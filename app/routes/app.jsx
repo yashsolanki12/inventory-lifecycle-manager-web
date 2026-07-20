@@ -6,15 +6,12 @@ import { AppProvider as ShopifyAppProvider } from "@shopify/shopify-app-react-ro
 import { AppProvider as PolarisAppProvider } from "@shopify/polaris";
 import enTranslations from "@shopify/polaris/locales/en.json";
 import { authenticate } from "../shopify.server";
-import { setShopDomain } from "../lib/backendClient";
 
 const queryClient = new QueryClient();
 
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
-  if (typeof globalThis !== "undefined") {
-    setShopDomain(session.shop);
-  }
+
   return {
     apiKey:
       typeof process !== "undefined" && process?.env?.SHOPIFY_API_KEY
