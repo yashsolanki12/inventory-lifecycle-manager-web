@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "3df39ce39e6e9a871e11d18b77897bb6"
-application_url = "https://unstimulating-semistiff-thuy.ngrok-free.dev"
+application_url = "https://inventory-lifecycle-manager-web.onrender.com"
 embedded = true
 name = "Inventory Manager Dev"
 
@@ -58,9 +58,10 @@ api_version = "2026-07"
 
 [auth]
 redirect_urls = [
-  "https://unstimulating-semistiff-thuy.ngrok-free.dev/api/auth/callback"
+  "https://inventory-lifecycle-manager-web.onrender.com/auth/callback",
+  "https://inventory-lifecycle-manager-web.onrender.com/auth/shopify/callback",
+  "https://inventory-lifecycle-manager-web.onrender.com/api/auth/callback"
 ]
 
 [build]
-include_config_on_deploy = true
 automatically_update_urls_on_dev = true
