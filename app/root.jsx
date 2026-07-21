@@ -1,20 +1,4 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
-import { addDocumentResponseHeaders } from "./shopify.server";
-
-// This is required so Shopify can frame your Remix app safely
-export const headers = (args) => {
-  // If SHOPIFY_APP_URL is missing or we are on a non-app route, return empty headers safely
-  if (!process.env.SHOPIFY_APP_URL) {
-    return {};
-  }
-
-  try {
-    return addDocumentResponseHeaders(args);
-  } catch (error) {
-    // Fallback to prevent 500 errors on automated bot / health checks
-    return {};
-  }
-};
 
 export default function App() {
   return (
