@@ -1,14 +1,6 @@
-import { useCurrentShopDomain } from "../utils/helper";
 import axiosInstance from "./axios-instance";
 
-export const getShopDomain = () => {
-  const app = useCurrentShopDomain();
-  return app;
-};
-
-export const syncProduct = async () => {
-  const shopDomain = getShopDomain();
-
+export const syncProduct = async (shopDomain) => {
   if (!shopDomain) {
     console.error("No shop domain found in URL parameters.");
     throw new Error("Shop domain is required");

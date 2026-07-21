@@ -1,20 +1,13 @@
-import { syncProduct } from "../api/products";
+import React from "react";
 
-export const ProductPage = () => {
-  const syncAllProduct = async () => {
-    try {
-      const response = await syncProduct();
-      console.log("res", response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const ProductPageView = React.lazy(
+  () => import("../pages/products/product-page"),
+);
+
+export default function ProductPage() {
   return (
-    <>
-      <h2>This is products page</h2>
-      <button onClick={syncAllProduct}>Sync product</button>
-    </>
+    <React.Suspense fallback={""}>
+      <ProductPageView />
+    </React.Suspense>
   );
-};
-
-export default ProductPage;
+}

@@ -1,21 +1,23 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
+import { StyledEngineProvider } from "@mui/material/styles";
+
+export const meta = () => {
+  return [{ name: "viewport", content: "width=device-width,initial-scale=1" }];
+};
 
 export default function App() {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="preconnect" href="https://cdn.shopify.com/" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.shopify.com/static/fonts/inter/v4/styles.css"
-        />
+        <meta name="emotion-insertion-point" content="" suppressHydrationWarning />
         <Meta />
         <Links />
       </head>
-      <body>
-        <Outlet />
+      <body suppressHydrationWarning>
+        <StyledEngineProvider injectFirst>
+          <Outlet />
+        </StyledEngineProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

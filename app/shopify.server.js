@@ -18,6 +18,23 @@ const shopify = shopifyApp({
     connectionPoolLimit: 20,
   }),
   distribution: AppDistribution.AppStore,
+  billing: {
+    Free: {
+      amount: 0,
+      currencyCode: "USD",
+      interval: "EVERY_30_DAYS",
+    },
+    Starter: {
+      amount: 9,
+      currencyCode: "USD",
+      interval: "EVERY_30_DAYS",
+    },
+    Pro: {
+      amount: 19,
+      currencyCode: "USD",
+      interval: "EVERY_30_DAYS",
+    },
+  },
   future: {
     expiringOfflineAccessTokens: true,
     unstable_newEmbeddedAuthStrategy: true,
