@@ -8,7 +8,16 @@ import PropTypes from "prop-types";
 
 function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
+  pricingUrl,
 }) {
+  const handleClick = () => {
+    if (pricingUrl) {
+      window.open(pricingUrl, "_top");
+    } else {
+      window.location.href = "/app/plans";
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -43,8 +52,7 @@ function NoPlanFallback({
           </Typography>
           <Button
             variant="contained"
-            component="a"
-            href="/app/plans"
+            onClick={handleClick}
             sx={{
               backgroundColor: "#202223",
               textTransform: "none",
@@ -65,6 +73,7 @@ function NoPlanFallback({
 
 NoPlanFallback.propTypes = {
   message: PropTypes.string,
+  pricingUrl: PropTypes.string,
 };
 
 export default NoPlanFallback;

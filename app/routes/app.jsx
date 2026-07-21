@@ -40,15 +40,23 @@ export const loader = async ({ request }) => {
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
+    // eslint-disable-next-line no-undef
+    appName: process.env.SHOPIFY_APP_NAME || "",
+    shop: session?.shop || "",
     hasActivePlan,
   };
 };
 
 
 export default function App() {
-  const { apiKey, hasActivePlan } = useLoaderData();
+  const { apiKey, hasActivePlan, shop, appName } = useLoaderData();
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
+
+  const pricingUrl =
+    shop && appName
+      ? `https://admin.shopify.com/store/${shop.split(".").at(0)}/charges/${appName}/pricing_plans`
+      : "";
 
   return (
     <AppProvider embedded apiKey={apiKey}>
@@ -59,7 +67,7 @@ export default function App() {
         <s-link href="/app/products">Products</s-link>
       </s-app-nav>
       {(hasActivePlan || isPlansRoute) && <Outlet />}
-      {!hasActivePlan && !isPlansRoute && <NoPlanFallback />}
+      {!hasActivePlan && !isPlansRoute && <NoPlanFallback pricingUrl={pricingUrl} />}
     </AppProvider>
   );
 }
