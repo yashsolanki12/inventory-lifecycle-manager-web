@@ -4,7 +4,6 @@ export const syncPlanToBackend = async (shop, plan, chargeId) => {
   return axiosInstance
     .post("/rules/plan", { shop, plan, chargeId })
     .then((res) => {
-      console.log("[Plan] Backend sync:", res.data);
       return res.data;
     })
     .catch((err) => {
@@ -17,7 +16,6 @@ export const resetPlanOnBackend = async (shop) => {
   return axiosInstance
     .post("/rules/plan", { shop, plan: "free", chargeId: null })
     .then((res) => {
-      console.log("[Plan] Backend reset:", res.data);
       return res.data;
     })
     .catch((err) => {

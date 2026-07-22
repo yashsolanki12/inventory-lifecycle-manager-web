@@ -10,6 +10,8 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import ConfirmDialog from "../../ui/confirmation-dialog";
+import useInventorySubmit from "../../hooks/useInventorySubmit";
+
 import { syncPlanToBackend, resetPlanOnBackend } from "../../api/plan";
 
 const PlansPage = ({ shop, subscription, appName, submit, actionData }) => {
@@ -18,8 +20,7 @@ const PlansPage = ({ shop, subscription, appName, submit, actionData }) => {
     message: "",
     severity: "success",
   });
-  const [cancelPlanDialogOpen, setCancelPlanDialogOpen] =
-    React.useState(false);
+  const [cancelPlanDialogOpen, setCancelPlanDialogOpen] = React.useState(false);
 
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
@@ -36,13 +37,23 @@ const PlansPage = ({ shop, subscription, appName, submit, actionData }) => {
     window.open(pricingUrl, "_top");
   };
 
+  const createSyncPlanToBackendMutation = useInventorySubmit(
+    (payload) =>
+      syncPlanToBackend(payload.shop, payload.plan, payload.chargeId),
+    null,
+    {
+      invalidateKeys: [["sync-plan-to-backend"]],
+    },
+  );
+  const payload = {
+    shop: shop,
+    plan: subscription?.name.toLowerCase(),
+    chargeId: subscription?.id,
+  };
+
   React.useEffect(() => {
     if (subscription && shop) {
-      syncPlanToBackend(
-        shop,
-        subscription.name.toLowerCase(),
-        subscription.id,
-      );
+      createSyncPlanToBackendMutation.mutate(payload);
     }
   }, [subscription, shop]);
 
