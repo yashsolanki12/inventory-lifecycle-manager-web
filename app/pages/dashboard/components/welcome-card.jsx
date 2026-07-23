@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import SyncIcon from "@mui/icons-material/Sync";
+import { usePricingRedirect } from "../../../utils/helper";
 
 const PLAN_SKU_TEXT = {
   free: "Sync up to 100 products",
@@ -18,16 +19,13 @@ const FEATURES = [
   { icon: "\u{1F504}", label: "Auto-sync updates" },
 ];
 
-const WelcomeCard = ({ onSync, plan, pricingUrl }) => {
+const WelcomeCard = ({ onSync, plan }) => {
   const planName = plan?.plan || "free";
   const skuLabel = PLAN_SKU_TEXT[planName] || PLAN_SKU_TEXT.free;
+  const redirectToPricing = usePricingRedirect();
 
   const handleUpgrade = () => {
-    if (pricingUrl) {
-      window.open(pricingUrl, "_top");
-    } else {
-      window.location.href = "/app/plans";
-    }
+    redirectToPricing();
   };
 
   return (

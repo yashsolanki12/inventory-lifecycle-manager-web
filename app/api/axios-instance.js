@@ -4,6 +4,7 @@ const getBaseURL = () => {
   const backendDomain =
     import.meta.env.VITE_BACKEND_API_URL ??
     "https://inventory-lifecycle-manager-backend.onrender.com";
+  // console.log("VITE:", import.meta.env.VITE_BACKEND_API_URL);
   return `${backendDomain}/api/`;
 };
 

@@ -1,8 +1,32 @@
+import React from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
+
+export const APP_HANDLE =
+  import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
 
 export const useCurrentShopDomain = () => {
   const app = useAppBridge();
   return app.config.shop;
+};
+
+export const usePricingRedirect = () => {
+  const app = useAppBridge();
+
+  return React.useCallback(() => {
+    try {
+      const shop = app?.config?.shop;
+      if (!shop) return;
+      const storeHandle = shop.split(".").at(0);
+      const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
+      if (app?.redirect?.dispatch) {
+        app.redirect.dispatch("ADMIN_PATH", path);
+      } else {
+        window.top.location.href = `https://admin.shopify.com${path}`;
+      }
+    } catch {
+      // SSR or App Bridge not ready
+    }
+  }, [app]);
 };
 
 export const DASHBOARD_CARDS = [

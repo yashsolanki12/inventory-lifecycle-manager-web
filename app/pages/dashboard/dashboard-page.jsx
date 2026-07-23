@@ -20,15 +20,10 @@ import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
 import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
 import { getPlanUsage } from "../../api/plan-usage";
-import { useSearchParams, useRouteLoaderData } from "react-router";
+import { useSearchParams } from "react-router";
 
 const DashboardPage = () => {
   const shopDomain = useCurrentShopDomain();
-  const loaderData = useRouteLoaderData("routes/app");
-  const pricingUrl =
-    loaderData?.shop && loaderData?.appName
-      ? `https://admin.shopify.com/store/${loaderData.shop.split(".").at(0)}/charges/${loaderData.appName}/pricing_plans`
-      : "";
 
   const [hasSynced, setHasSynced] = React.useState(
     () => localStorage.getItem("inventory_synced") === "true",
@@ -156,7 +151,6 @@ const DashboardPage = () => {
               feature="Inventory Aging Distribution"
               description="Upgrade to view detailed aging breakdown of your inventory across time periods."
               requiredPlan="Starter"
-              pricingUrl={pricingUrl}
             />
           )}
           {hasFullDashboard ? (
@@ -169,7 +163,6 @@ const DashboardPage = () => {
               feature="Inventory Value by Age"
               description="Upgrade to track inventory value distribution across aging buckets."
               requiredPlan="Starter"
-              pricingUrl={pricingUrl}
             />
           )}
         </Box>
@@ -188,7 +181,6 @@ const DashboardPage = () => {
               feature="Dead Stock Trend"
               description="Upgrade to monitor dead stock trends over time."
               requiredPlan="Starter"
-              pricingUrl={pricingUrl}
             />
           )}
           {hasFullAging ? (
@@ -198,7 +190,6 @@ const DashboardPage = () => {
               feature="Top Dead Stock Products"
               description="Upgrade to view and manage your dead stock products."
               requiredPlan="Starter"
-              pricingUrl={pricingUrl}
             />
           )}
         </Box>
@@ -208,7 +199,7 @@ const DashboardPage = () => {
 
   return (
     <>
-      <WelcomeCard onSync={() => handleSync(false)} plan={plan} pricingUrl={pricingUrl} />
+      <WelcomeCard onSync={() => handleSync(false)} plan={plan} />
       <Snackbar
         open={snackbar.open}
         autoHideDuration={snackbar.severity === "error" ? 5000 : 3000}
