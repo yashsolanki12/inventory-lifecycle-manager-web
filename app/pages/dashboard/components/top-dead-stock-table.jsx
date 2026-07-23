@@ -20,9 +20,12 @@ const TopDeadStockTable = ({ agingData }) => {
         border: "1px solid #ececec",
         boxShadow: "0 8px 24px rgba(0,0,0,.04)",
         height: "100%",
+        maxHeight: 360,
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <CardContent sx={{ p: "24px !important" }}>
+      <CardContent sx={{ p: "24px !important", flex: 1, overflow: "auto" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2.5 }}>
           <Typography variant="h6" sx={{ fontWeight: 600, fontSize: 18 }}>
             Top Dead Stock Products
