@@ -1,6 +1,6 @@
 import React from "react";
 import { authenticate } from "../shopify.server";
-import { useLoaderData, useSubmit, useActionData } from "react-router";
+import { useLoaderData, useSubmit, useActionData, useRouteLoaderData } from "react-router";
 import PlansShimmer from "../ui/plans-shimmer";
 
 const PlansPageView = React.lazy(() => import("../pages/plans/plans-page"));
@@ -21,8 +21,6 @@ export const loader = async ({ request }) => {
   return {
     shop: session?.shop,
     subscription,
-    // eslint-disable-next-line no-undef
-    appName: process.env.SHOPIFY_APP_NAME,
   };
 };
 
@@ -44,12 +42,19 @@ export default function PlansPage() {
   const data = useLoaderData();
   const submit = useSubmit();
   const actionData = useActionData();
+  const parentData = useRouteLoaderData("routes/app");
+
+  const pricingUrl =
+    parentData?.shop && parentData?.appName
+      ? `https://admin.shopify.com/store/${parentData.shop.split(".").at(0)}/charges/${parentData.appName}/pricing_plans`
+      : "";
+
   return (
     <React.Suspense fallback={<PlansShimmer />}>
       <PlansPageView
         shop={data.shop}
         subscription={data.subscription}
-        appName={data.appName}
+        pricingUrl={pricingUrl}
         submit={submit}
         actionData={actionData}
       />

@@ -14,7 +14,7 @@ import useInventorySubmit from "../../hooks/useInventorySubmit";
 
 import { syncPlanToBackend, resetPlanOnBackend } from "../../api/plan";
 
-const PlansPage = ({ shop, subscription, appName, submit, actionData }) => {
+const PlansPage = ({ shop, subscription, pricingUrl, submit, actionData }) => {
   const [snackbar, setSnackbar] = React.useState({
     open: false,
     message: "",
@@ -26,15 +26,20 @@ const PlansPage = ({ shop, subscription, appName, submit, actionData }) => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
 
-  const currentStore = shop.split(".").at(0);
-  const pricingUrl = `https://admin.shopify.com/store/${currentStore}/charges/${appName}/pricing_plans`;
-
   const handleViewPlan = () => {
-    window.open(pricingUrl, "_top");
+    if (pricingUrl) {
+      window.open(pricingUrl, "_top");
+    } else {
+      window.location.href = "/app/plans";
+    }
   };
 
   const handleChangePlan = () => {
-    window.open(pricingUrl, "_top");
+    if (pricingUrl) {
+      window.open(pricingUrl, "_top");
+    } else {
+      window.location.href = "/app/plans";
+    }
   };
 
   const createSyncPlanToBackendMutation = useInventorySubmit(
@@ -250,7 +255,7 @@ PlansPage.propTypes = {
     name: PropTypes.string,
     id: PropTypes.string,
   }),
-  appName: PropTypes.string.isRequired,
+  pricingUrl: PropTypes.string,
   submit: PropTypes.func.isRequired,
   actionData: PropTypes.shape({
     success: PropTypes.bool,
