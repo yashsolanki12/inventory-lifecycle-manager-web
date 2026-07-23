@@ -11,10 +11,12 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import ConfirmDialog from "../../ui/confirmation-dialog";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
+import { usePricingRedirect } from "../../utils/helper";
 
 import { syncPlanToBackend, resetPlanOnBackend } from "../../api/plan";
 
-const PlansPage = ({ shop, subscription, pricingUrl, submit, actionData }) => {
+const PlansPage = ({ shop, subscription, submit, actionData }) => {
+  const redirectToPricing = usePricingRedirect();
   const [snackbar, setSnackbar] = React.useState({
     open: false,
     message: "",
@@ -27,19 +29,11 @@ const PlansPage = ({ shop, subscription, pricingUrl, submit, actionData }) => {
   };
 
   const handleViewPlan = () => {
-    if (pricingUrl) {
-      window.open(pricingUrl, "_top");
-    } else {
-      window.location.href = "/app/plans";
-    }
+    redirectToPricing();
   };
 
   const handleChangePlan = () => {
-    if (pricingUrl) {
-      window.open(pricingUrl, "_top");
-    } else {
-      window.location.href = "/app/plans";
-    }
+    redirectToPricing();
   };
 
   const createSyncPlanToBackendMutation = useInventorySubmit(
@@ -255,7 +249,6 @@ PlansPage.propTypes = {
     name: PropTypes.string,
     id: PropTypes.string,
   }),
-  pricingUrl: PropTypes.string,
   submit: PropTypes.func.isRequired,
   actionData: PropTypes.shape({
     success: PropTypes.bool,

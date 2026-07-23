@@ -5,14 +5,13 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import LockIcon from "@mui/icons-material/Lock";
+import { usePricingRedirect } from "../../../utils/helper";
 
-const UpgradePrompt = ({ feature, description, requiredPlan = "Starter", pricingUrl }) => {
+const UpgradePrompt = ({ feature, description, requiredPlan = "Starter" }) => {
+  const redirectToPricing = usePricingRedirect();
+
   const handleClick = () => {
-    if (pricingUrl) {
-      window.open(pricingUrl, "_top");
-    } else {
-      window.location.href = "/app/plans";
-    }
+    redirectToPricing();
   };
 
   return (

@@ -43,7 +43,6 @@ export const loader = async ({ request }) => {
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
-    // eslint-disable-next-line no-undef
     appName: process.env.SHOPIFY_APP_NAME || "",
     shop: session?.shop || "",
     hasActivePlan,
@@ -70,11 +69,6 @@ export default function App() {
       }),
     [],
   );
-  const pricingUrl =
-    shop && appName
-      ? `https://admin.shopify.com/store/${shop.split(".").at(0)}/charges/${appName}/pricing_plans`
-      : "";
-
   React.useEffect(() => {
     if (!shop) return;
     const key = `auth_post_sync_${shop}`;
@@ -94,7 +88,7 @@ export default function App() {
         </s-app-nav>
         {(hasActivePlan || isPlansRoute) && <Outlet />}
         {!hasActivePlan && !isPlansRoute && (
-          <NoPlanFallback pricingUrl={pricingUrl} />
+          <NoPlanFallback />
         )}
       </AppProvider>
     </QueryClientProvider>

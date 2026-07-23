@@ -5,17 +5,15 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PropTypes from "prop-types";
+import { usePricingRedirect } from "../../utils/helper";
 
 function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
-  pricingUrl,
 }) {
+  const redirectToPricing = usePricingRedirect();
+
   const handleClick = () => {
-    if (pricingUrl) {
-      window.open(pricingUrl, "_top");
-    } else {
-      window.location.href = "/app/plans";
-    }
+    redirectToPricing();
   };
 
   return (
@@ -73,7 +71,6 @@ function NoPlanFallback({
 
 NoPlanFallback.propTypes = {
   message: PropTypes.string,
-  pricingUrl: PropTypes.string,
 };
 
 export default NoPlanFallback;
