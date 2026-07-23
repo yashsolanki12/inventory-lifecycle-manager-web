@@ -66,6 +66,19 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
         `UPDATE \`${tableName}\` SET updated_at = CURRENT_TIMESTAMP() WHERE updated_at IS NULL`
       );
     }
+
+    const stateType = await columnType("state");
+    if (stateType) {
+      const [stateInfo] = await this.connection.query(
+        `SELECT COLUMN_DEFAULT FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = 'state'`,
+        [tableName]
+      );
+      if (Array.isArray(stateInfo) && stateInfo.length > 0 && stateInfo[0].COLUMN_DEFAULT === null) {
+        await this.connection.query(
+          `ALTER TABLE \`${tableName}\` MODIFY COLUMN state varchar(255) DEFAULT ''`
+        );
+      }
+    }
   }
 
   async storeSession(session) {
@@ -167,6 +180,7 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
           scope varchar(1024),
           expires DATETIME,
           accessToken varchar(255),
+          state varchar(255) DEFAULT '',
           refreshToken varchar(255),
           refreshTokenExpires DATETIME,
           firstName varchar(255),

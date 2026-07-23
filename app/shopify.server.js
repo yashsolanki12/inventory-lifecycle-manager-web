@@ -15,7 +15,7 @@ const shopify = shopifyApp({
   authPathPrefix: "/auth",
   sessionStorage: new MySQLDatetimeSessionStorage(process.env.DATABASE_URL, {
     sessionTableName: "shopify_sessions",
-    connectionPoolLimit: 20,
+    connectionPoolLimit: 1,
   }),
   distribution: AppDistribution.AppStore,
   billing: {
