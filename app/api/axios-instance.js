@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const getBaseURL = () => {
-  // const backendDomain = import.meta.env.VITE_BACKEND_API_URL;
   const backendDomain =
+    import.meta.env.VITE_BACKEND_API_URL ??
     "https://inventory-lifecycle-manager-backend.onrender.com";
   return `${backendDomain}/api/`;
 };
