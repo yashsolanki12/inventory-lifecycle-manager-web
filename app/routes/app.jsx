@@ -7,7 +7,7 @@ import {
 } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
-import { authenticate } from "../shopify.server";
+import { authenticate, sessionStorage } from "../shopify.server";
 import { authPostSync } from "../api/auth";
 import { syncPlanToBackend } from "../api/plan";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -15,6 +15,41 @@ import NoPlanFallback from "../pages/plans/no-plan-fallback";
 
 export const loader = async ({ request }) => {
   const { session, billing } = await authenticate.admin(request);
+
+  if (session) {
+    const hasInfo = await sessionStorage.hasShopInfo(session.id).catch(() => false);
+    if (!hasInfo) {
+      try {
+        const response = await fetch(
+          `https://${session.shop}/admin/api/2026-07/shop.json`,
+          {
+            headers: {
+              "X-Shopify-Access-Token": session.accessToken,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        const shopData = data.shop;
+
+        if (shopData) {
+          const fullName = shopData.shop_owner || "";
+          const nameParts = fullName.trim().split(/\s+/);
+          await sessionStorage.updateShopInfo(session.id, {
+            firstName: nameParts[0] || "",
+            lastName: nameParts.slice(1).join(" ") || "",
+            email: shopData.email || "",
+            accountOwner: true,
+            locale: shopData.locale || "",
+            collaborator: false,
+            emailVerified: true,
+          });
+        }
+      } catch (err) {
+        console.error("[App] Failed to fetch shop info:", err.message);
+      }
+    }
+  }
 
   let hasActivePlan = false;
   let activeSubscription = null;
