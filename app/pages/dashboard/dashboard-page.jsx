@@ -25,9 +25,10 @@ import { useSearchParams } from "react-router";
 const DashboardPage = () => {
   const shopDomain = useCurrentShopDomain();
 
-  const [hasSynced, setHasSynced] = React.useState(
-    () => localStorage.getItem("inventory_synced") === "true",
-  );
+  const [hasSynced, setHasSynced] = React.useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("inventory_synced") === "true";
+  });
   const [snackbar, setSnackbar] = React.useState({
     open: false,
     message: "",

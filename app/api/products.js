@@ -17,7 +17,7 @@ export const syncProduct = async (shopDomain) => {
     )
     .then((res) => res.data)
     .catch((error) => {
-      console.error("API Error while sync product", error);
-      throw error;
+      console.error("API Error while sync product", error.response.data.message);
+      throw error.response.data.message;
     });
 };

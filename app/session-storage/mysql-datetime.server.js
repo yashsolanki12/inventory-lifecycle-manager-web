@@ -79,6 +79,25 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
         );
       }
     }
+
+    const shopInfoColumns = [
+      { name: "firstName", type: "varchar(255)" },
+      { name: "lastName", type: "varchar(255)" },
+      { name: "email", type: "varchar(255)" },
+      { name: "accountOwner", type: "tinyint" },
+      { name: "locale", type: "varchar(255)" },
+      { name: "collaborator", type: "tinyint" },
+      { name: "emailVerified", type: "tinyint" },
+    ];
+
+    for (const col of shopInfoColumns) {
+      const existing = await columnType(col.name);
+      if (!existing) {
+        await this.connection.query(
+          `ALTER TABLE \`${tableName}\` ADD COLUMN \`${col.name}\` ${col.type}`
+        );
+      }
+    }
   }
 
   async storeSession(session) {
@@ -151,6 +170,26 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
     return results;
   }
 
+  async updateShopInfo(sessionId, shopInfo) {
+    await this.ready;
+    const tableName = this.options.sessionTableName;
+    const query = `
+      UPDATE \`${tableName}\`
+      SET firstName = ?, lastName = ?, email = ?, accountOwner = ?, locale = ?, collaborator = ?, emailVerified = ?
+      WHERE id = ?
+    `;
+    await this.connection.query(query, [
+      shopInfo.firstName || null,
+      shopInfo.lastName || null,
+      shopInfo.email || null,
+      shopInfo.accountOwner ? 1 : 0,
+      shopInfo.locale || null,
+      shopInfo.collaborator ? 1 : 0,
+      shopInfo.emailVerified ? 1 : 0,
+      sessionId,
+    ]);
+  }
+
   _rowToSession(row) {
     if (row.expires) {
       const d = new Date(row.expires);
@@ -164,6 +203,13 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
     delete row.updated_at;
     delete row.userId;
     delete row.state;
+    delete row.firstName;
+    delete row.lastName;
+    delete row.email;
+    delete row.accountOwner;
+    delete row.locale;
+    delete row.collaborator;
+    delete row.emailVerified;
     return Session.fromPropertyArray(Object.entries(row), true);
   }
 
