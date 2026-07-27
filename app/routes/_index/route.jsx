@@ -17,7 +17,9 @@ export default function App() {
   const { showForm } = useLoaderData();
 
   React.useEffect(() => {
-    localStorage.removeItem("inventory_synced");
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith("inventory_synced_"))
+      .forEach((key) => localStorage.removeItem(key));
   }, []);
 
   return (
