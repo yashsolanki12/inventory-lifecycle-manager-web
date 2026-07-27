@@ -1,4 +1,3 @@
-import React from "react";
 import { redirect, Form, useLoaderData } from "react-router";
 import { login } from "../../shopify.server";
 import styles from "./styles.module.css";
@@ -16,11 +15,7 @@ export const loader = async ({ request }) => {
 export default function App() {
   const { showForm } = useLoaderData();
 
-  React.useEffect(() => {
-    Object.keys(localStorage)
-      .filter((key) => key.startsWith("inventory_synced_"))
-      .forEach((key) => localStorage.removeItem(key));
-  }, []);
+
 
   return (
     <div className={styles.index}>
