@@ -139,6 +139,7 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
     `;
 
     await this.connection.query(query, [...values, now, now, now]);
+    console.log(`[SessionStorage] storeSession: id=${session.id} shop=${session.shop}`);
     return true;
   }
 
@@ -149,9 +150,14 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
       WHERE id = ${this.connection.getArgumentPlaceholder()};
     `;
     const [rows] = await this.connection.query(query, [id]);
-    if (!Array.isArray(rows) || rows?.length !== 1) return undefined;
+    if (!Array.isArray(rows) || rows?.length !== 1) {
+      console.log(`[SessionStorage] loadSession: id=${id} → NOT FOUND`);
+      return undefined;
+    }
     const rawResult = rows[0];
-    return this._rowToSession(rawResult);
+    const session = this._rowToSession(rawResult);
+    console.log(`[SessionStorage] loadSession: id=${id} shop=${session.shop} accessToken=${session.accessToken ? "SET" : "MISSING"} expires=${session.expires}`);
+    return session;
   }
 
   async findSessionsByShop(shop) {
@@ -162,17 +168,34 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
       WHERE shop = ${this.connection.getArgumentPlaceholder()};
     `;
     const [rows] = await this.connection.query(query, [shop]);
-    if (!Array.isArray(rows) || rows?.length === 0) return [];
+    if (!Array.isArray(rows) || rows?.length === 0) {
+      console.log(`[SessionStorage] findSessionsByShop: shop=${shop} → 0 sessions`);
+      return [];
+    }
 
     const results = rows.map((row) => {
       return this._rowToSession(row);
     });
+    console.log(`[SessionStorage] findSessionsByShop: shop=${shop} → ${results.length} session(s)`);
     return results;
+  }
+
+  async hasShopInfo(sessionId) {
+    await this.ready;
+    const tableName = this.options.sessionTableName;
+    const [rows] = await this.connection.query(
+      `SELECT firstName FROM \`${tableName}\` WHERE id = ?`,
+      [sessionId]
+    );
+    const has = Array.isArray(rows) && rows.length > 0 && rows[0].firstName != null;
+    console.log(`[SessionStorage] hasShopInfo: sessionId=${sessionId} → ${has}`);
+    return has;
   }
 
   async updateShopInfo(sessionId, shopInfo) {
     await this.ready;
     const tableName = this.options.sessionTableName;
+    console.log(`[SessionStorage] updateShopInfo: sessionId=${sessionId} → firstName=${shopInfo.firstName} lastName=${shopInfo.lastName} email=${shopInfo.email} accountOwner=${shopInfo.accountOwner}`);
     const query = `
       UPDATE \`${tableName}\`
       SET firstName = ?, lastName = ?, email = ?, accountOwner = ?, locale = ?, collaborator = ?, emailVerified = ?
@@ -188,15 +211,16 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
       shopInfo.emailVerified ? 1 : 0,
       sessionId,
     ]);
+    console.log(`[SessionStorage] updateShopInfo: sessionId=${sessionId} DONE`);
   }
 
   _rowToSession(row) {
     if (row.expires) {
-      const d = new Date(row.expires);
+      const d = new Date(row.expires + "Z");
       row.expires = d.getTime();
     }
     if (row.refreshTokenExpires) {
-      const d = new Date(row.refreshTokenExpires);
+      const d = new Date(row.refreshTokenExpires + "Z");
       row.refreshTokenExpires = d.getTime();
     }
     delete row.created_at;
