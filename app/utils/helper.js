@@ -86,3 +86,5 @@ export const DASHBOARD_CARDS = [
         : (d.deadStockValue ?? 0),
   },
 ];
+
+export const COLORS = ["#34d399", "#84cc16", "#f97316", "#fb923c", "#ef4444"];

@@ -4,8 +4,7 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-
-const COLORS = ["#34d399", "#84cc16", "#f97316", "#fb923c", "#ef4444"];
+import { COLORS } from "../../../utils/helper";
 
 const InventoryValueChart = ({ dashboardData, agingData }) => {
   const inventoryByAge = dashboardData?.data?.inventoryValueByAge ?? [];
