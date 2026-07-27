@@ -68,18 +68,6 @@ const DashboardPage = () => {
     { enabled: hasSynced && !!shopDomain && hasFullAging },
   );
 
-  const syncMutation = useInventorySubmit(
-    (shop) => syncProduct(shop),
-    setSnackbar,
-    {
-      invalidateKeys: [["inventory-dashboard-data"], ["inventory-aging-data"]],
-      onSuccess: () => {
-        localStorage.setItem(`inventory_synced_${shopDomain}`, "true");
-        setHasSynced(true);
-      },
-    },
-  );
-
   const populateSnapShotMutation = useInventorySubmit(
     (shop) => populateSnapshot(shop),
     null,
@@ -88,12 +76,25 @@ const DashboardPage = () => {
     },
   );
 
+  const syncMutation = useInventorySubmit(
+    (shop) => syncProduct(shop),
+    setSnackbar,
+    {
+      invalidateKeys: [["inventory-dashboard-data"], ["inventory-aging-data"]],
+      onSuccess: () => {
+        localStorage.setItem(`inventory_synced_${shopDomain}`, "true");
+        setHasSynced(true);
+        populateSnapShotMutation.mutate(shopDomain);
+      },
+    },
+  );
+
   const handleSync = (isResync = false) => {
     if (!shopDomain) return;
     syncMutation.mutate(shopDomain);
-    if (!syncMutation.error && syncMutation.isPending) {
-      populateSnapShotMutation.mutate(shopDomain);
-    }
+    // if (!syncMutation.error && populateSnapShotMutation.status === "idle") {
+    //   populateSnapShotMutation.mutate(shopDomain);
+    // }
   };
 
   React.useEffect(() => {
