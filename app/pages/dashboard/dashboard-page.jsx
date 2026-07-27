@@ -26,8 +26,8 @@ const DashboardPage = () => {
   const shopDomain = useCurrentShopDomain();
 
   const [hasSynced, setHasSynced] = React.useState(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem("inventory_synced") === "true";
+    if (typeof window === "undefined" || !shopDomain) return false;
+    return localStorage.getItem(`inventory_synced_${shopDomain}`) === "true";
   });
   const [snackbar, setSnackbar] = React.useState({
     open: false,
@@ -74,7 +74,7 @@ const DashboardPage = () => {
     {
       invalidateKeys: [["inventory-dashboard-data"], ["inventory-aging-data"]],
       onSuccess: () => {
-        localStorage.setItem("inventory_synced", "true");
+        localStorage.setItem(`inventory_synced_${shopDomain}`, "true");
         setHasSynced(true);
       },
     },
@@ -91,7 +91,9 @@ const DashboardPage = () => {
   const handleSync = (isResync = false) => {
     if (!shopDomain) return;
     syncMutation.mutate(shopDomain);
-    populateSnapShotMutation.mutate(shopDomain);
+    if (!syncMutation.error && syncMutation.isPending) {
+      populateSnapShotMutation.mutate(shopDomain);
+    }
   };
 
   React.useEffect(() => {
