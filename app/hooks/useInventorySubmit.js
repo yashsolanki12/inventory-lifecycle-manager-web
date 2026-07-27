@@ -15,7 +15,7 @@ export const useInventorySubmit = (
     onError: (error) => {
       setSnackBar({
         open: true,
-        message: error.message || "An error occurred",
+        message: error || "An error occurred",
         severity: "error",
       });
     },
