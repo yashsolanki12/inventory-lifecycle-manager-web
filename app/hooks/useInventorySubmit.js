@@ -13,19 +13,22 @@ export const useInventorySubmit = (
   const mutation = useMutation({
     mutationFn,
     onError: (error) => {
-      setSnackBar({
-        open: true,
-        message: error || "An error occurred",
-        severity: "error",
-      });
+      if (typeof setSnackBar === "function") {
+        setSnackBar({
+          open: true,
+          message: error?.message || "An error occurred",
+          severity: "error",
+        });
+      }
     },
     onSuccess: (data) => {
-      // Show success snackbar immediately
-      setSnackBar({
-        open: true,
-        message: data?.message || "Operation successful",
-        severity: "success",
-      });
+      if (typeof setSnackBar === "function") {
+        setSnackBar({
+          open: true,
+          message: data?.message || "Operation successful",
+          severity: "success",
+        });
+      }
 
       // Call custom onSuccess callback to redirect in /app route
       if (onSuccess) {
