@@ -12,9 +12,9 @@ import DeadStockTrend from "./components/dead-stock-trend";
 import TopDeadStockTable from "./components/top-dead-stock-table";
 import WelcomeCard from "./components/welcome-card";
 import UpgradePrompt from "./components/upgrade-prompt";
-
 import useInventoryData from "../../hooks/useInventoryData";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
+
 import { useCurrentShopDomain } from "../../utils/helper";
 import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
@@ -95,6 +95,16 @@ const DashboardPage = () => {
   };
 
   React.useEffect(() => {
+    if (syncMutation.error) {
+      setSnackbar({
+        open: true,
+        message: syncMutation.error || "An error occurred",
+        severity: "error",
+      });
+    }
+  }, [syncMutation.error]);
+
+  React.useEffect(() => {
     if (searchParams.has("charge_id") || searchParams.has("plan_handle")) {
       const newParams = new URLSearchParams(searchParams);
       newParams.delete("charge_id");
@@ -108,20 +118,16 @@ const DashboardPage = () => {
   const isResyncing = syncMutation.isPending && hasSynced && dashboardData;
   const hasDashboardData = dashboardData?.data;
 
+  let content;
+
   if (isInitialLoading) {
-    return <DashboardSkeleton />;
-  }
-
-  if (isSyncing && !hasDashboardData) {
-    return <SyncProductSkeleton />;
-  }
-
-  if (isResyncing) {
-    return <DashboardSkeleton />;
-  }
-
-  if (hasDashboardData) {
-    return (
+    content = <DashboardSkeleton />;
+  } else if (isSyncing && !hasDashboardData) {
+    content = <SyncProductSkeleton />;
+  } else if (isResyncing) {
+    content = <DashboardSkeleton />;
+  } else if (hasDashboardData) {
+    content = (
       <Box
         sx={{
           width: "100%",
@@ -196,11 +202,13 @@ const DashboardPage = () => {
         </Box>
       </Box>
     );
+  } else {
+    content = <WelcomeCard onSync={() => handleSync(false)} plan={plan} />;
   }
 
   return (
     <>
-      <WelcomeCard onSync={() => handleSync(false)} plan={plan} />
+      {content}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={snackbar.severity === "error" ? 5000 : 3000}
