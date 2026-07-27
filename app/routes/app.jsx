@@ -43,14 +43,13 @@ export const loader = async ({ request }) => {
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
-    appName: process.env.SHOPIFY_APP_NAME || "",
     shop: session?.shop || "",
     hasActivePlan,
   };
 };
 
 export default function App() {
-  const { apiKey, hasActivePlan, shop, appName } = useLoaderData();
+  const { apiKey, hasActivePlan, shop } = useLoaderData();
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
 
