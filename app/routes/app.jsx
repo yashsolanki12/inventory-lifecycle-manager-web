@@ -61,8 +61,7 @@ export default function App() {
             staleTime: 1000 * 60 * 5, // 5 minutes
             gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
             refetchOnWindowFocus: false,
-            // Disable queries during SSR
-            enabled: typeof window !== "undefined",
+            retry: false,
           },
         },
       }),

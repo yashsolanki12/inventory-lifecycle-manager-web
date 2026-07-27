@@ -7,7 +7,7 @@ export const useInventoryData = (
   setSnackBar,
   options = {},
 ) => {
-  const { enabled = true, staleTime = 0, showSuccessToast = false } = options;
+  const { enabled = true, staleTime, showSuccessToast = false } = options;
 
   // Call useQuery at the top level
   const { error, data, isLoading, refetch, isSuccess } = useQuery({
