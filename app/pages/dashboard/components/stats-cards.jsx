@@ -47,7 +47,7 @@ const StatsCards = ({ dashboardData, plan }) => {
               const valueFontSize =
                 len > 12 ? 22 : len > 9 ? 22 : len > 7 ? 22 : 22;
               const labelFontSize =
-                len > 12 ? 15 : len > 9 ? 18 : len > 7 ? 15 : 15;
+                len > 12 ? 15 : len > 9 ? 15 : len > 7 ? 15 : 15;
               return (
                 <>
                   <Box
