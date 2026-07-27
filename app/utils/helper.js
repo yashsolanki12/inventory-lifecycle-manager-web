@@ -1,12 +1,13 @@
 import React from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
+import { useRouteLoaderData } from "react-router";
 
 export const APP_HANDLE =
   import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
 
 export const useCurrentShopDomain = () => {
-  const app = useAppBridge();
-  return app.config.shop;
+  const routeData = useRouteLoaderData("routes/app");
+  return routeData?.shop || null;
 };
 
 export const usePricingRedirect = () => {

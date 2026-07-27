@@ -28,12 +28,13 @@ axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  (error) => {  
     console.error("❌ API Error:", {
       status: error.response?.status,
       statusText: error.response?.statusText,
       url: error.config?.url,
       data: error.response?.data,
+      message: error.response?.data.message
     });
     return Promise.reject(error);
   },
