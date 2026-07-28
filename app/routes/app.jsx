@@ -93,7 +93,7 @@ export default function App() {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 1000 * 60 * 5, // 5 minutes
+            staleTime: 1000 * 16, // 16 seconds
             gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
             refetchOnWindowFocus: false,
             retry: false,
