@@ -23,6 +23,7 @@ const TopDeadStockTable = ({ agingData }) => {
         maxHeight: 360,
         display: "flex",
         flexDirection: "column",
+        height: `${items.length === 0 ? "100%" : 0}`,
       }}
     >
       <CardContent sx={{ p: "24px !important", flex: 1, overflow: "auto" }}>
@@ -40,7 +41,15 @@ const TopDeadStockTable = ({ agingData }) => {
         </Box>
 
         {items.length === 0 ? (
-          <Box sx={{ py: 6, textAlign: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              height: calc(100 % -"49px"),
+            }}
+          >
             <Typography sx={{ color: "#9ca3af", fontSize: 14 }}>
               No dead stock products found
             </Typography>
