@@ -47,7 +47,7 @@ const TopDeadStockTable = ({ agingData }) => {
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
-              height: "calc(100 % - 49px)",
+              height: "calc(100% - 49px)",
             }}
           >
             <Typography sx={{ color: "#9ca3af", fontSize: 14 }}>
