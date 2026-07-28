@@ -23,7 +23,7 @@ const TopDeadStockTable = ({ agingData }) => {
         maxHeight: 360,
         display: "flex",
         flexDirection: "column",
-        height: `${items.length === 0 ? "100%" : 0}`,
+        height: `${items.length === 0 ? "100%" : null}`,
       }}
     >
       <CardContent sx={{ p: "24px !important", flex: 1, overflow: "auto" }}>
