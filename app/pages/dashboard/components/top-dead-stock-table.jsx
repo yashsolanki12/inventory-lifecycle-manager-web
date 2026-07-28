@@ -19,7 +19,7 @@ const TopDeadStockTable = ({ agingData }) => {
         borderRadius: "14px",
         border: "1px solid #ececec",
         boxShadow: "0 8px 24px rgba(0,0,0,.04)",
-        height: "100%",
+        alignSelf: "start",
         maxHeight: 360,
         display: "flex",
         flexDirection: "column",
