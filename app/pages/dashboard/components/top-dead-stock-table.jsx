@@ -19,14 +19,21 @@ const TopDeadStockTable = ({ agingData }) => {
         borderRadius: "14px",
         border: "1px solid #ececec",
         boxShadow: "0 8px 24px rgba(0,0,0,.04)",
-        height: "100%",
+        alignSelf: "start",
         maxHeight: 360,
         display: "flex",
         flexDirection: "column",
       }}
     >
       <CardContent sx={{ p: "24px !important", flex: 1, overflow: "auto" }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2.5 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2.5,
+          }}
+        >
           <Typography variant="h6" sx={{ fontWeight: 600, fontSize: 18 }}>
             Top Dead Stock Products
           </Typography>
@@ -40,7 +47,10 @@ const TopDeadStockTable = ({ agingData }) => {
           </Box>
         ) : (
           <>
-            <Box component="table" sx={{ width: "100%", borderCollapse: "collapse" }}>
+            <Box
+              component="table"
+              sx={{ width: "100%", borderCollapse: "collapse" }}
+            >
               <Box component="tbody">
                 {items.map((item, i) => (
                   <Box
@@ -52,35 +62,53 @@ const TopDeadStockTable = ({ agingData }) => {
                       component="td"
                       sx={{ py: 2, pr: 2, borderBottom: "1px solid #ececec" }}
                     >
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+                      >
                         <Box
                           sx={{
                             width: 46,
                             height: 46,
                             borderRadius: "10px",
-                            backgroundColor: PRODUCT_COLORS[i % PRODUCT_COLORS.length],
-                            backgroundImage: item.image?.url ? `url(${item.image.url})` : "none",
+                            backgroundColor:
+                              PRODUCT_COLORS[i % PRODUCT_COLORS.length],
+                            backgroundImage: item.image?.url
+                              ? `url(${item.image.url})`
+                              : "none",
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                             flexShrink: 0,
                           }}
                         />
                         <Typography sx={{ fontSize: 15, fontWeight: 500 }}>
-                          {item.title}
+                          {item.title ?? "Untitled Product."}
                         </Typography>
                       </Box>
                     </Box>
                     <Box
                       component="td"
-                      sx={{ py: 2, px: 2, fontSize: 15, borderBottom: "1px solid #ececec", whiteSpace: "nowrap" }}
+                      sx={{
+                        py: 2,
+                        px: 2,
+                        fontSize: 15,
+                        borderBottom: "1px solid #ececec",
+                        whiteSpace: "nowrap",
+                      }}
                     >
                       {item.quantity} Units
                     </Box>
                     <Box
                       component="td"
-                      sx={{ py: 2, pl: 2, fontSize: 15, borderBottom: "1px solid #ececec", whiteSpace: "nowrap" }}
+                      sx={{
+                        py: 2,
+                        pl: 2,
+                        fontSize: 15,
+                        borderBottom: "1px solid #ececec",
+                        whiteSpace: "nowrap",
+                      }}
                     >
-                      {currency}{item.value.toLocaleString()}
+                      {currency}
+                      {item.value.toLocaleString()}
                     </Box>
                   </Box>
                 ))}

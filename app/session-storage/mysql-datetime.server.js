@@ -139,7 +139,7 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
     `;
 
     await this.connection.query(query, [...values, now, now, now]);
-    console.log(`[SessionStorage] storeSession: id=${session.id} shop=${session.shop}`);
+    // console.log(`[SessionStorage] storeSession: id=${session.id} shop=${session.shop}`);
     return true;
   }
 
@@ -151,12 +151,12 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
     `;
     const [rows] = await this.connection.query(query, [id]);
     if (!Array.isArray(rows) || rows?.length !== 1) {
-      console.log(`[SessionStorage] loadSession: id=${id} → NOT FOUND`);
+      // console.log(`[SessionStorage] loadSession: id=${id} → NOT FOUND`);
       return undefined;
     }
     const rawResult = rows[0];
     const session = this._rowToSession(rawResult);
-    console.log(`[SessionStorage] loadSession: id=${id} shop=${session.shop} accessToken=${session.accessToken ? "SET" : "MISSING"} expires=${session.expires}`);
+    // console.log(`[SessionStorage] loadSession: id=${id} shop=${session.shop} accessToken=${session.accessToken ? "SET" : "MISSING"} expires=${session.expires}`);
     return session;
   }
 
@@ -169,14 +169,14 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
     `;
     const [rows] = await this.connection.query(query, [shop]);
     if (!Array.isArray(rows) || rows?.length === 0) {
-      console.log(`[SessionStorage] findSessionsByShop: shop=${shop} → 0 sessions`);
+      // console.log(`[SessionStorage] findSessionsByShop: shop=${shop} → 0 sessions`);
       return [];
     }
 
     const results = rows.map((row) => {
       return this._rowToSession(row);
     });
-    console.log(`[SessionStorage] findSessionsByShop: shop=${shop} → ${results.length} session(s)`);
+    // console.log(`[SessionStorage] findSessionsByShop: shop=${shop} → ${results.length} session(s)`);
     return results;
   }
 
@@ -188,14 +188,14 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
       [sessionId]
     );
     const has = Array.isArray(rows) && rows.length > 0 && rows[0].firstName != null;
-    console.log(`[SessionStorage] hasShopInfo: sessionId=${sessionId} → ${has}`);
+    // console.log(`[SessionStorage] hasShopInfo: sessionId=${sessionId} → ${has}`);
     return has;
   }
 
   async updateShopInfo(sessionId, shopInfo) {
     await this.ready;
     const tableName = this.options.sessionTableName;
-    console.log(`[SessionStorage] updateShopInfo: sessionId=${sessionId} → firstName=${shopInfo.firstName} lastName=${shopInfo.lastName} email=${shopInfo.email} accountOwner=${shopInfo.accountOwner}`);
+    // console.log(`[SessionStorage] updateShopInfo: sessionId=${sessionId} → firstName=${shopInfo.firstName} lastName=${shopInfo.lastName} email=${shopInfo.email} accountOwner=${shopInfo.accountOwner}`);
     const query = `
       UPDATE \`${tableName}\`
       SET firstName = ?, lastName = ?, email = ?, accountOwner = ?, locale = ?, collaborator = ?, emailVerified = ?
@@ -211,7 +211,7 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
       shopInfo.emailVerified ? 1 : 0,
       sessionId,
     ]);
-    console.log(`[SessionStorage] updateShopInfo: sessionId=${sessionId} DONE`);
+    // console.log(`[SessionStorage] updateShopInfo: sessionId=${sessionId} DONE`);
   }
 
   _rowToSession(row) {
