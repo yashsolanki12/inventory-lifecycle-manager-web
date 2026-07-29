@@ -18,10 +18,10 @@ const createRenderActions =
           size="small"
           onClick={() => onView(item)}
           sx={{
-            color: "#6b7280",
+            color: "#4B5563",
             "&:hover": {
               color: "#008060",
-              backgroundColor: "rgba(0,128,96,0.08)",
+              backgroundColor: "#ddfde5",
             },
           }}
         >
@@ -36,7 +36,7 @@ const createRenderActions =
             color: "#6b7280",
             "&:hover": {
               color: "#094799",
-              backgroundColor: "rgba(12, 67, 150, 0.08)",
+              backgroundColor: "#DBEAFE",
             },
           }}
         >
