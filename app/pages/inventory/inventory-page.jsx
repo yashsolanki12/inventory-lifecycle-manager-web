@@ -118,9 +118,8 @@ const InventoryPage = () => {
             fontWeight: 600,
             fontSize: 13,
             "&:hover": {
-              borderColor: "#006F60",
-              color: "#006F60",
-              backgroundColor: "rgba(22, 167, 130, 0.04)",
+              borderColor: "#CBD5E1",
+              backgroundColor: "#F8FAFC",
             },
           }}
         >

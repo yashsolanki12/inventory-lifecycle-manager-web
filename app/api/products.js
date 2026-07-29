@@ -1,7 +1,7 @@
 import axiosInstance from "./axios-instance";
 
-export const syncProduct = async (shopDomain) => {
-  if (!shopDomain) {
+export const syncProduct = async (shop) => {
+  if (!shop) {
     console.error("No shop domain found in URL parameters.");
     throw new Error("Shop domain is required");
   }
@@ -11,7 +11,7 @@ export const syncProduct = async (shopDomain) => {
       {},
       {
         params: {
-          shop: shopDomain,
+          shop: shop,
         },
       },
     )
@@ -26,17 +26,17 @@ export const syncProduct = async (shopDomain) => {
 };
 
 export const listLocalDbProducts = async (
-  shopDomain,
+  shop,
   { page = 1, limit = 10, search, sort = "createdAt", status = "active" } = {},
 ) => {
-  if (!shopDomain) {
+  if (!shop) {
     console.error("No shop domain found in URL parameters.");
     throw new Error("Shop domain is required");
   }
   return axiosInstance
     .get("products/local", {
       params: {
-        shop: shopDomain,
+        shop: shop,
         page,
         limit,
         search,
@@ -47,6 +47,25 @@ export const listLocalDbProducts = async (
     .then((res) => res.data)
     .catch((error) => {
       console.error("Error while fetching local Db Products:", error);
+      throw error;
+    });
+};
+
+export const getSingleProduct = async (shop, productId) => {
+  if (!shop) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required");
+  }
+  return axiosInstance
+    .get("products", {
+      params: {
+        shop: shop,
+        productId: productId,
+      },
+    })
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error("Error while fetching single product:", error);
       throw error;
     });
 };

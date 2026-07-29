@@ -97,15 +97,19 @@ const COLUMNS = [
   },
   {
     key: "lastSoldAt",
-    label: "Last Sold",
+    label: "Last Sold At ",
     skeletonWidth: 90,
     render: (item) => (
-      <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
+      <Typography sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}>
         {item.lastSoldAt
           ? new Date(item.lastSoldAt).toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",
               year: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+              timeZone: "UTC",
             })
           : "—"}
       </Typography>
@@ -187,16 +191,18 @@ const COLUMNS = [
     skeletonWidth: 100,
     render: (item) => {
       if (!item.createdAt) return <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>;
-      const d = new Date(item.createdAt);
-      const pad = (n) => String(n).padStart(2, "0");
-      const date = `${pad(d.getUTCDate())}/${pad(d.getUTCMonth() + 1)}/${d.getUTCFullYear()}`;
-      let hours = d.getUTCHours();
-      const ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12 || 12;
-      const time = `${pad(hours)}:${pad(d.getUTCMinutes())} ${ampm}`;
+      const date = new Date(item.createdAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "UTC",
+      });
       return (
         <Typography sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}>
-          {date} {time} UTC
+          {date}
         </Typography>
       );
     },

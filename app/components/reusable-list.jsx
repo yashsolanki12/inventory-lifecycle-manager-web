@@ -273,7 +273,7 @@ const ReusableList = ({
                 <Box
                   component="td"
                   key={col.key}
-                  sx={{ py: 2, px: 2, fontSize: 14, verticalAlign: "middle" }}
+                  sx={{ py: 1.2, px: 2, fontSize: 14, verticalAlign: "middle" }}
                 >
                   {col.render ? col.render(item, idx) : item[col.key]}
                 </Box>

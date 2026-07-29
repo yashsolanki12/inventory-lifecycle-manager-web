@@ -18,18 +18,39 @@ const DashboardHeader = ({ onSync }) => {
   };
 
   return (
-    <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <Typography variant="h3" sx={{ fontWeight: 700, color: "#202223", fontSize: 30 }}>
+    <Box
+      sx={{
+        mb: 3,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <Typography
+        variant="h3"
+        sx={{ fontWeight: 700, color: "#202223", fontSize: 30 }}
+      >
         Dashboard
       </Typography>
       <Button
         variant="outlined"
-        startIcon={<SyncIcon sx={{ animation: loading ? "spin 1s linear infinite" : "none", "@keyframes spin": { "0%": { transform: "rotate(0deg)" }, "100%": { transform: "rotate(360deg)" } } }} />}
+        startIcon={
+          <SyncIcon
+            sx={{
+              animation: loading ? "spin 1s linear infinite" : "none",
+              "@keyframes spin": {
+                "0%": { transform: "rotate(0deg)" },
+                "100%": { transform: "rotate(360deg)" },
+              },
+            }}
+          />
+        }
         onClick={handleSync}
         disabled={loading}
         sx={{
-          borderColor: "#008060",
-          color: "#008060",
+          borderColor: "#fafdfc",
+          color: "#000000",
+          backgroundColor: "#FFFFFF",
           textTransform: "none",
           borderRadius: "8px",
           fontWeight: 600,
@@ -37,8 +58,8 @@ const DashboardHeader = ({ onSync }) => {
           px: 2,
           py: 0.75,
           "&:hover": {
-            borderColor: "#006F60",
-            backgroundColor: "rgba(0,128,96,0.04)",
+            borderColor: "#CBD5E1",
+            backgroundColor: "#F8FAFC",
           },
         }}
       >

@@ -152,16 +152,17 @@ const TopDeadStockTable = ({ agingData }) => {
                 variant="outlined"
                 onClick={() => navigate("/app/inventory")}
                 sx={{
-                  borderColor: "#008060",
-                  color: "#008060",
+                  borderColor: "#000703",
+                  color: "#000504",
+                  backgroundColor: "#FFFFFF",
                   textTransform: "none",
                   borderRadius: "8px",
                   fontWeight: 600,
                   fontSize: "13px",
                   px: 3,
                   "&:hover": {
-                    borderColor: "#006F60",
-                    backgroundColor: "rgba(0,128,96,0.04)",
+                    borderColor: "#CBD5E1",
+                    backgroundColor: "#F8FAFC",
                   },
                 }}
               >
