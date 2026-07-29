@@ -1,13 +1,10 @@
-import React from "react";
+import { Outlet } from "react-router";
+import Box from "@mui/material/Box";
 
-const InventoryPageView = React.lazy(
-  () => import("../pages/inventory/inventory-page"),
-);
-
-export default function InventoryRoute() {
+export default function InventoryLayout() {
   return (
-    <React.Suspense fallback={""}>
-      <InventoryPageView />
-    </React.Suspense>
+    <Box sx={{ width: "100%", height: "100%" }}>
+      <Outlet />
+    </Box>
   );
 }

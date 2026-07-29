@@ -8,7 +8,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import IconButton from "@mui/material/IconButton";
-import Skeleton from "@mui/material/Skeleton";
 import SearchIcon from "@mui/icons-material/Search";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -18,8 +17,11 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
 import useInventoryData from "../hooks/useInventoryData";
 import NoDataFound from "./no-data-found";
-
-const MIN_SEARCH_CHARS = 3;
+import {
+  ReusableListSkeleton,
+  PaginationSkeleton,
+} from "../ui/skeleton-loader/reusable-list-skeleton";
+import { MIN_SEARCH_CHARS } from "../utils/helper";
 
 const ReusableList = ({
   fetchFn,
@@ -156,61 +158,58 @@ const ReusableList = ({
     </Box>
   );
 
-  const renderSkeleton = () =>
-    tableWrapper(
-      <Box component="table" sx={{ width: "100%", borderCollapse: "collapse" }}>
-        <Box
-          component="thead"
+  const renderEmpty = () => <NoDataFound />;
+
+  const renderPagination = () => (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        mt: 3,
+        pt: 2,
+        borderTop: "1px solid #ececec",
+      }}
+    >
+      <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
+        Showing {Math.min((page - 1) * defaultLimit + 1, total)} to{" "}
+        {Math.min(page * defaultLimit, total)} of {total} {paginationText}
+      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <IconButton
+          size="small"
+          disabled={!hasPreviousPage}
+          onClick={() => setPage((p) => p - 1)}
           sx={{
-            position: "sticky",
-            top: 0,
-            zIndex: 1,
-            backgroundColor: "#f9fafb",
+            border: "1px solid #e5e7eb",
+            borderRadius: "6px",
+            "&:hover": { backgroundColor: "#0056b3", color: "white" },
+            "&.Mui-disabled": { opacity: 0.4 },
           }}
         >
-          <Box component="tr">
-            {allColumns.map((col) => (
-              <Box
-                key={col.key}
-                component="th"
-                sx={{
-                  textAlign: "left",
-                  py: 1.5,
-                  px: 2,
-                  fontWeight: 600,
-                  fontSize: 14,
-                  color: "#6b7280",
-                  borderBottom: "2px solid #e5e7eb",
-                }}
-              >
-                {col.label}
-              </Box>
-            ))}
-          </Box>
-        </Box>
-        <Box component="tbody">
-          {Array.from({ length: defaultLimit }).map((_, i) => (
-            <Box
-              component="tr"
-              key={i}
-              sx={{ borderBottom: "1px solid #ececec" }}
-            >
-              {allColumns.map((col) => (
-                <Box component="td" key={col.key} sx={{ py: 2, px: 2 }}>
-                  <Skeleton
-                    variant="text"
-                    width={col.skeletonWidth || "80%"}
-                    height={20}
-                  />
-                </Box>
-              ))}
-            </Box>
-          ))}
-        </Box>
-      </Box>,
-    );
-
-  const renderEmpty = () => <NoDataFound />;
+          <ChevronLeftIcon sx={{ fontSize: 18 }} />
+        </IconButton>
+        <Typography
+          sx={{ fontSize: 13, color: "#374151", fontWeight: 500, px: 1 }}
+        >
+          {page} / {totalPages}
+        </Typography>
+        <IconButton
+          size="small"
+          disabled={!hasNextPage}
+          onClick={() => setPage((p) => p + 1)}
+          sx={{
+            border: "1px solid #e5e7eb",
+            borderRadius: "6px",
+            "&:hover": { backgroundColor: "#0056b3", color: "white" },
+            "&.Mui-disabled": { opacity: 0.4 },
+          }}
+        >
+          <ChevronRightIcon sx={{ fontSize: 18 }} />
+        </IconButton>
+      </Box>
+    </Box>
+  );
 
   const renderTable = () =>
     tableWrapper(
@@ -274,7 +273,7 @@ const ReusableList = ({
                 <Box
                   component="td"
                   key={col.key}
-                  sx={{ py: 2, px: 2, fontSize: 14, verticalAlign: "middle" }}
+                  sx={{ py: 1.2, px: 2, fontSize: 14, verticalAlign: "middle" }}
                 >
                   {col.render ? col.render(item, idx) : item[col.key]}
                 </Box>
@@ -326,7 +325,7 @@ const ReusableList = ({
               minWidth: 280,
               "& .MuiOutlinedInput-root": {
                 borderRadius: "8px",
-                backgroundColor: "#f9fafb",
+                backgroundColor: "#ffffff",
                 fontSize: 14,
               },
             }}
@@ -368,7 +367,7 @@ const ReusableList = ({
                   minWidth: 140,
                   borderRadius: "8px",
                   fontSize: 14,
-                  backgroundColor: "#f9fafb",
+                  backgroundColor: "#ffffff",
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: "#e5e7eb",
                   },
@@ -402,7 +401,7 @@ const ReusableList = ({
                   minWidth: 160,
                   borderRadius: "8px",
                   fontSize: 14,
-                  backgroundColor: "#f9fafb",
+                  backgroundColor: "#ffffff",
                   "& .MuiOutlinedInput-notchedOutline": {
                     borderColor: "#e5e7eb",
                   },
@@ -438,7 +437,7 @@ const ReusableList = ({
                   color: "#6b7280",
                   fontSize: 12,
                   "&:hover": {
-                    backgroundColor: "#f3f4f6",
+                    backgroundColor: "#ffebee",
                     borderColor: "#d1d5db",
                   },
                 }}
@@ -452,64 +451,28 @@ const ReusableList = ({
           </Box>
         </Box>
 
-        {isInitialLoading
-          ? renderSkeleton()
-          : items.length === 0 && !isReloading
-            ? renderEmpty()
-            : isReloading
-              ? renderSkeleton()
-              : renderTable()}
-
-        {total > 0 && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mt: 3,
-              pt: 2,
-              borderTop: "1px solid #ececec",
-            }}
-          >
-            {/* prettier-ignore */}
-            <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
-              {/* – */}
-              Showing {Math.min((page - 1) * defaultLimit + 1, total)} to {Math.min(page * defaultLimit, total)} of {total} {paginationText}
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <IconButton
-                size="small"
-                disabled={!hasPreviousPage}
-                onClick={() => setPage((p) => p - 1)}
-                sx={{
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "6px",
-                  "&:hover": { backgroundColor: "#f3f4f6" },
-                  "&.Mui-disabled": { opacity: 0.4 },
-                }}
-              >
-                <ChevronLeftIcon sx={{ fontSize: 18 }} />
-              </IconButton>
-              <Typography
-                sx={{ fontSize: 13, color: "#374151", fontWeight: 500, px: 1 }}
-              >
-                {page} / {totalPages}
-              </Typography>
-              <IconButton
-                size="small"
-                disabled={!hasNextPage}
-                onClick={() => setPage((p) => p + 1)}
-                sx={{
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "6px",
-                  "&:hover": { backgroundColor: "#f3f4f6" },
-                  "&.Mui-disabled": { opacity: 0.4 },
-                }}
-              >
-                <ChevronRightIcon sx={{ fontSize: 18 }} />
-              </IconButton>
-            </Box>
-          </Box>
+        {isInitialLoading ? (
+          <>
+            <ReusableListSkeleton
+              columns={allColumns}
+              skeletonCount={defaultLimit}
+            />
+            <PaginationSkeleton />
+          </>
+        ) : items.length === 0 && !isReloading ? (
+          renderEmpty()
+        ) : (
+          <>
+            {isReloading ? (
+              <ReusableListSkeleton
+                columns={allColumns}
+                skeletonCount={defaultLimit}
+              />
+            ) : (
+              renderTable()
+            )}
+            {total > 0 && renderPagination()}
+          </>
         )}
       </CardContent>
     </Card>
