@@ -19,7 +19,7 @@ const DashboardHeader = ({ onSync }) => {
 
   return (
     <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-      <Typography variant="h4" sx={{ fontWeight: 700, color: "#202223" }}>
+      <Typography variant="h3" sx={{ fontWeight: 700, color: "#202223", fontSize: 30 }}>
         Dashboard
       </Typography>
       <Button

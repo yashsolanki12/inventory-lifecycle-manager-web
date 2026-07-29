@@ -20,19 +20,19 @@ const TopDeadStockTable = ({ agingData }) => {
         border: "1px solid #ececec",
         boxShadow: "0 8px 24px rgba(0,0,0,.04)",
         alignSelf: "start",
-        maxHeight: 360,
+        // maxHeight: 360,
         display: "flex",
         flexDirection: "column",
         height: `${items.length === 0 ? "100%" : null}`,
       }}
     >
-      <CardContent sx={{ p: "24px !important", flex: 1, overflow: "auto" }}>
+      <CardContent sx={{ p: "24px !important", display: "flex", flexDirection: "column" }}>
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: 2.5,
+            mb: 1,
           }}
         >
           <Typography variant="h6" sx={{ fontWeight: 600, fontSize: 18 }}>
@@ -57,70 +57,81 @@ const TopDeadStockTable = ({ agingData }) => {
         ) : (
           <>
             <Box
-              component="table"
-              sx={{ width: "100%", borderCollapse: "collapse" }}
+              sx={{
+                maxHeight: 220,
+                overflowY: "auto",
+                borderRadius: "8px",
+                "&::-webkit-scrollbar": { width: 6 },
+                "&::-webkit-scrollbar-thumb": { backgroundColor: "#d1d5db", borderRadius: 3 },
+                "&::-webkit-scrollbar-track": { backgroundColor: "#f9fafb" },
+              }}
             >
-              <Box component="tbody">
-                {items.map((item, i) => (
-                  <Box
-                    component="tr"
-                    key={item.id}
-                    sx={{ borderBottom: "1px solid #ececec" }}
-                  >
+              <Box
+                component="table"
+                sx={{ width: "100%", borderCollapse: "collapse" }}
+              >
+                <Box component="tbody">
+                  {items.map((item, i) => (
                     <Box
-                      component="td"
-                      sx={{ py: 2, pr: 2, borderBottom: "1px solid #ececec" }}
+                      component="tr"
+                      key={item.id}
+                      sx={{ borderBottom: "1px solid #ececec" }}
                     >
                       <Box
-                        sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+                        component="td"
+                        sx={{ py: 2, pr: 2, borderBottom: "1px solid #ececec" }}
                       >
                         <Box
-                          sx={{
-                            width: 46,
-                            height: 46,
-                            borderRadius: "10px",
-                            backgroundColor:
-                              PRODUCT_COLORS[i % PRODUCT_COLORS.length],
-                            backgroundImage: item.image?.url
-                              ? `url(${item.image.url})`
-                              : "none",
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography sx={{ fontSize: 15, fontWeight: 500 }}>
-                          {item.title ?? "Untitled Product."}
-                        </Typography>
+                          sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+                        >
+                          <Box
+                            sx={{
+                              width: 46,
+                              height: 46,
+                              borderRadius: "10px",
+                              backgroundColor:
+                                PRODUCT_COLORS[i % PRODUCT_COLORS.length],
+                              backgroundImage: item.image?.url
+                                ? `url(${item.image.url})`
+                                : "none",
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                              flexShrink: 0,
+                            }}
+                          />
+                          <Typography sx={{ fontSize: 15, fontWeight: 500 }}>
+                            {item.title ?? "Untitled Product."}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Box
+                        component="td"
+                        sx={{
+                          py: 2,
+                          px: 2,
+                          fontSize: 15,
+                          borderBottom: "1px solid #ececec",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {item.quantity} Units
+                      </Box>
+                      <Box
+                        component="td"
+                        sx={{
+                          py: 2,
+                          pl: 2,
+                          fontSize: 15,
+                          borderBottom: "1px solid #ececec",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {currency}
+                        {item.value.toLocaleString()}
                       </Box>
                     </Box>
-                    <Box
-                      component="td"
-                      sx={{
-                        py: 2,
-                        px: 2,
-                        fontSize: 15,
-                        borderBottom: "1px solid #ececec",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {item.quantity} Units
-                    </Box>
-                    <Box
-                      component="td"
-                      sx={{
-                        py: 2,
-                        pl: 2,
-                        fontSize: 15,
-                        borderBottom: "1px solid #ececec",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {currency}
-                      {item.value.toLocaleString()}
-                    </Box>
-                  </Box>
-                ))}
+                  ))}
+                </Box>
               </Box>
             </Box>
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2.5 }}>

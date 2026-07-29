@@ -1,20 +1,35 @@
 import React from "react";
-import SuspenseFallback from "../components/suspense-fallback";
+// import SuspenseFallback from "../components/suspense-fallback";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
+import { useLoaderData } from "react-router";
+import DashboardSkeleton from "../ui/dashboard-skeleton";
+import SyncProductSkeleton from "../ui/sync-product-skeleton";
 
 const DashboardPage = React.lazy(
   () => import("../pages/dashboard/dashboard-page"),
 );
 
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
-  return null;
+  const { session } = await authenticate.admin(request);
+  return {
+    shop: session.shop ?? "No shop found",
+  };
 };
 
 export default function Index() {
+  const { shop } = useLoaderData();
+  const hasSynced = () => {
+    if (typeof window === "undefined" || !shop) return false;
+    return sessionStorage.getItem(`inventory_synced_${shop}`) === "true";
+  };
+  const showFallback = hasSynced() ? (
+    <DashboardSkeleton />
+  ) : (
+    <SyncProductSkeleton />
+  );
   return (
-    <React.Suspense fallback={<SuspenseFallback />}>
+    <React.Suspense fallback={showFallback}>
       <DashboardPage />
     </React.Suspense>
   );
