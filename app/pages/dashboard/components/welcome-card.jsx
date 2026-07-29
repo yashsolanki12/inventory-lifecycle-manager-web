@@ -5,19 +5,11 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import SyncIcon from "@mui/icons-material/Sync";
-import { usePricingRedirect } from "../../../utils/helper";
-
-const PLAN_SKU_TEXT = {
-  free: "Sync up to 100 products",
-  starter: "Sync up to 1,000 products",
-  pro: "Sync unlimited products",
-};
-
-const FEATURES = [
-  { icon: "\u{1F4E6}", label: "Import all products" },
-  { icon: "\u{1F4CA}", label: "Track inventory levels" },
-  { icon: "\u{1F504}", label: "Auto-sync updates" },
-];
+import {
+  FEATURES,
+  PLAN_SKU_TEXT,
+  usePricingRedirect,
+} from "../../../utils/helper";
 
 const WelcomeCard = ({ onSync, plan }) => {
   const planName = plan?.plan || "free";

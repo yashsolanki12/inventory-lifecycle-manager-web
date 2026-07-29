@@ -4,13 +4,7 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
-import { DASHBOARD_CARDS } from "../../../utils/helper";
-
-const PLAN_COLORS = {
-  free: { bg: "#f3f4f6", text: "#6b7280" },
-  starter: { bg: "#ecfdf5", text: "#008060" },
-  pro: { bg: "#eff6ff", text: "#2563eb" },
-};
+import { DASHBOARD_CARDS, PLAN_COLORS } from "../../../utils/helper";
 
 const StatsCards = ({ dashboardData, plan }) => {
   const data = dashboardData?.data;

@@ -21,8 +21,7 @@ import {
   ReusableListSkeleton,
   PaginationSkeleton,
 } from "../ui/skeleton-loader/reusable-list-skeleton";
-
-const MIN_SEARCH_CHARS = 3;
+import { MIN_SEARCH_CHARS } from "../utils/helper";
 
 const ReusableList = ({
   fetchFn,

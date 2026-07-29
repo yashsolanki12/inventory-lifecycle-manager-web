@@ -1,12 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-
-const PRODUCT_COLORS = ["#2563eb", "#8b5e3c", "#facc15", "#059669", "#7c3aed"];
+import { useNavigate } from "react-router";
+import { PRODUCT_COLORS } from "../../../utils/helper";
 
 const TopDeadStockTable = ({ agingData }) => {
   const navigate = useNavigate();
@@ -23,7 +22,7 @@ const TopDeadStockTable = ({ agingData }) => {
         // maxHeight: 360,
         display: "flex",
         flexDirection: "column",
-        height: "100%"
+        height: "100%",
       }}
     >
       <CardContent
@@ -69,7 +68,10 @@ const TopDeadStockTable = ({ agingData }) => {
                 overflowY: "auto",
                 borderRadius: "8px",
                 "&::-webkit-scrollbar": { width: 6 },
-                "&::-webkit-scrollbar-thumb": { backgroundColor: "#d1d5db", borderRadius: 3 },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#d1d5db",
+                  borderRadius: 3,
+                },
                 "&::-webkit-scrollbar-track": { backgroundColor: "#f9fafb" },
               }}
             >
@@ -89,7 +91,11 @@ const TopDeadStockTable = ({ agingData }) => {
                         sx={{ py: 2, pr: 2, borderBottom: "1px solid #ececec" }}
                       >
                         <Box
-                          sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1.5,
+                          }}
                         >
                           <Box
                             sx={{

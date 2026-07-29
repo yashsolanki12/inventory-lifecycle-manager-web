@@ -17,6 +17,7 @@ import {
 import useInventorySubmit from "../../hooks/useInventorySubmit";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router";
 
 const InventoryPage = () => {
   const shopDomain = useCurrentShopDomain();
@@ -26,10 +27,15 @@ const InventoryPage = () => {
     message: "",
     severity: "success",
   });
+  const navigate = useNavigate();
+
   const fetchProducts = (params) => listLocalDbProducts(shopDomain, params);
 
   const handleView = (item) => {
-    console.log("handle view", item);
+    const productId = item.productId.split("/").pop();
+    if (productId) {
+      navigate(`/app/inventory/${productId}`);
+    }
   };
 
   const handlePreviewProduct = (item) => {
