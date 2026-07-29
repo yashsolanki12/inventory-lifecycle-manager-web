@@ -24,7 +24,16 @@ const PERIOD_OPTIONS = [
 ];
 
 const EmptyState = () => (
-  <Box sx={{ py: 6, textAlign: "center" }}>
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      flexGrow: 1,
+      minHeight: 260,
+    }}
+  >
     <Typography sx={{ color: "#9ca3af", fontSize: 14 }}>
       No dead stock trend data available
     </Typography>
@@ -54,7 +63,14 @@ const DeadStockTrend = () => {
         alignSelf: "start",
       }}
     >
-      <CardContent sx={{ p: "24px !important" }}>
+      <CardContent
+        sx={{
+          p: "24px !important",
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+        }}
+      >
         <Box
           sx={{
             display: "flex",
