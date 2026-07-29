@@ -11,6 +11,7 @@ import useInventoryData from "../../hooks/useInventoryData";
 import { getSingleProduct } from "../../api/products";
 import { useCurrentShopDomain } from "../../utils/helper";
 import { INVENTORY_STATUS_CONFIG } from "../../utils/config/constants";
+import ProductImageZoom from "../../components/product-image-zoom";
 
 const FALLBACK_IMAGE = "/fallback-image.jpg";
 
@@ -76,7 +77,7 @@ const InventoryViewPage = () => {
         </Box>
         <Typography
           variant="h4"
-          sx={{ fontWeight: 700, color: "#202223", fontSize: 26 }}
+          sx={{ fontWeight: 600, color: "#0f1111", fontSize: 24 }}
         >
           {product.title}
         </Typography>
@@ -89,7 +90,7 @@ const InventoryViewPage = () => {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
           {allImages.length > 1 && (
             <Box
               sx={{
@@ -131,372 +132,351 @@ const InventoryViewPage = () => {
               ))}
             </Box>
           )}
-          <Box
-            sx={{
-              width: 360,
-              maxHeight: 320,
-              borderRadius: "12px",
-              overflow: "hidden",
-              backgroundColor: "#f9fafb",
-              border: "1px solid #e5e7eb",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flex: 1,
-            }}
+          <ProductImageZoom
+            imageUrl={mainImage?.url || FALLBACK_IMAGE}
+            altText={mainImage?.altText || product.title}
           >
-            <Box
-              component="img"
-              src={mainImage?.url || FALLBACK_IMAGE}
-              alt={mainImage?.altText || product.title}
-              sx={{
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                p: 2,
-              }}
-            />
-          </Box>
-        </Box>
-
-        <Box sx={{ width: { xs: "100%", md: 600 }, flexShrink: 0 }}>
-          <Box
-            sx={{
-              backgroundColor: "#fff",
-              borderRadius: "12px",
-              border: "1px solid #e5e7eb",
-              px: 2,
-              py: 2,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            {/* Product Type */}
-            {product.title && (
+            <Box sx={{ width: { xs: "100%", md: 600 }, flexShrink: 0 }}>
               <Box
                 sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "12px",
+                  border: "1px solid #e5e7eb",
+                  px: 2,
+                  py: 2,
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  flexDirection: "column",
+                  gap: 2,
                 }}
               >
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: "#9ca3af",
-                    flexShrink: 0,
-                  }}
-                >
-                  Title
-                </Typography>
-                <Typography
-                  sx={{ fontSize: 14, color: "#202223", fontWeight: 600 }}
-                >
-                  {product.title}
-                </Typography>
-              </Box>
-            )}
+                {/* Product Type */}
+                {product.title && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        flexShrink: 0,
+                      }}
+                    >
+                      Title
+                    </Typography>
+                    <Typography
+                      sx={{ fontSize: 14, color: "#0f1111", fontWeight: 500 }}
+                    >
+                      {product.title}
+                    </Typography>
+                  </Box>
+                )}
 
-            {/* Product Type */}
-            {product.productType && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: "#9ca3af",
-                    flexShrink: 0,
-                  }}
-                >
-                  Product Type
-                </Typography>
-                <Typography
-                  sx={{ fontSize: 14, color: "#202223", fontWeight: 600 }}
-                >
-                  {product.productType}
-                </Typography>
-              </Box>
-            )}
+                {/* Product Type */}
+                {product.productType && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        flexShrink: 0,
+                      }}
+                    >
+                      Product Type
+                    </Typography>
+                    <Typography
+                      sx={{ fontSize: 14, color: "#0f1111", fontWeight: 500 }}
+                    >
+                      {product.productType}
+                    </Typography>
+                  </Box>
+                )}
 
-            {/* Vendor */}
-            {product.vendor && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: "#9ca3af",
-                    flexShrink: 0,
-                  }}
-                >
-                  Vendor
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    color: "#202223",
-                    fontWeight: 600,
-                  }}
-                >
-                  {product.vendor}
-                </Typography>
-              </Box>
-            )}
+                {/* Vendor */}
+                {product.vendor && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        flexShrink: 0,
+                      }}
+                    >
+                      Vendor
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        color: "#0f1111",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {product.vendor}
+                    </Typography>
+                  </Box>
+                )}
 
-            {/* Tags */}
-            {product.tags?.length > 0 && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: "#9ca3af",
-                    flexShrink: 0,
-                  }}
-                >
-                  Tags
-                </Typography>
+                {/* Tags */}
+                {product.tags?.length > 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        flexShrink: 0,
+                      }}
+                    >
+                      Tags
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 0.5,
+                        alignItems: "center",
+                        flex: 1,
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      {product.tags.slice(0, 2).map((tag) => (
+                        <Chip
+                          key={tag}
+                          label={tag}
+                          size="small"
+                          sx={{
+                            height: 22,
+                            fontSize: 11,
+                            fontWeight: 500,
+                            backgroundColor: "#f3f4f6",
+                            color: "#0f1111",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      ))}
+                      {product.tags.length > 2 && (
+                        <Tooltip
+                          title={product.tags.slice(2).join(", ")}
+                          arrow
+                          placement="top"
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: 11,
+                              color: "#9ca3af",
+                              cursor: "default",
+                            }}
+                          >
+                            +{product.tags.length - 2}
+                          </Typography>
+                        </Tooltip>
+                      )}
+                    </Box>
+                  </Box>
+                )}
+
+                {/* Stock */}
                 <Box
                   sx={{
                     display: "flex",
-                    gap: 0.5,
                     alignItems: "center",
-                    flex: 1,
-                    justifyContent: "flex-end",
+                    justifyContent: "space-between",
                   }}
                 >
-                  {product.tags.slice(0, 2).map((tag) => (
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#9ca3af",
+                      flexShrink: 0,
+                    }}
+                  >
+                    Stock
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      color: "#0f1111",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {product.totalInventory ?? 0} units
+                  </Typography>
+                </Box>
+
+                {/* SKU */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#9ca3af",
+                      flexShrink: 0,
+                    }}
+                  >
+                    SKU
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      color: "#0f1111",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {sku}
+                  </Typography>
+                </Box>
+
+                {/* Last Sold At */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#9ca3af",
+                      flexShrink: 0,
+                    }}
+                  >
+                    Last Sold At
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      color: "#0f1111",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {product.lastSoldAt
+                      ? new Date(product.lastSoldAt).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: true,
+                            timeZone: "UTC",
+                          },
+                        )
+                      : "—"}
+                  </Typography>
+                </Box>
+
+                {/* Created At */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#9ca3af",
+                      flexShrink: 0,
+                    }}
+                  >
+                    Created At
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      color: "#0f1111",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {product.createdAt
+                      ? new Date(product.createdAt).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: true,
+                            timeZone: "UTC",
+                          },
+                        )
+                      : "—"}
+                  </Typography>
+                </Box>
+
+                {/* Status */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "#9ca3af",
+                      flexShrink: 0,
+                    }}
+                  >
+                    Status
+                  </Typography>
+                  {statusConfig && (
                     <Chip
-                      key={tag}
-                      label={tag}
+                      label={statusConfig.label}
                       size="small"
                       sx={{
-                        height: 22,
-                        fontSize: 11,
-                        fontWeight: 500,
-                        backgroundColor: "#f3f4f6",
-                        color: "#374151",
-                        borderRadius: "4px",
+                        backgroundColor: statusConfig.bg,
+                        color: statusConfig.color,
+                        fontWeight: 600,
+                        fontSize: 12,
+                        height: 26,
+                        borderRadius: "6px",
+                        border: `1px solid ${statusConfig.color}20`,
                       }}
                     />
-                  ))}
-                  {product.tags.length > 2 && (
-                    <Tooltip
-                      title={product.tags.slice(2).join(", ")}
-                      arrow
-                      placement="top"
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: 11,
-                          color: "#9ca3af",
-                          cursor: "default",
-                        }}
-                      >
-                        +{product.tags.length - 2}
-                      </Typography>
-                    </Tooltip>
                   )}
                 </Box>
               </Box>
-            )}
-
-            {/* Stock */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "#9ca3af",
-
-                  flexShrink: 0,
-                }}
-              >
-                Stock
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  color: "#202223",
-                  fontWeight: 600,
-                }}
-              >
-                {product.totalInventory ?? 0} units
-              </Typography>
             </Box>
-
-            {/* SKU */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "#9ca3af",
-
-                  flexShrink: 0,
-                }}
-              >
-                SKU
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  color: "#202223",
-                  fontWeight: 600,
-                }}
-              >
-                {sku}
-              </Typography>
-            </Box>
-
-            {/* Last Sold At */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "#9ca3af",
-
-                  flexShrink: 0,
-                }}
-              >
-                Last Sold At
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  color: "#202223",
-                  fontWeight: 600,
-                }}
-              >
-                {product.lastSoldAt
-                  ? new Date(product.lastSoldAt).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "numeric",
-                      minute: "2-digit",
-                      hour12: true,
-                      timeZone: "UTC",
-                    })
-                  : "—"}
-              </Typography>
-            </Box>
-
-            {/* Created At */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "#9ca3af",
-
-                  flexShrink: 0,
-                }}
-              >
-                Created At
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  color: "#202223",
-                  fontWeight: 600,
-                }}
-              >
-                {product.createdAt
-                  ? new Date(product.createdAt).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "numeric",
-                      minute: "2-digit",
-                      hour12: true,
-                      timeZone: "UTC",
-                    })
-                  : "—"}
-              </Typography>
-            </Box>
-
-            {/* Status */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: "#9ca3af",
-
-                  flexShrink: 0,
-                }}
-              >
-                Status
-              </Typography>
-              {statusConfig && (
-                <Chip
-                  label={statusConfig.label}
-                  size="small"
-                  sx={{
-                    backgroundColor: statusConfig.bg,
-                    color: statusConfig.color,
-                    fontWeight: 600,
-                    fontSize: 12,
-                    height: 26,
-                    borderRadius: "6px",
-                    border: `1px solid ${statusConfig.color}20`,
-                  }}
-                />
-              )}
-            </Box>
-          </Box>
+          </ProductImageZoom>
         </Box>
       </Box>
     </Box>

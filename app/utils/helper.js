@@ -122,3 +122,5 @@ export const FEATURES = [
   { icon: "\u{1F4CA}", label: "Track inventory levels" },
   { icon: "\u{1F504}", label: "Auto-sync updates" },
 ];
+
+export const ZOOM_FACTOR = 2.5;

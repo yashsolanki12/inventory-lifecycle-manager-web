@@ -73,6 +73,75 @@ const COLUMNS = [
       </Box>
     ),
   },
+
+  {
+    key: "productType",
+    label: "Product Type",
+    skeletonWidth: 80,
+    render: (item) => {
+      const productType = item.productType || "—";
+      return (
+        <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
+          {productType}
+        </Typography>
+      );
+    },
+  },
+
+  {
+    key: "tags",
+    label: "Tags",
+    skeletonWidth: 100,
+    render: (item) => {
+      const rawTags = item.tags || [];
+      const tags = Array.isArray(rawTags)
+        ? rawTags
+        : typeof rawTags === "string" && rawTags
+          ? rawTags
+              .split(",")
+              .map((t) => t.trim())
+              .filter(Boolean)
+          : [];
+      if (tags.length === 0)
+        return (
+          <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
+        );
+      return (
+        <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+          {tags.slice(0, 2).map((tag) => (
+            <Chip
+              key={tag}
+              label={tag}
+              size="small"
+              sx={{
+                height: 22,
+                fontSize: 11,
+                fontWeight: 500,
+                backgroundColor: "#f3f4f6",
+                color: "#374151",
+                borderRadius: "4px",
+              }}
+            />
+          ))}
+          {tags.length > 2 && (
+            <Tooltip title={tags.slice(2).join(", ")} arrow placement="top">
+              <Typography
+                sx={{
+                  fontSize: 11,
+                  color: "#9ca3af",
+                  alignSelf: "center",
+                  cursor: "default",
+                }}
+              >
+                +{tags.length - 2}
+              </Typography>
+            </Tooltip>
+          )}
+        </Box>
+      );
+    },
+  },
+
   {
     key: "sku",
     label: "SKU",
@@ -84,6 +153,7 @@ const COLUMNS = [
       );
     },
   },
+
   {
     key: "stock",
     label: "Stock",
@@ -95,26 +165,7 @@ const COLUMNS = [
       </Typography>
     ),
   },
-  {
-    key: "lastSoldAt",
-    label: "Last Sold At ",
-    skeletonWidth: 90,
-    render: (item) => (
-      <Typography sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}>
-        {item.lastSoldAt
-          ? new Date(item.lastSoldAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-              hour: "numeric",
-              minute: "2-digit",
-              hour12: true,
-              timeZone: "UTC",
-            })
-          : "—"}
-      </Typography>
-    ),
-  },
+
   {
     key: "status",
     label: "Status",
@@ -141,47 +192,24 @@ const COLUMNS = [
     },
   },
   {
-    key: "tags",
-    label: "Tags",
-    skeletonWidth: 100,
-    render: (item) => {
-      const rawTags = item.tags || [];
-      const tags = Array.isArray(rawTags)
-        ? rawTags
-        : typeof rawTags === "string" && rawTags
-          ? rawTags.split(",").map((t) => t.trim()).filter(Boolean)
-          : [];
-      if (tags.length === 0)
-        return <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>;
-      return (
-        <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-          {tags.slice(0, 2).map((tag) => (
-            <Chip
-              key={tag}
-              label={tag}
-              size="small"
-              sx={{
-                height: 22,
-                fontSize: 11,
-                fontWeight: 500,
-                backgroundColor: "#f3f4f6",
-                color: "#374151",
-                borderRadius: "4px",
-              }}
-            />
-          ))}
-          {tags.length > 2 && (
-            <Tooltip title={tags.slice(2).join(", ")} arrow placement="top">
-              <Typography
-                sx={{ fontSize: 11, color: "#9ca3af", alignSelf: "center", cursor: "default" }}
-              >
-                +{tags.length - 2}
-              </Typography>
-            </Tooltip>
-          )}
-        </Box>
-      );
-    },
+    key: "lastSoldAt",
+    label: "Last Sold At ",
+    skeletonWidth: 90,
+    render: (item) => (
+      <Typography sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}>
+        {item.lastSoldAt
+          ? new Date(item.lastSoldAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              hour12: true,
+              timeZone: "UTC",
+            })
+          : "—"}
+      </Typography>
+    ),
   },
   {
     key: "createdAt",
@@ -190,7 +218,10 @@ const COLUMNS = [
     sortField: "createdAt",
     skeletonWidth: 100,
     render: (item) => {
-      if (!item.createdAt) return <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>;
+      if (!item.createdAt)
+        return (
+          <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
+        );
       const date = new Date(item.createdAt).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
@@ -201,7 +232,9 @@ const COLUMNS = [
         timeZone: "UTC",
       });
       return (
-        <Typography sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}>
+        <Typography
+          sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}
+        >
           {date}
         </Typography>
       );
