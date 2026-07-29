@@ -8,7 +8,18 @@ import Button from "@mui/material/Button";
 
 function ConfirmDialog({ open, title, message, onClose, onConfirm }) {
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={open}
+      onClose={(reason) => {
+        // Only allow closing via Cancel button, not outside click or escape
+        if (reason === "backdropClick" || reason === "escapeKeyDown") {
+          return;
+        }
+      }}
+      aria-labelledby="confirm-dialog-title"
+      maxWidth="sm"
+      fullWidth
+    >
       <DialogTitle sx={{ fontWeight: 600 }}>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ fontSize: "14px", lineHeight: 1.6 }}>
