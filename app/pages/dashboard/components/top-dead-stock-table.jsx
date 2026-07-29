@@ -23,10 +23,17 @@ const TopDeadStockTable = ({ agingData }) => {
         // maxHeight: 360,
         display: "flex",
         flexDirection: "column",
-        height: `${items.length === 0 ? "100%" : null}`,
+        height: "100%"
       }}
     >
-      <CardContent sx={{ p: "24px !important", display: "flex", flexDirection: "column" }}>
+      <CardContent
+        sx={{
+          p: "24px !important",
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -47,7 +54,7 @@ const TopDeadStockTable = ({ agingData }) => {
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
-              height: "calc(100% - 49px)",
+              flex: 1,
             }}
           >
             <Typography sx={{ color: "#9ca3af", fontSize: 14 }}>
