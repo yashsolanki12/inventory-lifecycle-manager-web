@@ -124,3 +124,42 @@ export const FEATURES = [
 ];
 
 export const ZOOM_FACTOR = 2.5;
+
+export const COLOR_MAP = {
+  black: "#000000",
+  white: "#ffffff",
+  red: "#ef4444",
+  blue: "#3b82f6",
+  green: "#22c55e",
+  yellow: "#eab308",
+  orange: "#f97316",
+  purple: "#a855f7",
+  pink: "#ec4899",
+  brown: "#92400e",
+  grey: "#6b7280",
+  gray: "#6b7280",
+  silver: "#c0c0c0",
+  gold: "#ffd700",
+  navy: "#1e3a5f",
+  teal: "#14b8a6",
+  cyan: "#06b6d4",
+  maroon: "#800000",
+  olive: "#808000",
+  lime: "#84cc16",
+  indigo: "#6366f1",
+  violet: "#8b5cf6",
+  beige: "#f5f5dc",
+  coral: "#ff7f50",
+  salmon: "#fa8072",
+  turquoise: "#40e0d0",
+  lavender: "#e6e6fa",
+  peach: "#ffcba4",
+  mint: "#98ff98",
+  ivory: "#fffff0",
+  charcoal: "#36454f",
+};
+
+export const getColorHex = (colorName) => {
+  const normalized = colorName?.toLowerCase().trim();
+  return COLOR_MAP[normalized] || null;
+};
