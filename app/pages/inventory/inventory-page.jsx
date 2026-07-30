@@ -9,7 +9,10 @@ import ConfirmDialog from "../../ui/confirmation-dialog";
 import { generateProductCsv } from "../../api/generate-csv";
 import { useCurrentShopDomain } from "../../utils/helper";
 import { listLocalDbProducts } from "../../api/products";
-import COLUMNS, { createRenderActions } from "../../utils/config/columns";
+import {
+  createRenderActions,
+  INVENTORY_COLUMNS,
+} from "../../utils/config/columns";
 import {
   INVENTORY_SORT_OPTIONS,
   INVENTORY_FILTER_OPTIONS,
@@ -130,14 +133,14 @@ const InventoryPage = () => {
       <ReusableList
         fetchFn={fetchProducts}
         queryKey="products-local"
-        columns={COLUMNS}
+        columns={INVENTORY_COLUMNS}
         actions={renderActions}
         searchPlaceholder="Search by product name..."
         sortOptions={INVENTORY_SORT_OPTIONS}
         defaultSort="-createdAt"
-        filterOptions={INVENTORY_FILTER_OPTIONS}
-        defaultFilter="active"
-        filterParam="status"
+        filters={[
+          { param: "status", label: "Status", options: INVENTORY_FILTER_OPTIONS, defaultValue: "active" },
+        ]}
         defaultLimit={10}
         paginationText="products"
       />
