@@ -5,7 +5,13 @@ import Skeleton from "@mui/material/Skeleton";
 const InventoryViewSkeleton = () => {
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
-      <Skeleton variant="text" width={300} height={40} sx={{ mb: 3 }} />
+      {/* Header */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 3, mb: 3 }}>
+        <Skeleton variant="circular" width={40} height={40} />
+        <Skeleton variant="text" width={300} height={32} />
+      </Box>
+
+      {/* Image & Product Info */}
       <Box
         sx={{
           display: "flex",
@@ -13,41 +19,66 @@ const InventoryViewSkeleton = () => {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
+          {/* Thumbnails */}
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} variant="rounded" width={44} height={44} />
+              <Skeleton key={i} variant="rounded" width={38} height={38} sx={{ borderRadius: "8px" }} />
             ))}
           </Box>
-          <Skeleton variant="rounded" width={360} height={320} />
+
+          {/* Main Image & Details */}
+          <Box sx={{ flex: 1, display: "flex", gap: 2 }}>
+            <Skeleton variant="rounded" width={360} height={320} sx={{ borderRadius: "12px", flexShrink: 0 }} />
+            <Box sx={{ flex: 1 }}>
+              <Box
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "12px",
+                  border: "1px solid #e5e7eb",
+                  px: 2,
+                  py: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <Box key={i} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <Skeleton variant="text" width={100} height={16} />
+                    <Skeleton variant="text" width={120} height={18} />
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
         </Box>
-        <Box sx={{ width: { xs: "100%", md: 700 } }}>
-          <Box
-            sx={{
-              backgroundColor: "#fff",
-              borderRadius: "12px",
-              border: "1px solid #e5e7eb",
-              px: 4,
-              py: 4,
-              display: "flex",
-              flexDirection: "column",
-              gap: 3,
-            }}
-          >
-            {Array.from({ length: 8 }).map((_, i) => (
-              <Box key={i} sx={{ display: "flex", alignItems: "center" }}>
-                <Skeleton
-                  variant="text"
-                  width={120}
-                  height={16}
-                  sx={{ mr: 2 }}
-                />
-                <Skeleton
-                  variant="text"
-                  width="60%"
-                  height={18}
-                  sx={{ ml: "auto" }}
-                />
+      </Box>
+
+      {/* Master Tabs Section */}
+      <Box
+        sx={{
+          mt: 3,
+          backgroundColor: "#fff",
+          borderRadius: "12px",
+          border: "1px solid #e5e7eb",
+          overflow: "hidden",
+        }}
+      >
+        {/* Tabs */}
+        <Box sx={{ display: "flex", gap: 2, px: 2, py: 1.5, borderBottom: "1px solid #e5e7eb" }}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} variant="rounded" width={100} height={24} sx={{ borderRadius: "6px" }} />
+          ))}
+        </Box>
+
+        {/* Tab Content */}
+        <Box sx={{ p: 3 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Box key={i} sx={{ display: "flex", gap: 2 }}>
+                <Skeleton variant="rounded" width={120} height={16} />
+                <Skeleton variant="rounded" width="60%" height={16} />
               </Box>
             ))}
           </Box>

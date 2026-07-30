@@ -22,7 +22,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
   };
 
   return (
-    <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
+    <Box sx={{ display: "flex", gap: 2, flex: 1, position: "relative" }}>
       <Box
         ref={containerRef}
         onMouseMove={handleMouseMove}
@@ -40,6 +40,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
           flexShrink: 0,
           cursor: "crosshair",
           position: "relative",
+          zIndex: 1,
         }}
       >
         <Box
@@ -57,11 +58,16 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
         />
       </Box>
 
-      {zoom.active ? (
+      {children}
+
+      {zoom.active && (
         <Box
           sx={{
-            width: { xs: "100%", md: 600 },
-            height: 320,
+            position: "absolute",
+            left: 376,
+            top: 0,
+            width: "calc(100% - 376px)",
+            height: "100%",
             borderRadius: "12px",
             overflow: "hidden",
             border: "1px solid #e5e7eb",
@@ -69,11 +75,10 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
             backgroundSize: `${ZOOM_FACTOR * 100}%`,
             backgroundPosition: `${zoom.x}% ${zoom.y}%`,
             backgroundRepeat: "no-repeat",
-            flexShrink: 0,
+            zIndex: 10,
+            boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
           }}
         />
-      ) : (
-        children
       )}
     </Box>
   );
