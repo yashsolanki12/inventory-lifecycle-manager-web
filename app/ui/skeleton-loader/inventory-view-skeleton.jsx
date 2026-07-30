@@ -21,15 +21,34 @@ const InventoryViewSkeleton = () => {
       >
         <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
           {/* Thumbnails */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 0.5,
+              maxHeight: 320,
+              width: 54,
+            }}
+          >
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} variant="rounded" width={38} height={38} sx={{ borderRadius: "8px" }} />
+              <Skeleton
+                key={i}
+                variant="rounded"
+                width={38}
+                height={38}
+                sx={{ borderRadius: "8px" }}
+              />
             ))}
           </Box>
 
           {/* Main Image & Details */}
-          <Box sx={{ flex: 1, display: "flex", gap: 2 }}>
-            <Skeleton variant="rounded" width={360} height={320} sx={{ borderRadius: "12px", flexShrink: 0 }} />
+          <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
+            <Skeleton
+              variant="rounded"
+              width={600}
+              height={320}
+              sx={{ borderRadius: "12px", flexShrink: 0 }}
+            />
             <Box sx={{ flex: 1 }}>
               <Box
                 sx={{
@@ -43,12 +62,71 @@ const InventoryViewSkeleton = () => {
                   gap: 2,
                 }}
               >
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <Box key={i} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <Skeleton variant="text" width={100} height={16} />
-                    <Skeleton variant="text" width={120} height={18} />
-                  </Box>
-                ))}
+                {/* SKU */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={80} height={16} />
+                  <Skeleton variant="text" width={100} height={18} />
+                </Box>
+
+                {/* Stock */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={60} height={16} />
+                  <Skeleton variant="text" width={80} height={18} />
+                </Box>
+
+                {/* Inventory Age */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={110} height={16} />
+                  <Skeleton variant="text" width={90} height={18} />
+                </Box>
+
+                {/* Last Sale */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={80} height={16} />
+                  <Skeleton variant="text" width={100} height={18} />
+                </Box>
+
+                {/* Inventory Value */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={130} height={16} />
+                  <Skeleton variant="text" width={120} height={18} />
+                </Box>
+
+                {/* Status Chip */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={60} height={16} />
+                  <Skeleton variant="rounded" width={80} height={24} sx={{ borderRadius: "16px" }} />
+                </Box>
+
+                {/* Stock Status Chip */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={100} height={16} />
+                  <Skeleton variant="rounded" width={70} height={24} sx={{ borderRadius: "16px" }} />
+                </Box>
+
+                {/* Product Type */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={110} height={16} />
+                  <Skeleton variant="text" width={90} height={18} />
+                </Box>
+
+                {/* Vendor */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={70} height={16} />
+                  <Skeleton variant="text" width={100} height={18} />
+                </Box>
+
+                {/* Tags */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={50} height={16} />
+                  <Skeleton variant="rounded" width={120} height={22} sx={{ borderRadius: "4px" }} />
+                </Box>
+
+                {/* Created At */}
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Skeleton variant="text" width={90} height={16} />
+                  <Skeleton variant="text" width={140} height={18} />
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -66,10 +144,26 @@ const InventoryViewSkeleton = () => {
         }}
       >
         {/* Tabs */}
-        <Box sx={{ display: "flex", gap: 2, px: 2, py: 1.5, borderBottom: "1px solid #e5e7eb" }}>
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} variant="rounded" width={100} height={24} sx={{ borderRadius: "6px" }} />
-          ))}
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            px: 2,
+            py: 1.5,
+            borderBottom: "1px solid #e5e7eb",
+          }}
+        >
+          {["Overview", "Inventory History", "Sales History", "Variants"].map(
+            (_, i) => (
+              <Skeleton
+                key={i}
+                variant="rounded"
+                width={110}
+                height={28}
+                sx={{ borderRadius: "6px" }}
+              />
+            ),
+          )}
         </Box>
 
         {/* Tab Content */}

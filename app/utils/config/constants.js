@@ -1,7 +1,15 @@
 export const INVENTORY_STATUS_CONFIG = {
-  ACTIVE: { label: "Active", color: "#22c55e", bg: "#f0fdf4" },
-  DRAFT: { label: "Draft", color: "#f97316", bg: "#fff7ed" },
-  ARCHIVED: { label: "Archived", color: "#6b7280", bg: "#f9fafb" },
+  ACTIVE: { label: "Active", color: "#15803d", bg: "#dcfce7" },
+  DRAFT: { label: "Draft", color: "#c2410c", bg: "#ffedd5" },
+  ARCHIVED: { label: "Archived", color: "#6b7280", bg: "#f3f4f6" },
+};
+
+export const STOCK_STATUS_CONFIG = {
+  fresh: { label: "Fresh", color: "#15803d", bg: "#dcfce7" },
+  mild: { label: "Mild", color: "#a16207", bg: "#fef9c3" },
+  aging: { label: "Aging", color: "#c2410c", bg: "#ffedd5" },
+  dead: { label: "Dead", color: "#b91c1c", bg: "#fee2e2" },
+  unknown: { label: "Unknown", color: "#6b7280", bg: "#f3f4f6" },
 };
 
 export const ORDER_STATUS_CONFIG = {

@@ -12,7 +12,10 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useInventoryData from "../../hooks/useInventoryData";
 import { getSingleProduct } from "../../api/products";
 import { useCurrentShopDomain } from "../../utils/helper";
-import { INVENTORY_STATUS_CONFIG } from "../../utils/config/constants";
+import {
+  INVENTORY_STATUS_CONFIG,
+  STOCK_STATUS_CONFIG,
+} from "../../utils/config/constants";
 import ProductImageZoom from "../../components/product-image-zoom";
 import TabPanel from "./ui-components/TabPanel";
 import OverviewTab from "./ui-components/OverviewTab";
@@ -171,15 +174,152 @@ const InventoryViewPage = () => {
                   gap: 2,
                 }}
               >
-                {product.title && (
+                {/* Product Title */}
+                {/* {product.title && (
                   <InfoRow label="Title" value={product.title} />
+                )} */}
+
+                {/* SKU */}
+                <InfoRow label="SKU" value={sku} />
+
+                {/* Stock */}
+                <InfoRow
+                  label="Stock"
+                  value={`${product.totalInventory ?? 0} units`}
+                />
+
+                {/* Product Age */}
+                {product.productAgeDays && (
+                  <InfoRow
+                    label="Inventory Age"
+                    value={product.productAgeDays}
+                  />
                 )}
+
+                {/* Last sale */}
+                {product.daysWithoutSales && (
+                  <InfoRow label="Last Sale" value={product.daysWithoutSales} />
+                )}
+
+                {/* Inventory Value */}
+                {product.inventoryValue && (
+                  <InfoRow
+                    label="Inventory Value"
+                    value={product.inventoryValue}
+                  />
+                )}
+
+                {/* Status */}
+                {statusConfig && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        flexShrink: 0,
+                      }}
+                    >
+                      Status
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        backgroundColor: statusConfig.bg,
+                        color: statusConfig.color,
+                        fontWeight: 600,
+                        fontSize: 12,
+                        px: 1.5,
+                        py: 0.5,
+                        borderRadius: "16px",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: 6,
+                          height: 6,
+                          borderRadius: "50%",
+                          backgroundColor: statusConfig.color,
+                        }}
+                      />
+                      {statusConfig.label}
+                    </Box>
+                  </Box>
+                )}
+
+                {/* Stock Status */}
+                {product.stockStatus &&
+                  (() => {
+                    const stockKey =
+                      product.stockStatus?.toLowerCase() || "unknown";
+                    const stockConfig =
+                      STOCK_STATUS_CONFIG[stockKey] ||
+                      STOCK_STATUS_CONFIG.unknown;
+                    return (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: 14,
+                            fontWeight: 600,
+                            color: "#9ca3af",
+                            flexShrink: 0,
+                          }}
+                        >
+                          Stock Status
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 0.5,
+                            backgroundColor: stockConfig.bg,
+                            color: stockConfig.color,
+                            fontWeight: 600,
+                            fontSize: 12,
+                            px: 1.5,
+                            py: 0.5,
+                            borderRadius: "16px",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: 6,
+                              height: 6,
+                              borderRadius: "50%",
+                              backgroundColor: stockConfig.color,
+                            }}
+                          />
+                          {stockConfig.label}
+                        </Box>
+                      </Box>
+                    );
+                  })()}
+
+                {/* Product Type */}
                 {product.productType && (
                   <InfoRow label="Product Type" value={product.productType} />
                 )}
+
+                {/* Vendor */}
                 {product.vendor && (
                   <InfoRow label="Vendor" value={product.vendor} />
                 )}
+
+                {/* Tags */}
                 {product.tags?.length > 0 && (
                   <Box
                     sx={{
@@ -242,12 +382,8 @@ const InventoryViewPage = () => {
                     </Box>
                   </Box>
                 )}
-                <InfoRow
-                  label="Stock"
-                  value={`${product.totalInventory ?? 0} units`}
-                />
-                <InfoRow label="SKU" value={sku} />
-                <InfoRow
+
+                {/* <InfoRow
                   label="Last Sold At"
                   value={
                     product.lastSoldAt
@@ -262,7 +398,8 @@ const InventoryViewPage = () => {
                         })
                       : "—"
                   }
-                />
+                /> */}
+                {/* Created At */}
                 <InfoRow
                   label="Created At"
                   value={
@@ -279,39 +416,6 @@ const InventoryViewPage = () => {
                       : "—"
                   }
                 />
-                {statusConfig && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: "#9ca3af",
-                        flexShrink: 0,
-                      }}
-                    >
-                      Status
-                    </Typography>
-                    <Chip
-                      label={statusConfig.label}
-                      size="small"
-                      sx={{
-                        backgroundColor: statusConfig.bg,
-                        color: statusConfig.color,
-                        fontWeight: 600,
-                        fontSize: 12,
-                        height: 26,
-                        borderRadius: "6px",
-                        border: `1px solid ${statusConfig.color}20`,
-                      }}
-                    />
-                  </Box>
-                )}
               </Box>
             </Box>
           </ProductImageZoom>
