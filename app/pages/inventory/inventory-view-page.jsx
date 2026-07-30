@@ -67,7 +67,8 @@ const InventoryViewPage = () => {
             border: "1px solid #bfd3e6",
             "&:hover": {
               backgroundColor: "#f3f4f6",
-              border: "1px solid #8fb3d4",
+              border: "1px solid #CBD5E1",
+            
             },
           }}
         >
@@ -424,18 +425,15 @@ const InventoryViewPage = () => {
                     }}
                   >
                     {product.createdAt
-                      ? new Date(product.createdAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "numeric",
-                            minute: "2-digit",
-                            hour12: true,
-                            timeZone: "UTC",
-                          },
-                        )
+                      ? new Date(product.createdAt).toLocaleString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
+                          timeZone: "UTC",
+                        })
                       : "—"}
                   </Typography>
                 </Box>

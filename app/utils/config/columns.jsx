@@ -4,12 +4,15 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import Popover from "@mui/material/Popover";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
-import { INVENTORY_STATUS_CONFIG } from "./constants";
+import { INVENTORY_STATUS_CONFIG, ORDER_STATUS_CONFIG, ORDER_FINANCIAL_STATUS_CONFIG, ORDER_FULFILLMENT_STATUS_CONFIG } from "./constants";
 
-const createRenderActions =
+// Inventory action column
+export const createRenderActions =
   ({ onView, onPreviewUrl }) =>
   (item) => (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -46,7 +49,8 @@ const createRenderActions =
     </Box>
   );
 
-const COLUMNS = [
+// Inventory list column
+export const INVENTORY_COLUMNS = [
   {
     key: "product",
     label: "Product",
@@ -222,7 +226,7 @@ const COLUMNS = [
         return (
           <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
         );
-      const date = new Date(item.createdAt).toLocaleDateString("en-US", {
+      const date = new Date(item.createdAt).toLocaleString("en-US", {
         month: "short",
         day: "numeric",
         year: "numeric",
@@ -242,5 +246,327 @@ const COLUMNS = [
   },
 ];
 
-export { createRenderActions };
-export default COLUMNS;
+const LineItemsPopover = ({ lineItems, children }) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <Box onClick={handleClick}>{children}</Box>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
+        onClose={handleClose}
+        slotProps={{
+          paper: {
+            sx: {
+              mt: 0.5,
+              borderRadius: "10px",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+              border: "1px solid #e5e7eb",
+              minWidth: 320,
+              maxWidth: 420,
+              maxHeight: 300,
+              overflowY: "auto",
+            },
+          },
+        }}
+      >
+        {lineItems.length === 0 ? (
+          <Typography sx={{ p: 2, fontSize: 13, color: "#9ca3af" }}>
+            No items
+          </Typography>
+        ) : (
+          lineItems.map((li, i) => (
+            <Box
+              key={li.id || i}
+              sx={{
+                display: "flex",
+                gap: 1.5,
+                p: 1.5,
+                borderBottom:
+                  i < lineItems.length - 1 ? "1px solid #f3f4f6" : "none",
+                "&:hover": { backgroundColor: "#f9fafb" },
+              }}
+            >
+              <Box
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: "8px",
+                  overflow: "hidden",
+                  flexShrink: 0,
+                  backgroundColor: "#f3f4f6",
+                  backgroundImage: `url(${li.image?.url || "/fallback-image.jpg"})`,
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                }}
+              />
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography
+                  sx={{ fontSize: 13, fontWeight: 600, lineHeight: 1.3 }}
+                >
+                  {li.title}
+                </Typography>
+                {li.variantTitle && (
+                  <Typography
+                    sx={{ fontSize: 12, color: "#6b7280", mt: 0.3 }}
+                  >
+                    Variant: {li.variantTitle}
+                  </Typography>
+                )}
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 1,
+                    mt: 0.3,
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {li.sku && (
+                    <Typography sx={{ fontSize: 11, color: "#9ca3af" }}>
+                      SKU: {li.sku}
+                    </Typography>
+                  )}
+                  <Typography sx={{ fontSize: 11, color: "#9ca3af" }}>
+                    Qty: {li.quantity}
+                  </Typography>
+                  {li.price && (
+                    <Typography sx={{ fontSize: 11, color: "#9ca3af" }}>
+                      Price: {li.price}
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+            </Box>
+          ))
+        )}
+      </Popover>
+    </>
+  );
+};
+
+// Order action column
+export const ordersRenderActions =
+  ({ onPreviewUrl }) =>
+  (item) => (
+    <Box sx={{ display: "flex", flexDirection: "row" }}>
+      <Tooltip title="Open in Shopify Admin" arrow>
+        <IconButton
+          size="small"
+          onClick={() => onPreviewUrl(item)}
+          sx={{
+            color: "#6b7280",
+            "&:hover": {
+              color: "#094799",
+              backgroundColor: "#DBEAFE",
+            },
+          }}
+        >
+          <OpenInNewIcon sx={{ fontSize: 18 }} />
+        </IconButton>
+      </Tooltip>
+    </Box>
+  );
+
+// Orders list column
+export const ORDERS_COLUMNS = [
+  {
+    key: "name",
+    label: "Order",
+    skeletonWidth: 80,
+    render: (item) => {
+      const name = item.name || "—";
+      return (
+        <Typography sx={{ fontSize: 14, color: "#6b7280" }}>{name}</Typography>
+      );
+    },
+  },
+
+  {
+    key: "totalPrice",
+    label: "Total",
+    skeletonWidth: 80,
+    render: (item) => {
+      const totalPrice = item.totalPrice || "—";
+      const currencyCode = item.currencyCode || "—";
+      return (
+        <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
+          {currencyCode} {totalPrice}
+        </Typography>
+      );
+    },
+  },
+
+  {
+    key: "status",
+    label: "Status",
+    skeletonWidth: 70,
+    render: (item) => {
+      const config =
+        ORDER_STATUS_CONFIG[item.status?.toUpperCase()] ||
+        ORDER_STATUS_CONFIG.OPEN;
+      return (
+        <Chip
+          label={config.label}
+          size="small"
+          sx={{
+            backgroundColor: config.bg,
+            color: config.color,
+            fontWeight: 600,
+            fontSize: 12,
+            height: 26,
+            borderRadius: "6px",
+            border: `1px solid ${config.color}20`,
+          }}
+        />
+      );
+    },
+  },
+
+  {
+    key: "financialStatus",
+    label: "Payment",
+    skeletonWidth: 90,
+    render: (item) => {
+      const config =
+        ORDER_FINANCIAL_STATUS_CONFIG[item.financialStatus?.toUpperCase()] ||
+        ORDER_FINANCIAL_STATUS_CONFIG.PENDING;
+      return (
+        <Chip
+          label={config.label}
+          size="small"
+          sx={{
+            backgroundColor: config.bg,
+            color: config.color,
+            fontWeight: 600,
+            fontSize: 12,
+            height: 26,
+            borderRadius: "6px",
+            border: `1px solid ${config.color}20`,
+          }}
+        />
+      );
+    },
+  },
+
+  {
+    key: "fulfillmentStatus",
+    label: "Fulfillment",
+    skeletonWidth: 90,
+    render: (item) => {
+      const status = item.fulfillmentStatus?.toUpperCase();
+      if (!status) {
+        return (
+          <Chip
+            label="Unfulfilled"
+            size="small"
+            sx={{
+              backgroundColor: ORDER_FULFILLMENT_STATUS_CONFIG.UNFULFILLED.bg,
+              color: ORDER_FULFILLMENT_STATUS_CONFIG.UNFULFILLED.color,
+              fontWeight: 600,
+              fontSize: 12,
+              height: 26,
+              borderRadius: "6px",
+              border: `1px solid ${ORDER_FULFILLMENT_STATUS_CONFIG.UNFULFILLED.color}20`,
+            }}
+          />
+        );
+      }
+      const config =
+        ORDER_FULFILLMENT_STATUS_CONFIG[status] ||
+        ORDER_FULFILLMENT_STATUS_CONFIG.UNFULFILLED;
+      return (
+        <Chip
+          label={config.label}
+          size="small"
+          sx={{
+            backgroundColor: config.bg,
+            color: config.color,
+            fontWeight: 600,
+            fontSize: 12,
+            height: 26,
+            borderRadius: "6px",
+            border: `1px solid ${config.color}20`,
+          }}
+        />
+      );
+    },
+  },
+
+  {
+    key: "lineItems",
+    label: "Items",
+    skeletonWidth: 60,
+    render: (item) => {
+      const lineItems = item.lineItems || [];
+      return (
+        <LineItemsPopover lineItems={lineItems}>
+          <Box
+            sx={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 0.5,
+              cursor: "pointer",
+              color: "#374151",
+              "&:hover .arrow-icon": { opacity: 1 },
+            }}
+          >
+            <Typography sx={{ fontSize: 14, fontWeight: 500 }}>
+              {lineItems.length}
+            </Typography>
+            <KeyboardArrowDownIcon
+              className="arrow-icon"
+              sx={{
+                fontSize: 16,
+                color: "#9ca3af",
+                opacity: 0,
+                transition: "opacity 0.15s",
+              }}
+            />
+          </Box>
+        </LineItemsPopover>
+      );
+    },
+  },
+
+  {
+    key: "createdAt",
+    label: "Created At",
+    sortable: true,
+    sortField: "createdAt",
+    skeletonWidth: 100,
+    render: (item) => {
+      if (!item.createdAt)
+        return (
+          <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
+        );
+      const date = new Date(item.createdAt).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "UTC",
+      });
+      return (
+        <Typography
+          sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}
+        >
+          {date}
+        </Typography>
+      );
+    },
+  },
+];
