@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import InventoryViewSkeleton from "../../ui/skeleton-loader/inventory-view-skeleton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useInventoryData from "../../hooks/useInventoryData";
@@ -12,6 +14,11 @@ import { getSingleProduct } from "../../api/products";
 import { useCurrentShopDomain } from "../../utils/helper";
 import { INVENTORY_STATUS_CONFIG } from "../../utils/config/constants";
 import ProductImageZoom from "../../components/product-image-zoom";
+import TabPanel from "./ui-components/TabPanel";
+import OverviewTab from "./ui-components/OverviewTab";
+import InventoryHistoryTab from "./ui-components/InventoryHistoryTab";
+import SalesHistoryTab from "./ui-components/SalesHistoryTab";
+import VariantsTab from "./ui-components/VariantsTab";
 
 const FALLBACK_IMAGE = "/fallback-image.jpg";
 
@@ -20,6 +27,7 @@ const InventoryViewPage = () => {
   const navigate = useNavigate();
   const shopDomain = useCurrentShopDomain();
   const [selectedImage, setSelectedImage] = React.useState(0);
+  const [activeTab, setActiveTab] = React.useState(0);
 
   const { data: responseData, isLoading } = useInventoryData(
     ["single-product", id],
@@ -57,6 +65,7 @@ const InventoryViewPage = () => {
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
+      {/* Header */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 3, mb: 3 }}>
         <Box
           sx={{
@@ -68,7 +77,6 @@ const InventoryViewPage = () => {
             "&:hover": {
               backgroundColor: "#f3f4f6",
               border: "1px solid #CBD5E1",
-            
             },
           }}
         >
@@ -84,6 +92,7 @@ const InventoryViewPage = () => {
         </Typography>
       </Box>
 
+      {/* Image & Product Info */}
       <Box
         sx={{
           display: "flex",
@@ -92,14 +101,23 @@ const InventoryViewPage = () => {
         }}
       >
         <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
+          {/* Thumbnails */}
           {allImages.length > 1 && (
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 1,
+                gap: 0.5,
                 maxHeight: 320,
+                width: 54,
                 overflowY: "auto",
+                pr: 0.5,
+                "&::-webkit-scrollbar": { width: 4 },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#d1d5db",
+                  borderRadius: 2,
+                },
+                "&::-webkit-scrollbar-track": { backgroundColor: "#f9fafb" },
               }}
             >
               {allImages.map((img, i) => (
@@ -113,6 +131,7 @@ const InventoryViewPage = () => {
                     borderRadius: "8px",
                     overflow: "hidden",
                     cursor: "pointer",
+                    flexShrink: 0,
                     border:
                       i === selectedImage
                         ? "2px solid #8CAECE"
@@ -133,6 +152,8 @@ const InventoryViewPage = () => {
               ))}
             </Box>
           )}
+
+          {/* Main Image & Details */}
           <ProductImageZoom
             imageUrl={mainImage?.url || FALLBACK_IMAGE}
             altText={mainImage?.altText || product.title}
@@ -150,92 +171,15 @@ const InventoryViewPage = () => {
                   gap: 2,
                 }}
               >
-                {/* Product Type */}
                 {product.title && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: "#9ca3af",
-                        flexShrink: 0,
-                      }}
-                    >
-                      Title
-                    </Typography>
-                    <Typography
-                      sx={{ fontSize: 14, color: "#0f1111", fontWeight: 500 }}
-                    >
-                      {product.title}
-                    </Typography>
-                  </Box>
+                  <InfoRow label="Title" value={product.title} />
                 )}
-
-                {/* Product Type */}
                 {product.productType && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: "#9ca3af",
-                        flexShrink: 0,
-                      }}
-                    >
-                      Product Type
-                    </Typography>
-                    <Typography
-                      sx={{ fontSize: 14, color: "#0f1111", fontWeight: 500 }}
-                    >
-                      {product.productType}
-                    </Typography>
-                  </Box>
+                  <InfoRow label="Product Type" value={product.productType} />
                 )}
-
-                {/* Vendor */}
                 {product.vendor && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        fontWeight: 600,
-                        color: "#9ca3af",
-                        flexShrink: 0,
-                      }}
-                    >
-                      Vendor
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        color: "#0f1111",
-                        fontWeight: 500,
-                      }}
-                    >
-                      {product.vendor}
-                    </Typography>
-                  </Box>
+                  <InfoRow label="Vendor" value={product.vendor} />
                 )}
-
-                {/* Tags */}
                 {product.tags?.length > 0 && (
                   <Box
                     sx={{
@@ -298,133 +242,31 @@ const InventoryViewPage = () => {
                     </Box>
                   </Box>
                 )}
-
-                {/* Stock */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "#9ca3af",
-                      flexShrink: 0,
-                    }}
-                  >
-                    Stock
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      color: "#0f1111",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {product.totalInventory ?? 0} units
-                  </Typography>
-                </Box>
-
-                {/* SKU */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "#9ca3af",
-                      flexShrink: 0,
-                    }}
-                  >
-                    SKU
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      color: "#0f1111",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {sku}
-                  </Typography>
-                </Box>
-
-                {/* Last Sold At */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "#9ca3af",
-                      flexShrink: 0,
-                    }}
-                  >
-                    Last Sold At
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      color: "#0f1111",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {product.lastSoldAt
-                      ? new Date(product.lastSoldAt).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                            hour: "numeric",
-                            minute: "2-digit",
-                            hour12: true,
-                            timeZone: "UTC",
-                          },
-                        )
-                      : "—"}
-                  </Typography>
-                </Box>
-
-                {/* Created At */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "#9ca3af",
-                      flexShrink: 0,
-                    }}
-                  >
-                    Created At
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 14,
-                      color: "#0f1111",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {product.createdAt
+                <InfoRow
+                  label="Stock"
+                  value={`${product.totalInventory ?? 0} units`}
+                />
+                <InfoRow label="SKU" value={sku} />
+                <InfoRow
+                  label="Last Sold At"
+                  value={
+                    product.lastSoldAt
+                      ? new Date(product.lastSoldAt).toLocaleString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
+                          timeZone: "UTC",
+                        })
+                      : "—"
+                  }
+                />
+                <InfoRow
+                  label="Created At"
+                  value={
+                    product.createdAt
                       ? new Date(product.createdAt).toLocaleString("en-US", {
                           month: "short",
                           day: "numeric",
@@ -434,29 +276,27 @@ const InventoryViewPage = () => {
                           hour12: true,
                           timeZone: "UTC",
                         })
-                      : "—"}
-                  </Typography>
-                </Box>
-
-                {/* Status */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Typography
+                      : "—"
+                  }
+                />
+                {statusConfig && (
+                  <Box
                     sx={{
-                      fontSize: 14,
-                      fontWeight: 600,
-                      color: "#9ca3af",
-                      flexShrink: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
                   >
-                    Status
-                  </Typography>
-                  {statusConfig && (
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "#9ca3af",
+                        flexShrink: 0,
+                      }}
+                    >
+                      Status
+                    </Typography>
                     <Chip
                       label={statusConfig.label}
                       size="small"
@@ -470,15 +310,94 @@ const InventoryViewPage = () => {
                         border: `1px solid ${statusConfig.color}20`,
                       }}
                     />
-                  )}
-                </Box>
+                  </Box>
+                )}
               </Box>
             </Box>
           </ProductImageZoom>
         </Box>
       </Box>
+
+      {/* Master Tabs Section */}
+      <Box
+        sx={{
+          mt: 3,
+          backgroundColor: "#fff",
+          borderRadius: "12px",
+          border: "1px solid #e5e7eb",
+          overflow: "hidden",
+        }}
+      >
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={activeTab}
+            onChange={(_, newValue) => setActiveTab(newValue)}
+            sx={{
+              minHeight: 48,
+              px: 2,
+              "& .MuiTab-root": {
+                textTransform: "none",
+                fontWeight: 600,
+                fontSize: 14,
+                color: "#6b7280",
+                minHeight: 48,
+                "&.Mui-selected": {
+                  color: "#005EA2",
+                  backgroundColor: "#F6F6F7",
+                },
+              },
+              "& .MuiTabs-indicator": {
+                backgroundColor: "#005EA2",
+                height: 3,
+              },
+            }}
+          >
+            <Tab label="Overview" />
+            <Tab label="Inventory History" />
+            <Tab label="Sales History" />
+            <Tab label="Variants" />
+          </Tabs>
+        </Box>
+
+        <TabPanel value={activeTab} index={0}>
+          <OverviewTab product={product} />
+        </TabPanel>
+        <TabPanel value={activeTab} index={1}>
+          <InventoryHistoryTab product={product} />
+        </TabPanel>
+        <TabPanel value={activeTab} index={2}>
+          <SalesHistoryTab product={product} />
+        </TabPanel>
+        <TabPanel value={activeTab} index={3}>
+          <VariantsTab variants={product.variants} />
+        </TabPanel>
+      </Box>
     </Box>
   );
 };
+
+const InfoRow = ({ label, value }) => (
+  <Box
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+    }}
+  >
+    <Typography
+      sx={{
+        fontSize: 14,
+        fontWeight: 600,
+        color: "#9ca3af",
+        flexShrink: 0,
+      }}
+    >
+      {label}
+    </Typography>
+    <Typography sx={{ fontSize: 14, color: "#0f1111", fontWeight: 500 }}>
+      {value}
+    </Typography>
+  </Box>
+);
 
 export default InventoryViewPage;
