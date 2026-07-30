@@ -23,11 +23,8 @@ export default function Index() {
     if (typeof window === "undefined" || !shop) return false;
     return sessionStorage.getItem(`inventory_synced_${shop}`) === "true";
   };
-  const showFallback = hasSynced() ? (
-    <DashboardSkeleton />
-  ) : (
-    <SyncProductSkeleton />
-  );
+  const showFallback =
+    hasSynced() === true ? <DashboardSkeleton /> : <SyncProductSkeleton />;
   return (
     <React.Suspense fallback={showFallback}>
       <DashboardPage />
