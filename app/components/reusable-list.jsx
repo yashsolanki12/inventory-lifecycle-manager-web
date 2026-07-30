@@ -31,9 +31,7 @@ const ReusableList = ({
   searchPlaceholder = "Search...",
   sortOptions = [],
   defaultSort = "",
-  filterOptions = [],
-  defaultFilter = "",
-  filterParam = "",
+  filters = [],
   defaultLimit = 10,
   paginationText = "items",
 }) => {
@@ -51,7 +49,13 @@ const ReusableList = ({
   const [search, setSearch] = React.useState("");
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
   const [sort, setSort] = React.useState(defaultSort);
-  const [filter, setFilter] = React.useState(defaultFilter);
+  const [filterValues, setFilterValues] = React.useState(() => {
+  const initial = {};
+    filters.forEach((f) => {
+      initial[f.param] = f.defaultValue || "";
+    });
+    return initial;
+  });
   const [page, setPage] = React.useState(1);
   const tableRef = React.useRef(null);
 
@@ -72,22 +76,31 @@ const ReusableList = ({
 
   React.useEffect(() => {
     setPage(1);
-  }, [sort, filter]);
+  }, [sort, filterValues]);
+
+  const filterParams = {};
+  filters.forEach((f) => {
+    if (filterValues[f.param]) {
+      filterParams[f.param] = filterValues[f.param];
+    }
+  });
 
   const params = {
     page,
     limit: defaultLimit,
     ...(debouncedSearch && { search: debouncedSearch }),
     ...(sort && { sort }),
-    ...(filter && filterParam && { [filterParam]: filter }),
+    ...filterParams,
   };
+
+  const filterKey = filters.map((f) => filterValues[f.param]).join(",");
 
   const {
     data: responseData,
     isLoading,
     isFetching,
   } = useInventoryData(
-    [queryKey, page, debouncedSearch, sort, filter],
+    [queryKey, page, debouncedSearch, sort, filterKey],
     () => fetchFn(params),
     null,
     { enabled: true },
@@ -105,14 +118,25 @@ const ReusableList = ({
   const isInitialLoading = isLoading;
   const isReloading = isFetching && !isLoading;
   const hasActiveFilters =
-    search || sort !== defaultSort || filter !== defaultFilter || page > 1;
+    search ||
+    sort !== defaultSort ||
+    filters.some((f) => filterValues[f.param] !== (f.defaultValue || "")) ||
+    page > 1;
 
   const handleClear = () => {
     setSearch("");
     setDebouncedSearch("");
     setSort(defaultSort);
-    setFilter(defaultFilter);
+    const resetFilters = {};
+    filters.forEach((f) => {
+      resetFilters[f.param] = f.defaultValue || "";
+    });
+    setFilterValues(resetFilters);
     setPage(1);
+  };
+
+  const handleFilterChange = (param, value) => {
+    setFilterValues((prev) => ({ ...prev, [param]: value }));
   };
 
   const handleSort = (field) => {
@@ -328,6 +352,9 @@ const ReusableList = ({
                 backgroundColor: "#ffffff",
                 fontSize: 14,
               },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#d1d5db",
+              },
             }}
             helperText={
               search.length > 0 && search.length < MIN_SEARCH_CHARS
@@ -357,11 +384,12 @@ const ReusableList = ({
             }}
           />
           <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
-            {filterOptions.length > 0 && (
+            {filters.map((f) => (
               <Select
+                key={f.param}
                 size="small"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
+                value={filterValues[f.param] || ""}
+                onChange={(e) => handleFilterChange(f.param, e.target.value)}
                 displayEmpty
                 sx={{
                   minWidth: 140,
@@ -378,10 +406,10 @@ const ReusableList = ({
               >
                 <MenuItem value="">
                   <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
-                    All Status
+                    All {f.label}
                   </Typography>
                 </MenuItem>
-                {filterOptions.map((opt) => (
+                {f.options.map((opt) => (
                   <MenuItem
                     key={opt.value}
                     value={opt.value}
@@ -391,7 +419,7 @@ const ReusableList = ({
                   </MenuItem>
                 ))}
               </Select>
-            )}
+            ))}
             {sortOptions.length > 0 && (
               <Select
                 size="small"

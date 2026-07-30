@@ -17,7 +17,9 @@ export const loader = async ({ request }) => {
   const { session, billing } = await authenticate.admin(request);
 
   if (session) {
-    const hasInfo = await sessionStorage.hasShopInfo(session.id).catch(() => false);
+    const hasInfo = await sessionStorage
+      .hasShopInfo(session.id)
+      .catch(() => false);
     if (!hasInfo) {
       try {
         const response = await fetch(
@@ -27,7 +29,7 @@ export const loader = async ({ request }) => {
               "X-Shopify-Access-Token": session.accessToken,
               "Content-Type": "application/json",
             },
-          }
+          },
         );
         const data = await response.json();
         const shopData = data.shop;
@@ -116,6 +118,7 @@ export default function App() {
         <s-app-nav>
           <s-link href="/app">📊 Dashboard</s-link>
           <s-link href="/app/inventory">📦 Inventory</s-link>
+          <s-link href="/app/orders">🛍️ Orders</s-link>
           <s-link href="/app/plans">💳 Plans</s-link>
         </s-app-nav>
         {(hasActivePlan || isPlansRoute) && <Outlet />}
