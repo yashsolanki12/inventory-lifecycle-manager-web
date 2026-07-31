@@ -9,7 +9,7 @@ export const STOCK_STATUS_CONFIG = {
   mild: { label: "Mild", color: "#a16207", bg: "#fef9c3" },
   aging: { label: "Aging", color: "#c2410c", bg: "#ffedd5" },
   dead: { label: "Dead", color: "#b91c1c", bg: "#fee2e2" },
-  unknown: { label: "Unknown", color: "#6b7280", bg: "#f3f4f6" },
+  never_sold: { label: "Never sold", color: "#6b7280", bg: "#f3f4f6" },
 };
 
 export const ORDER_STATUS_CONFIG = {

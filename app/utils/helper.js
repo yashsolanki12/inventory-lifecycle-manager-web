@@ -163,3 +163,33 @@ export const getColorHex = (colorName) => {
   const normalized = colorName?.toLowerCase().trim();
   return COLOR_MAP[normalized] || null;
 };
+
+export const VELOCITY_CONFIG = {
+  fast: { label: "Fast", color: "#15803d", bg: "#dcfce7" },
+  moderate: { label: "Moderate", color: "#a16207", bg: "#fef9c3" },
+  slow: { label: "Slow", color: "#c2410c", bg: "#ffedd5" },
+  dead: { label: "Dead", color: "#b91c1c", bg: "#fee2e2" },
+};
+
+export const formatDate = (dateStr) => {
+  return new Date(dateStr).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "UTC",
+  });
+};
+
+export const PAGE_SIZE = 10;
+
+export const MOVEMENT_CONFIG = {
+  addition: { label: "Restocked", color: "#15803d", bg: "#dcfce7" },
+  removal: { label: "Removed", color: "#b91c1c", bg: "#fee2e2" },
+  sale: { label: "Sold", color: "#2563eb", bg: "#dbeafe" },
+  adjustment: { label: "Adjusted", color: "#a16207", bg: "#fef9c3" },
+  restock: { label: "Restocked", color: "#15803d", bg: "#dcfce7" },
+  initial: { label: "Initial", color: "#6b7280", bg: "#f3f4f6" },
+};
