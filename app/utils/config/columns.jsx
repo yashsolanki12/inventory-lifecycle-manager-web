@@ -229,9 +229,9 @@ export const INVENTORY_COLUMNS = [
     label: "Stock Status",
     skeletonWidth: 80,
     render: (item) => {
-      const statusKey = item.stockStatus?.toLowerCase() || "unknown";
+      const statusKey = item.stockStatus?.toLowerCase() || "Never sold";
       const config =
-        STOCK_STATUS_CONFIG[statusKey] || STOCK_STATUS_CONFIG.unknown;
+        STOCK_STATUS_CONFIG[statusKey] || STOCK_STATUS_CONFIG.never_sold;
       return (
         <Box
           sx={{

@@ -259,10 +259,10 @@ const InventoryViewPage = () => {
                 {product.stockStatus &&
                   (() => {
                     const stockKey =
-                      product.stockStatus?.toLowerCase() || "unknown";
+                      product.stockStatus?.toLowerCase() || "Never Sold";
                     const stockConfig =
                       STOCK_STATUS_CONFIG[stockKey] ||
-                      STOCK_STATUS_CONFIG.unknown;
+                      STOCK_STATUS_CONFIG.never_sold;
                     return (
                       <Box
                         sx={{
