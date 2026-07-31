@@ -66,8 +66,8 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
         height: "100%",
       }}
     >
-      <CardContent sx={{ p: "24px !important" }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, fontSize: 18 }}>
+      <CardContent sx={{ p: { xs: "16px !important", sm: "24px !important" } }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, fontSize: { xs: 15, sm: 18 } }}>
           Inventory Value By Age
         </Typography>
         <Box sx={{ position: "relative" }}>

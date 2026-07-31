@@ -26,7 +26,7 @@ const UpgradePrompt = ({ feature, description, requiredPlan = "Starter" }) => {
         justifyContent: "center",
       }}
     >
-      <CardContent sx={{ textAlign: "center", py: 4 }}>
+      <CardContent sx={{ textAlign: "center", py: { xs: 3, sm: 4 }, px: { xs: 2, sm: 3 } }}>
         <Box
           sx={{
             width: 56,

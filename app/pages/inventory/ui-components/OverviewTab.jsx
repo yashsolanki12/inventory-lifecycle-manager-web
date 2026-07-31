@@ -17,20 +17,19 @@ import { VELOCITY_CONFIG } from "../../../utils/helper";
 const StatCard = ({ label, value, isLast }) => (
   <Box
     sx={{
-      flex: 1,
-      minWidth: 120,
-      px: 2.5,
+      px: { xs: 1.5, sm: 2.5 },
       py: 2,
-      borderRight: isLast ? "none" : "1px solid #e5e7eb",
+      borderRight: { sm: isLast ? "none" : "1px solid #e5e7eb" },
+      borderBottom: { xs: isLast ? "none" : "1px solid #e5e7eb", sm: "none" },
       display: "flex",
       flexDirection: "column",
       gap: 0.5,
     }}
   >
-    <Typography sx={{ fontSize: 12, fontWeight: 500, color: "#9ca3af" }}>
+    <Typography sx={{ fontSize: { xs: 11, sm: 12 }, fontWeight: 500, color: "#9ca3af" }}>
       {label}
     </Typography>
-    <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#0f1111" }}>
+    <Typography sx={{ fontSize: { xs: 16, sm: 18 }, fontWeight: 700, color: "#0f1111" }}>
       {value}
     </Typography>
   </Box>
@@ -72,7 +71,7 @@ const TrendChart = ({ title, data, color, gradientId }) => {
         borderRadius: "14px",
         border: "1px solid #ececec",
         boxShadow: "0 8px 24px rgba(0,0,0,.04)",
-        p: "24px",
+        p: { xs: "16px", sm: "24px" },
       }}
     >
       <Typography variant="h6" sx={{ fontWeight: 600, fontSize: 16, mb: 2.5 }}>
@@ -197,21 +196,17 @@ const OverviewTab = ({ product }) => {
   ];
 
   return (
-    <Box sx={{ p: 3, display: "flex", flexDirection: "column", gap: 3 }}>
+    <Box sx={{ p: { xs: 1.5, sm: 3 }, display: "flex", flexDirection: "column", gap: 3 }}>
       {/* Stat Cards */}
       <Box
         sx={{
-          display: "flex",
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr 1fr", sm: "repeat(4, 1fr)" },
           borderRadius: "14px",
           border: "1px solid #ececec",
           boxShadow: "0 8px 24px rgba(0,0,0,.04)",
-          overflow: "auto",
+          overflow: "hidden",
           backgroundColor: "#fff",
-          "&::-webkit-scrollbar": { height: 4 },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#d1d5db",
-            borderRadius: 2,
-          },
         }}
       >
         {statCards.map((card, i) => (

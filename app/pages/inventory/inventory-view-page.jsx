@@ -69,7 +69,7 @@ const InventoryViewPage = () => {
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
       {/* Header */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 3, mb: 3 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1.5, sm: 3 }, mb: { xs: 2, sm: 3 } }}>
         <Box
           sx={{
             color: "#374151",
@@ -89,7 +89,7 @@ const InventoryViewPage = () => {
         </Box>
         <Typography
           variant="h4"
-          sx={{ fontWeight: 600, color: "#0f1111", fontSize: 24 }}
+          sx={{ fontWeight: 600, color: "#0f1111", fontSize: { xs: 20, sm: 24 } }}
         >
           {product.title}
         </Typography>
@@ -103,19 +103,21 @@ const InventoryViewPage = () => {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
+        <Box sx={{ display: "flex", gap: 2, flex: 1, flexDirection: { xs: "column", sm: "row" }, overflowX: { xs: "auto", sm: "visible" } }}>
           {/* Thumbnails */}
           {allImages.length > 1 && (
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: { xs: "row", sm: "column" },
                 gap: 0.5,
-                maxHeight: 320,
-                width: 54,
-                overflowY: "auto",
-                pr: 0.5,
-                "&::-webkit-scrollbar": { width: 4 },
+                maxHeight: { sm: 320 },
+                width: { xs: "auto", sm: 54 },
+                overflowX: { xs: "auto", sm: "visible" },
+                overflowY: { xs: "visible", sm: "auto" },
+                pb: { xs: 0.5, sm: 0 },
+                pr: { xs: 0, sm: 0.5 },
+                "&::-webkit-scrollbar": { width: 4, height: 4 },
                 "&::-webkit-scrollbar-thumb": {
                   backgroundColor: "#d1d5db",
                   borderRadius: 2,
@@ -161,7 +163,7 @@ const InventoryViewPage = () => {
             imageUrl={mainImage?.url || FALLBACK_IMAGE}
             altText={mainImage?.altText || product.title}
           >
-            <Box sx={{ width: { xs: "100%", md: 600 }, flexShrink: 0 }}>
+            <Box sx={{ flex: 1, minWidth: 0 }}>
               <Box
                 sx={{
                   backgroundColor: "#fff",
@@ -432,19 +434,23 @@ const InventoryViewPage = () => {
           overflow: "hidden",
         }}
       >
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", overflowX: "auto", "&::-webkit-scrollbar": { height: 0 } }}>
           <Tabs
             value={activeTab}
             onChange={(_, newValue) => setActiveTab(newValue)}
+            variant="scrollable"
+            scrollButtons="auto"
             sx={{
               minHeight: 48,
-              px: 2,
+              px: { xs: 1, sm: 2 },
               "& .MuiTab-root": {
                 textTransform: "none",
                 fontWeight: 600,
-                fontSize: 14,
+                fontSize: { xs: 12, sm: 14 },
                 color: "#6b7280",
                 minHeight: 48,
+                minWidth: { xs: 0, sm: "auto" },
+                px: { xs: 1.5, sm: 2 },
                 "&.Mui-selected": {
                   color: "#005EA2",
                   backgroundColor: "#F6F6F7",

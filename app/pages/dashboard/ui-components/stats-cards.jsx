@@ -34,7 +34,7 @@ const StatsCards = ({ dashboardData, plan }) => {
             boxShadow: "0 8px 24px rgba(0,0,0,.04)",
           }}
         >
-          <CardContent sx={{ p: "22px !important" }}>
+          <CardContent sx={{ p: { xs: "16px !important", sm: "22px !important" } }}>
             {(() => {
               const val = data ? String(card.getValue(data)) : "--";
               const len = val.length;

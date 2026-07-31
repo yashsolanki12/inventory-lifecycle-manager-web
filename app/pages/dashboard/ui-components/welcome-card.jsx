@@ -27,14 +27,14 @@ const WelcomeCard = ({ onSync, plan }) => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "65vh",
-        px: 3,
+        px: { xs: 1.5, sm: 3 },
       }}
     >
       <Box
         sx={{
           width: "100%",
           maxWidth: 480,
-          borderRadius: "16px",
+          borderRadius: { xs: "12px", sm: "16px" },
           overflow: "hidden",
           boxShadow: "0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06)",
           backgroundColor: "#fff",
@@ -44,8 +44,8 @@ const WelcomeCard = ({ onSync, plan }) => {
           sx={{
             background:
               "linear-gradient(135deg, #008060 0%, #006F60 50%, #004C3F 100%)",
-            px: 4,
-            py: 5,
+            px: { xs: 2.5, sm: 4 },
+            py: { xs: 3.5, sm: 5 },
             textAlign: "center",
             position: "relative",
             overflow: "hidden",
@@ -102,7 +102,7 @@ const WelcomeCard = ({ onSync, plan }) => {
           </Typography>
         </Box>
 
-        <Box sx={{ px: 4, pt: 3, pb: 1 }}>
+        <Box sx={{ px: { xs: 2.5, sm: 4 }, pt: 3, pb: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
             <Chip
               label={`'${plan?.planName}' plan.` || "Free"}
@@ -148,7 +148,7 @@ const WelcomeCard = ({ onSync, plan }) => {
           ))}
         </Box>
 
-        <Box sx={{ px: 4, pb: 4, pt: 2 }}>
+        <Box sx={{ px: { xs: 2.5, sm: 4 }, pb: 4, pt: 2 }}>
           <Button
             fullWidth
             variant="contained"

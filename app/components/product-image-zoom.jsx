@@ -22,14 +22,14 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
   };
 
   return (
-    <Box sx={{ display: "flex", gap: 2, flex: 1, position: "relative" }}>
+    <Box sx={{ display: "flex", gap: 2, flex: 1, flexDirection: { xs: "column", sm: "row" }, position: "relative" }}>
       <Box
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         sx={{
-          width: 360,
-          maxHeight: 320,
+          width: { xs: "100%", sm: 360 },
+          maxHeight: { xs: 260, sm: 320 },
           borderRadius: "12px",
           overflow: "hidden",
           backgroundColor: "#f9fafb",
@@ -64,9 +64,9 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
         <Box
           sx={{
             position: "absolute",
-            left: 376,
+            left: { xs: 0, sm: 376 },
             top: 0,
-            width: "calc(100% - 376px)",
+            width: { xs: "100%", sm: "calc(100% - 376px)" },
             height: "100%",
             borderRadius: "12px",
             overflow: "hidden",

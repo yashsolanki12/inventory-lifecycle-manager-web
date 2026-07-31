@@ -19,7 +19,6 @@ const TopDeadStockTable = ({ agingData }) => {
         border: "1px solid #ececec",
         boxShadow: "0 8px 24px rgba(0,0,0,.04)",
         alignSelf: "start",
-        // maxHeight: 360,
         display: "flex",
         flexDirection: "column",
         height: "100%",
@@ -27,7 +26,7 @@ const TopDeadStockTable = ({ agingData }) => {
     >
       <CardContent
         sx={{
-          p: "24px !important",
+          p: { xs: "16px !important", sm: "24px !important" },
           display: "flex",
           flexDirection: "column",
           flex: 1,
@@ -84,47 +83,64 @@ const TopDeadStockTable = ({ agingData }) => {
                     <Box
                       component="tr"
                       key={item.id}
-                      sx={{ borderBottom: "1px solid #ececec" }}
+                      sx={{
+                        borderBottom: "1px solid #ececec",
+                        display: { xs: "flex", md: "table-row" },
+                        flexWrap: "wrap",
+                        py: { xs: 1, md: 0 },
+                      }}
                     >
                       <Box
                         component="td"
-                        sx={{ py: 2, pr: 2, borderBottom: "1px solid #ececec" }}
+                        sx={{
+                          py: { xs: 1, md: 2 },
+                          pr: 2,
+                          borderBottom: { xs: "none", md: "1px solid #ececec" },
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1.5,
+                          flex: 1,
+                          minWidth: 0,
+                        }}
                       >
                         <Box
                           sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1.5,
+                            width: { xs: 36, sm: 46 },
+                            height: { xs: 36, sm: 46 },
+                            borderRadius: "10px",
+                            backgroundColor:
+                              PRODUCT_COLORS[i % PRODUCT_COLORS.length],
+                            backgroundImage: item.image?.url
+                              ? `url(${item.image.url})`
+                              : "none",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            flexShrink: 0,
+                          }}
+                        />
+                        <Typography
+                          sx={{
+                            fontSize: { xs: 13, sm: 15 },
+                            fontWeight: 500,
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
                           }}
                         >
-                          <Box
-                            sx={{
-                              width: 46,
-                              height: 46,
-                              borderRadius: "10px",
-                              backgroundColor:
-                                PRODUCT_COLORS[i % PRODUCT_COLORS.length],
-                              backgroundImage: item.image?.url
-                                ? `url(${item.image.url})`
-                                : "none",
-                              backgroundSize: "cover",
-                              backgroundPosition: "center",
-                              flexShrink: 0,
-                            }}
-                          />
-                          <Typography sx={{ fontSize: 15, fontWeight: 500 }}>
-                            {item.title ?? "Untitled Product."}
-                          </Typography>
-                        </Box>
+                          {item.title ?? "Untitled Product."}
+                        </Typography>
                       </Box>
                       <Box
                         component="td"
                         sx={{
-                          py: 2,
-                          px: 2,
-                          fontSize: 15,
-                          borderBottom: "1px solid #ececec",
+                          py: { xs: 0, md: 2 },
+                          px: { xs: 0, sm: 2 },
+                          fontSize: { xs: 12, sm: 15 },
+                          borderBottom: { xs: "none", md: "1px solid #ececec" },
                           whiteSpace: "nowrap",
+                          display: { xs: "inline-block", md: "table-cell" },
+                          mr: { xs: 2, md: 0 },
+                          textAlign: { xs: "right", md: "left" },
                         }}
                       >
                         {item.quantity} Units
@@ -132,11 +148,13 @@ const TopDeadStockTable = ({ agingData }) => {
                       <Box
                         component="td"
                         sx={{
-                          py: 2,
-                          pl: 2,
-                          fontSize: 15,
-                          borderBottom: "1px solid #ececec",
+                          py: { xs: 0, md: 2 },
+                          pl: { xs: 0, sm: 2 },
+                          fontSize: { xs: 12, sm: 15 },
+                          borderBottom: { xs: "none", md: "1px solid #ececec" },
                           whiteSpace: "nowrap",
+                          display: { xs: "inline-block", md: "table-cell" },
+                          textAlign: { xs: "right", md: "left" },
                         }}
                       >
                         {currency}
