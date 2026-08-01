@@ -6,9 +6,24 @@ const InventoryViewSkeleton = () => {
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
       {/* Header */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 3, mb: 3 }}>
-        <Skeleton variant="circular" width={40} height={40} />
-        <Skeleton variant="text" width={300} height={32} />
+      <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1.5, sm: 3 }, mb: { xs: 2, sm: 3 } }}>
+        <Box
+          sx={{
+            color: "#374151",
+            backgroundColor: "#ffffff",
+            padding: 0.02,
+            borderRadius: 50,
+            border: "1px solid #bfd3e6",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 40,
+            height: 40,
+          }}
+        >
+          <Skeleton variant="circular" width={24} height={24} />
+        </Box>
+        <Skeleton variant="text" sx={{ width: { xs: 200, sm: 300 } }} height={32} />
       </Box>
 
       {/* Image & Product Info */}
@@ -19,15 +34,19 @@ const InventoryViewSkeleton = () => {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
+        <Box sx={{ display: "flex", gap: 2, flex: 1, flexDirection: { xs: "column", sm: "row" }, overflowX: { xs: "auto", sm: "visible" } }}>
           {/* Thumbnails */}
           <Box
             sx={{
               display: "flex",
-              flexDirection: "column",
+              flexDirection: { xs: "row", sm: "column" },
               gap: 0.5,
-              maxHeight: 320,
-              width: 54,
+              maxHeight: { sm: 320 },
+              width: { xs: "auto", sm: 54 },
+              overflowX: { xs: "auto", sm: "visible" },
+              overflowY: { xs: "visible", sm: "auto" },
+              pb: { xs: 0.5, sm: 0 },
+              pr: { xs: 0, sm: 0.5 },
             }}
           >
             {Array.from({ length: 4 }).map((_, i) => (
@@ -36,20 +55,24 @@ const InventoryViewSkeleton = () => {
                 variant="rounded"
                 width={38}
                 height={38}
-                sx={{ borderRadius: "8px" }}
+                sx={{ borderRadius: "8px", flexShrink: 0 }}
               />
             ))}
           </Box>
 
           {/* Main Image & Details */}
-          <Box sx={{ display: "flex", gap: 2, flex: 1 }}>
+          <Box sx={{ display: "flex", gap: 2, flex: 1, flexDirection: { xs: "column", sm: "row" } }}>
             <Skeleton
               variant="rounded"
-              width={600}
-              height={320}
-              sx={{ borderRadius: "12px", flexShrink: 0 }}
+              sx={{
+                width: { xs: "100%", sm: 360 },
+                minHeight: { xs: 200, sm: 260 },
+                maxHeight: { xs: 360, sm: 320 },
+                borderRadius: "12px",
+                flexShrink: 0,
+              }}
             />
-            <Box sx={{ flex: 1 }}>
+            <Box sx={{ flex: 1, minWidth: 0 }}>
               <Box
                 sx={{
                   backgroundColor: "#fff",
@@ -147,10 +170,11 @@ const InventoryViewSkeleton = () => {
         <Box
           sx={{
             display: "flex",
-            gap: 2,
-            px: 2,
+            gap: { xs: 1, sm: 2 },
+            px: { xs: 1.5, sm: 2 },
             py: 1.5,
             borderBottom: "1px solid #e5e7eb",
+            overflowX: "auto",
           }}
         >
           {["Overview", "Inventory History", "Sales History", "Variants"].map(
@@ -158,16 +182,16 @@ const InventoryViewSkeleton = () => {
               <Skeleton
                 key={i}
                 variant="rounded"
-                width={110}
+                width={{ xs: 90, sm: 110 }}
                 height={28}
-                sx={{ borderRadius: "6px" }}
+                sx={{ borderRadius: "6px", flexShrink: 0 }}
               />
             ),
           )}
         </Box>
 
         {/* Tab Content */}
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: { xs: 2, sm: 3 } }}>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {Array.from({ length: 3 }).map((_, i) => (
               <Box key={i} sx={{ display: "flex", gap: 2 }}>
