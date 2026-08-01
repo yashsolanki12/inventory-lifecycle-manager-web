@@ -3,8 +3,8 @@ import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
-import useAsyncOptions from "../../hooks/useAsyncOptions";
-import useMergedOptions from "../../hooks/useMergedOptions";
+import useAsyncOptions from "../hooks/useAsyncOptions";
+import useMergedOptions from "../hooks/useMergedOptions";
 
 const AsyncAutocomplete = ({
   label,
