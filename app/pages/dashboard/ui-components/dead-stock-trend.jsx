@@ -14,7 +14,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import useInventoryData from "../../../hooks/useInventoryData";
-import { PERIOD_OPTIONS, useCurrentShopDomain } from "../../../utils/helper";
+import { useCurrentShopDomain } from "../../../utils/helper";
 import { getDeadStockTrend } from "../../../api/dead-stock-trend";
 
 const EmptyState = () => (
@@ -36,11 +36,10 @@ const EmptyState = () => (
 
 const DeadStockTrend = () => {
   const shopDomain = useCurrentShopDomain();
-  const [selectedDays, setSelectedDays] = React.useState(7);
 
   const { data: trendData } = useInventoryData(
-    ["dead-stock-trend-data", selectedDays],
-    () => getDeadStockTrend(shopDomain, { days: selectedDays }),
+    ["dead-stock-trend-data"],
+    () => getDeadStockTrend(shopDomain),
     null,
     { enabled: !!shopDomain },
   );
@@ -65,51 +64,9 @@ const DeadStockTrend = () => {
           flex: 1,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 3,
-            gap: 1,
-            flexWrap: "wrap",
-          }}
-        >
-          <Typography variant="h6" sx={{ fontWeight: 600, fontSize: { xs: 15, sm: 18 } }}>
-            Dead Stock Trend
-          </Typography>
-          <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-            {PERIOD_OPTIONS.map((opt) => (
-              <Box
-                key={opt.days}
-                onClick={() => setSelectedDays(opt.days)}
-                sx={{
-                  px: { xs: 1, sm: 1.5 },
-                  py: 0.5,
-                  borderRadius: "6px",
-                  fontSize: { xs: 11, sm: 12 },
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  border: "1px solid",
-                  borderColor:
-                    selectedDays === opt.days ? "#008060" : "#e5e7eb",
-                  backgroundColor:
-                    selectedDays === opt.days
-                      ? "rgba(0,128,96,0.08)"
-                      : "transparent",
-                  color: selectedDays === opt.days ? "#008060" : "#6b7280",
-                  transition: "all 0.15s ease",
-                  "&:hover": {
-                    borderColor: "#008060",
-                    color: "#008060",
-                  },
-                }}
-              >
-                {opt.label}
-              </Box>
-            ))}
-          </Box>
-        </Box>
+        <Typography variant="h6" sx={{ fontWeight: 600, fontSize: { xs: 15, sm: 18 }, mb: 3 }}>
+          Dead Stock Trend
+        </Typography>
         {hasData ? (
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart
@@ -134,21 +91,8 @@ const DeadStockTrend = () => {
                 vertical={false}
               />
               <XAxis
-                dataKey="key"
-                tick={({ x, y, payload }) => {
-                  const item = trend.find((t) => t.key === payload.value);
-                  return (
-                    <text
-                      x={x}
-                      y={y + 14}
-                      textAnchor="middle"
-                      fill="#6b7280"
-                      fontSize={13}
-                    >
-                      {item?.label ?? payload.value}
-                    </text>
-                  );
-                }}
+                dataKey="label"
+                tick={{ fontSize: 13, fill: "#6b7280" }}
                 axisLine={false}
                 tickLine={false}
               />
@@ -161,7 +105,6 @@ const DeadStockTrend = () => {
                 content={({ active, payload, label }) => {
                   if (!active || !payload?.length) return null;
                   const val = payload[0].value;
-                  const item = trend.find((t) => t.key === label);
                   return (
                     <Box
                       sx={{
@@ -177,7 +120,7 @@ const DeadStockTrend = () => {
                       <Typography
                         sx={{ fontSize: 13, fontWeight: 600, color: "#fff" }}
                       >
-                        {item?.label ?? label}
+                        {label}
                       </Typography>
                       <Typography
                         sx={{ fontSize: 12, color: "#e2e8f0" }}
