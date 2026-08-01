@@ -18,18 +18,6 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
     color: COLORS[i],
   }));
 
-  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-    if (percent === 0) return null;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
-    const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
-    return (
-      <text x={x} y={y} fill="#202223" textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight={600}>
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
-
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null;
     const data = payload[0];
@@ -71,18 +59,17 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
           Inventory Value By Age
         </Typography>
         <Box sx={{ position: "relative" }}>
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                innerRadius={50}
-                outerRadius={85}
-                paddingAngle={2}
+                innerRadius={70}
+                outerRadius={100}
+                paddingAngle={3}
                 dataKey="value"
-                labelLine={false}
-                label={renderCustomLabel}
+                strokeWidth={0}
               >
                 {chartData.map((entry, index) => (
                   <Cell key={index} fill={entry.color} />
@@ -91,14 +78,23 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
               <Tooltip content={<CustomTooltip />} />
             </PieChart>
           </ResponsiveContainer>
-        </Box>
-        <Box sx={{ textAlign: "center", mt: 1 }}>
-          <Typography sx={{ fontSize: 13, color: "#6b7280", fontWeight: 500 }}>
-            Total
-          </Typography>
-          <Typography sx={{ fontSize: 16, fontWeight: 700, color: "#202223" }}>
-            {currency}{totalValue}
-          </Typography>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              textAlign: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <Typography sx={{ fontSize: 12, color: "#6b7280", fontWeight: 500 }}>
+              Total
+            </Typography>
+            <Typography sx={{ fontSize: 16, fontWeight: 700, color: "#202223" }}>
+              {currency}{totalValue}
+            </Typography>
+          </Box>
         </Box>
         <Box sx={{ mt: 2 }}>
           {chartData.map((item, i) => (

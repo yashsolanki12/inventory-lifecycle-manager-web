@@ -116,10 +116,14 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <AppProvider embedded apiKey={apiKey}>
         <s-app-nav>
-          <s-link href="/app">📊 Dashboard</s-link>
-          <s-link href="/app/inventory">📦 Inventory</s-link>
-          <s-link href="/app/orders">🛍️ Orders</s-link>
-          <s-link href="/app/plans">💳 Plans</s-link>
+          <s-link href="/app">Dashboard</s-link>
+          {/* 📊 */}
+          <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
+          <s-link href="/app/rules">Rules</s-link>
+          <s-link href="/app/orders">Orders</s-link>
+          {/* 🛍️  */}
+          <s-link href="/app/plans">Plans</s-link>
+          {/* 💳  */}
         </s-app-nav>
         {(hasActivePlan || isPlansRoute) && <Outlet />}
         {!hasActivePlan && !isPlansRoute && <NoPlanFallback />}

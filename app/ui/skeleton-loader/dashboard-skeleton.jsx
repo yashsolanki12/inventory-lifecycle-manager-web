@@ -109,7 +109,7 @@ const DashboardSkeleton = () => {
         ))}
       </Box>
 
-      {/* Inventory Value By Age */}
+      {/* Inventory Aging Distribution & Inventory Value By Age */}
       <Box
         sx={{
           display: "grid",
@@ -118,6 +118,7 @@ const DashboardSkeleton = () => {
           mb: 3,
         }}
       >
+        {/* Inventory Aging Distribution */}
         <Card
           sx={{
             borderRadius: "14px",
@@ -129,7 +130,7 @@ const DashboardSkeleton = () => {
           <CardContent
             sx={{ p: { xs: "16px !important", sm: "24px !important" } }}
           >
-            <Skeleton variant="text" width="30%" height={24} sx={{ mb: 3 }} />
+            <Skeleton variant="text" width="60%" height={24} sx={{ mb: 3 }} />
             <Skeleton
               variant="rounded"
               width="100%"
@@ -139,7 +140,7 @@ const DashboardSkeleton = () => {
           </CardContent>
         </Card>
 
-        {/* Inventory Value By Age */}
+        {/* Inventory Value By Age - Doughnut */}
         <Card
           sx={{
             borderRadius: "14px",
@@ -151,13 +152,27 @@ const DashboardSkeleton = () => {
           <CardContent
             sx={{ p: { xs: "16px !important", sm: "24px !important" } }}
           >
-            <Skeleton variant="text" width="45%" height={24} sx={{ mb: 3 }} />
-            <Skeleton
-              variant="circular"
-              width={170}
-              height={170}
-              sx={{ mx: "auto" }}
-            />
+            <Skeleton variant="text" width="55%" height={24} sx={{ mb: 3 }} />
+            <Box sx={{ position: "relative" }}>
+              <Skeleton
+                variant="circular"
+                width={200}
+                height={200}
+                sx={{ mx: "auto" }}
+              />
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  textAlign: "center",
+                }}
+              >
+                <Skeleton variant="text" width={40} height={14} sx={{ mx: "auto" }} />
+                <Skeleton variant="text" width={60} height={20} sx={{ mx: "auto" }} />
+              </Box>
+            </Box>
             <Box sx={{ mt: 2 }}>
               {[1, 2, 3, 4].map((i) => (
                 <Box
