@@ -32,24 +32,14 @@ const TopDeadStockTable = ({ agingData }) => {
           flex: 1,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 1,
-          }}
-        >
-          <Typography variant="h6" sx={{ fontWeight: 600, fontSize: 18 }}>
-            Top Dead Stock Products
-          </Typography>
-        </Box>
+        <Typography variant="h6" sx={{ fontWeight: 600, fontSize: 18, mb: 1 }}>
+          Top Dead Stock Products
+        </Typography>
 
         {items.length === 0 ? (
           <Box
             sx={{
               display: "flex",
-              flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
               flex: 1,
@@ -74,96 +64,62 @@ const TopDeadStockTable = ({ agingData }) => {
                 "&::-webkit-scrollbar-track": { backgroundColor: "#f9fafb" },
               }}
             >
-              <Box
-                component="table"
-                sx={{ width: "100%", borderCollapse: "collapse" }}
-              >
-                <Box component="tbody">
-                  {items.map((item, i) => (
-                    <Box
-                      component="tr"
-                      key={item.id}
+              {items.map((item, i) => (
+                <Box
+                  key={item.id}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    py: 1.5,
+                    borderBottom: "1px solid #ececec",
+                    "&:last-child": { borderBottom: "none" },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "10px",
+                      backgroundColor:
+                        PRODUCT_COLORS[i % PRODUCT_COLORS.length],
+                      backgroundImage: item.image?.url
+                        ? `url(${item.image.url})`
+                        : "none",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography
                       sx={{
-                        borderBottom: "1px solid #ececec",
-                        display: { xs: "flex", md: "table-row" },
-                        flexWrap: "wrap",
-                        py: { xs: 1, md: 0 },
+                        fontSize: 14,
+                        fontWeight: 500,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
                       }}
                     >
-                      <Box
-                        component="td"
-                        sx={{
-                          py: { xs: 1, md: 2 },
-                          pr: 2,
-                          borderBottom: { xs: "none", md: "1px solid #ececec" },
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1.5,
-                          flex: 1,
-                          minWidth: 0,
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            width: { xs: 36, sm: 46 },
-                            height: { xs: 36, sm: 46 },
-                            borderRadius: "10px",
-                            backgroundColor:
-                              PRODUCT_COLORS[i % PRODUCT_COLORS.length],
-                            backgroundImage: item.image?.url
-                              ? `url(${item.image.url})`
-                              : "none",
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: { xs: 13, sm: 15 },
-                            fontWeight: 500,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {item.title ?? "Untitled Product."}
-                        </Typography>
-                      </Box>
-                      <Box
-                        component="td"
-                        sx={{
-                          py: { xs: 0, md: 2 },
-                          px: { xs: 0, sm: 2 },
-                          fontSize: { xs: 12, sm: 15 },
-                          borderBottom: { xs: "none", md: "1px solid #ececec" },
-                          whiteSpace: "nowrap",
-                          display: { xs: "inline-block", md: "table-cell" },
-                          mr: { xs: 2, md: 0 },
-                          textAlign: { xs: "right", md: "left" },
-                        }}
-                      >
-                        {item.quantity} Units
-                      </Box>
-                      <Box
-                        component="td"
-                        sx={{
-                          py: { xs: 0, md: 2 },
-                          pl: { xs: 0, sm: 2 },
-                          fontSize: { xs: 12, sm: 15 },
-                          borderBottom: { xs: "none", md: "1px solid #ececec" },
-                          whiteSpace: "nowrap",
-                          display: { xs: "inline-block", md: "table-cell" },
-                          textAlign: { xs: "right", md: "left" },
-                        }}
-                      >
-                        {currency}
-                        {item.value.toLocaleString()}
-                      </Box>
-                    </Box>
-                  ))}
+                      {item.title ?? "Untitled Product."}
+                    </Typography>
+                    <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+                      {item.quantity} Units
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {currency}
+                    {item.value.toLocaleString()}
+                  </Typography>
                 </Box>
-              </Box>
+              ))}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2.5 }}>
               <Button

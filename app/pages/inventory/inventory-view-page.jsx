@@ -117,6 +117,7 @@ const InventoryViewPage = () => {
                 overflowY: { xs: "visible", sm: "auto" },
                 pb: { xs: 0.5, sm: 0 },
                 pr: { xs: 0, sm: 0.5 },
+                flexShrink: 0,
                 "&::-webkit-scrollbar": { width: 4, height: 4 },
                 "&::-webkit-scrollbar-thumb": {
                   backgroundColor: "#d1d5db",

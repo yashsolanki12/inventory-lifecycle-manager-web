@@ -77,8 +77,8 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                innerRadius={60}
-                outerRadius={100}
+                innerRadius={50}
+                outerRadius={85}
                 paddingAngle={2}
                 dataKey="value"
                 labelLine={false}
@@ -102,13 +102,13 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
         </Box>
         <Box sx={{ mt: 2 }}>
           {chartData.map((item, i) => (
-            <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
-              <Box sx={{ width: 14, height: 14, borderRadius: "50%", backgroundColor: item.color, flexShrink: 0 }} />
-              <Typography sx={{ fontSize: 14, color: "#374151" }}>{item.name}</Typography>
-              <Typography sx={{ fontSize: 13, color: item.color, fontWeight: 600, ml: 0.5 }}>
+            <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+              <Box sx={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: item.color, flexShrink: 0 }} />
+              <Typography sx={{ fontSize: { xs: 12, sm: 14 }, color: "#374151" }}>{item.name}</Typography>
+              <Typography sx={{ fontSize: { xs: 11, sm: 13 }, color: item.color, fontWeight: 600, ml: 0.5 }}>
                 {item.percentage}%
               </Typography>
-              <Typography sx={{ fontSize: 14, color: "#6b7280", ml: "auto" }}>
+              <Typography sx={{ fontSize: { xs: 12, sm: 14 }, color: "#6b7280", ml: "auto" }}>
                 {currency}{item.value.toLocaleString()}
               </Typography>
             </Box>

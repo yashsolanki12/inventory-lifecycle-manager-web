@@ -114,7 +114,7 @@ const DeadStockTrend = () => {
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart
               data={trend}
-              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+              margin={{ top: 5, right: 10, bottom: 5, left: -10 }}
             >
               <defs>
                 <linearGradient

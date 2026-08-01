@@ -13,6 +13,7 @@ const DashboardSkeleton = () => {
         mx: "auto",
         px: { xs: 2, sm: 3 },
         py: 3,
+        mb: 5,
         boxSizing: "border-box",
         background: "#f5f7fb",
         borderRadius: "12px",
@@ -84,7 +85,7 @@ const DashboardSkeleton = () => {
           mb: 3,
         }}
       >
-        {[5, 6, 7, 8].map((i) => (
+        {[1, 2, 3, 4].map((i) => (
           <Card
             key={i}
             sx={{
@@ -93,7 +94,9 @@ const DashboardSkeleton = () => {
               boxShadow: "0 8px 24px rgba(0,0,0,.04)",
             }}
           >
-            <CardContent sx={{ p: "22px !important" }}>
+            <CardContent
+              sx={{ p: { xs: "16px !important", sm: "22px !important" } }}
+            >
               <Skeleton variant="text" width="60%" height={16} />
               <Skeleton
                 variant="text"
@@ -106,7 +109,7 @@ const DashboardSkeleton = () => {
         ))}
       </Box>
 
-      {/* Charts Row */}
+      {/* Charts Row 1 */}
       <Box
         sx={{
           display: "grid",
@@ -120,9 +123,12 @@ const DashboardSkeleton = () => {
             borderRadius: "14px",
             border: "1px solid #ececec",
             boxShadow: "0 8px 24px rgba(0,0,0,.04)",
+            height: "100%",
           }}
         >
-          <CardContent sx={{ p: "24px !important" }}>
+          <CardContent
+            sx={{ p: { xs: "16px !important", sm: "24px !important" } }}
+          >
             <Skeleton variant="text" width="60%" height={24} sx={{ mb: 3 }} />
             <Skeleton
               variant="rounded"
@@ -137,14 +143,17 @@ const DashboardSkeleton = () => {
             borderRadius: "14px",
             border: "1px solid #ececec",
             boxShadow: "0 8px 24px rgba(0,0,0,.04)",
+            height: "100%",
           }}
         >
-          <CardContent sx={{ p: "24px !important" }}>
+          <CardContent
+            sx={{ p: { xs: "16px !important", sm: "24px !important" } }}
+          >
             <Skeleton variant="text" width="55%" height={24} sx={{ mb: 3 }} />
             <Skeleton
               variant="circular"
-              width={200}
-              height={200}
+              width={170}
+              height={170}
               sx={{ mx: "auto" }}
             />
             <Box sx={{ mt: 2 }}>
@@ -154,17 +163,17 @@ const DashboardSkeleton = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    gap: 1.5,
+                    gap: 1,
                     mb: 1,
                   }}
                 >
-                  <Skeleton variant="circular" width={14} height={14} />
-                  <Skeleton variant="text" width="35%" height={16} />
-                  <Skeleton variant="text" width="10%" height={16} />
+                  <Skeleton variant="circular" width={12} height={12} />
+                  <Skeleton variant="text" width="30%" height={14} />
+                  <Skeleton variant="text" width="10%" height={14} />
                   <Skeleton
                     variant="text"
-                    width="18%"
-                    height={16}
+                    width="20%"
+                    height={14}
                     sx={{ ml: "auto" }}
                   />
                 </Box>
@@ -174,7 +183,7 @@ const DashboardSkeleton = () => {
         </Card>
       </Box>
 
-      {/* Bottom Row */}
+      {/* Charts Row 2 */}
       <Box
         sx={{
           display: "grid",
@@ -191,35 +200,35 @@ const DashboardSkeleton = () => {
             alignSelf: "start",
           }}
         >
-          <CardContent sx={{ p: "24px !important" }}>
+          <CardContent
+            sx={{ p: { xs: "16px !important", sm: "24px !important" } }}
+          >
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
                 mb: 3,
+                gap: 1,
+                flexWrap: "wrap",
               }}
             >
-              <Skeleton variant="text" width={160} height={24} />
-              <Box sx={{ display: "flex", gap: 1 }}>
-                <Skeleton
-                  variant="rounded"
-                  width={40}
-                  height={28}
-                  sx={{ borderRadius: "6px" }}
-                />
-                <Skeleton
-                  variant="rounded"
-                  width={48}
-                  height={28}
-                  sx={{ borderRadius: "6px" }}
-                />
-                <Skeleton
-                  variant="rounded"
-                  width={48}
-                  height={28}
-                  sx={{ borderRadius: "6px" }}
-                />
+              <Skeleton
+                variant="text"
+                width="20%"
+                height={12}
+                sx={{ mt: 0.5 }}
+              />
+              <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+                {[1, 2, 3].map((i) => (
+                  <Skeleton
+                    key={i}
+                    variant="rounded"
+                    width={40}
+                    height={28}
+                    sx={{ borderRadius: "6px" }}
+                  />
+                ))}
               </Box>
             </Box>
             <Skeleton
@@ -241,32 +250,38 @@ const DashboardSkeleton = () => {
             alignSelf: "start",
           }}
         >
-          <CardContent sx={{ p: "24px !important" }}>
+          <CardContent
+            sx={{ p: { xs: "16px !important", sm: "24px !important" } }}
+          >
             <Skeleton variant="text" width="55%" height={24} sx={{ mb: 2.5 }} />
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3, 4].map((i) => (
               <Box
                 key={i}
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   gap: 1.5,
-                  py: 2,
+                  py: 1.5,
                   borderBottom: "1px solid #ececec",
+                  "&:last-child": { borderBottom: "none" },
                 }}
               >
                 <Skeleton
                   variant="rounded"
-                  width={46}
-                  height={46}
+                  width={40}
+                  height={40}
                   sx={{ borderRadius: "10px", flexShrink: 0 }}
                 />
-                <Skeleton variant="text" width="50%" height={18} />
-                <Skeleton
-                  variant="text"
-                  width="15%"
-                  height={18}
-                  sx={{ ml: "auto" }}
-                />
+                <Box sx={{ flex: 1 }}>
+                  <Skeleton variant="text" width="70%" height={14} />
+                  <Skeleton
+                    variant="text"
+                    width="20%"
+                    height={12}
+                    sx={{ mt: 0.5 }}
+                  />
+                </Box>
+                <Skeleton variant="text" width="15%" height={14} />
               </Box>
             ))}
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2.5 }}>
