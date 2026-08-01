@@ -37,8 +37,8 @@ const StatsCards = ({ dashboardData, plan }) => {
           <CardContent sx={{ p: { xs: "16px !important", sm: "22px !important" } }}>
             {(() => {
               const val = data ? String(card.getValue(data)) : "--";
-              const len = val.length;
-              const valueFontSize = len > 10 ? 18 : 22;
+              // const len = val.length;
+              const valueFontSize = 22
               const labelFontSize = 14;
               return (
                 <>
