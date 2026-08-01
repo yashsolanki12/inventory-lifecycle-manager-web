@@ -1,12 +1,15 @@
 import React from "react";
 import Box from "@mui/material/Box";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { ZOOM_FACTOR } from "../utils/helper";
 
 const ProductImageZoom = ({ imageUrl, altText, children }) => {
   const [zoom, setZoom] = React.useState({ active: false, x: 50, y: 50 });
   const containerRef = React.useRef(null);
+  const isMobile = useMediaQuery("(max-width:767px)");
 
   const handleMouseMove = (e) => {
+    if (isMobile) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -29,7 +32,8 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
         onMouseLeave={handleMouseLeave}
         sx={{
           width: { xs: "100%", sm: 360 },
-          maxHeight: { xs: 260, sm: 320 },
+          minHeight: { xs: 200, sm: 260 },
+          maxHeight: { xs: 360, sm: 320 },
           borderRadius: "12px",
           overflow: "hidden",
           backgroundColor: "#f9fafb",
@@ -38,7 +42,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
-          cursor: "crosshair",
+          cursor: isMobile ? "default" : "crosshair",
           position: "relative",
           zIndex: 1,
         }}
@@ -51,7 +55,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
             width: "100%",
             height: "100%",
             objectFit: "contain",
-            p: 2,
+            p: { xs: 1, sm: 2 },
             userSelect: "none",
             pointerEvents: "none",
           }}
@@ -60,13 +64,13 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
 
       {children}
 
-      {zoom.active && (
+      {zoom.active && !isMobile && (
         <Box
           sx={{
             position: "absolute",
-            left: { xs: 0, sm: 376 },
+            left: 376,
             top: 0,
-            width: { xs: "100%", sm: "calc(100% - 376px)" },
+            width: "calc(100% - 376px)",
             height: "100%",
             borderRadius: "12px",
             overflow: "hidden",
