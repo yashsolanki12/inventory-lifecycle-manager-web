@@ -50,7 +50,7 @@ const ReusableList = ({
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
   const [sort, setSort] = React.useState(defaultSort);
   const [filterValues, setFilterValues] = React.useState(() => {
-  const initial = {};
+    const initial = {};
     filters.forEach((f) => {
       initial[f.param] = f.defaultValue || "";
     });
@@ -244,7 +244,7 @@ const ReusableList = ({
             position: "sticky",
             top: 0,
             zIndex: 1,
-            backgroundColor: "#f9fafb",
+            backgroundColor: "#FCFDFD",
           }}
         >
           <Box component="tr">
@@ -259,7 +259,7 @@ const ReusableList = ({
                   fontWeight: 600,
                   fontSize: 14,
                   color: "#6b7280",
-                  borderBottom: "2px solid #e5e7eb",
+                  borderBottom: "2px solid #eceef1",
                   cursor: col.sortable ? "pointer" : "default",
                   userSelect: "none",
                   whiteSpace: "nowrap",

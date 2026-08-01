@@ -24,11 +24,13 @@ const DashboardHeader = ({ onSync }) => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        gap: 2,
+        flexWrap: "wrap",
       }}
     >
       <Typography
         variant="h3"
-        sx={{ fontWeight: 700, color: "#202223", fontSize: 30 }}
+        sx={{ fontWeight: 700, color: "#202223", fontSize: { xs: 22, sm: 26, md: 30 } }}
       >
         Dashboard
       </Typography>
@@ -54,8 +56,8 @@ const DashboardHeader = ({ onSync }) => {
           textTransform: "none",
           borderRadius: "8px",
           fontWeight: 600,
-          fontSize: "13px",
-          px: 2,
+          fontSize: { xs: 12, sm: "13px" },
+          px: { xs: 1.5, sm: 2 },
           py: 0.75,
           "&:hover": {
             borderColor: "#CBD5E1",

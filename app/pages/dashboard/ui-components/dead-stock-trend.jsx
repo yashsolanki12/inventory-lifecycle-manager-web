@@ -59,7 +59,7 @@ const DeadStockTrend = () => {
     >
       <CardContent
         sx={{
-          p: "24px !important",
+          p: { xs: "16px !important", sm: "24px !important" },
           display: "flex",
           flexDirection: "column",
           flex: 1,
@@ -71,21 +71,23 @@ const DeadStockTrend = () => {
             justifyContent: "space-between",
             alignItems: "center",
             mb: 3,
+            gap: 1,
+            flexWrap: "wrap",
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 600, fontSize: 18 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, fontSize: { xs: 15, sm: 18 } }}>
             Dead Stock Trend
           </Typography>
-          <Box sx={{ display: "flex", gap: 1 }}>
+          <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
             {PERIOD_OPTIONS.map((opt) => (
               <Box
                 key={opt.days}
                 onClick={() => setSelectedDays(opt.days)}
                 sx={{
-                  px: 1.5,
+                  px: { xs: 1, sm: 1.5 },
                   py: 0.5,
                   borderRadius: "6px",
-                  fontSize: 12,
+                  fontSize: { xs: 11, sm: 12 },
                   fontWeight: 600,
                   cursor: "pointer",
                   border: "1px solid",

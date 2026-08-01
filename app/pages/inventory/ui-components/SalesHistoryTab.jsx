@@ -72,11 +72,12 @@ const SalesHistoryTab = ({ product }) => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Box sx={{ display: "flex", gap: 3, mb: 3 }}>
+    <Box sx={{ p: { xs: 1.5, sm: 3 } }}>
+      <Box sx={{ display: "flex", gap: { xs: 1.5, sm: 3 }, mb: 3, flexWrap: "wrap" }}>
         <Box
           sx={{
             flex: 1,
+            minWidth: 120,
             p: 2,
             borderRadius: "10px",
             border: "1px solid #e5e7eb",
@@ -86,13 +87,14 @@ const SalesHistoryTab = ({ product }) => {
           <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.5 }}>
             Total Orders
           </Typography>
-          <Typography sx={{ fontSize: 20, fontWeight: 700, color: "#0f1111" }}>
+          <Typography sx={{ fontSize: { xs: 18, sm: 20 }, fontWeight: 700, color: "#0f1111" }}>
             {total}
           </Typography>
         </Box>
         <Box
           sx={{
             flex: 1,
+            minWidth: 120,
             p: 2,
             borderRadius: "10px",
             border: "1px solid #e5e7eb",
@@ -102,14 +104,16 @@ const SalesHistoryTab = ({ product }) => {
           <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.5 }}>
             Total Units Sold
           </Typography>
-          <Typography sx={{ fontSize: 20, fontWeight: 700, color: "#0f1111" }}>
+          <Typography sx={{ fontSize: { xs: 18, sm: 20 }, fontWeight: 700, color: "#0f1111" }}>
             {totalUnitsSold}
           </Typography>
         </Box>
       </Box>
 
+      {/* Desktop table */}
       <Box
         sx={{
+          display: { xs: "none", md: "block" },
           border: "1px solid #e5e7eb",
           borderRadius: "12px",
           overflow: "hidden",
@@ -175,6 +179,58 @@ const SalesHistoryTab = ({ product }) => {
             <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
               {formatDate(s.createdAt)}
             </Typography>
+          </Box>
+        ))}
+      </Box>
+
+      {/* Mobile cards */}
+      <Box
+        sx={{
+          display: { xs: "flex", md: "none" },
+          flexDirection: "column",
+          gap: 1.5,
+        }}
+      >
+        {sales.map((s) => (
+          <Box
+            key={s.id}
+            sx={{
+              border: "1px solid #e5e7eb",
+              borderRadius: "10px",
+              p: 1.5,
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+            }}
+          >
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <Chip
+                label={formatReference(s.reference)}
+                size="small"
+                sx={{
+                  height: 22,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  backgroundColor: "#dbeafe",
+                  color: "#2563eb",
+                  borderRadius: "12px",
+                  width: "fit-content",
+                }}
+              />
+              <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+                {formatDate(s.createdAt)}
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <Typography
+                sx={{ fontSize: 14, fontWeight: 600, color: "#b91c1c" }}
+              >
+                -{s.quantity} units
+              </Typography>
+              <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+                Stock: {s.newQuantity ?? "—"}
+              </Typography>
+            </Box>
           </Box>
         ))}
       </Box>

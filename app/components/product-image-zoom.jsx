@@ -1,12 +1,15 @@
 import React from "react";
 import Box from "@mui/material/Box";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { ZOOM_FACTOR } from "../utils/helper";
 
 const ProductImageZoom = ({ imageUrl, altText, children }) => {
   const [zoom, setZoom] = React.useState({ active: false, x: 50, y: 50 });
   const containerRef = React.useRef(null);
+  const isMobile = useMediaQuery("(max-width:767px)");
 
   const handleMouseMove = (e) => {
+    if (isMobile) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -22,14 +25,15 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
   };
 
   return (
-    <Box sx={{ display: "flex", gap: 2, flex: 1, position: "relative" }}>
+    <Box sx={{ display: "flex", gap: 2, flex: 1, flexDirection: { xs: "column", sm: "row" }, position: "relative" }}>
       <Box
         ref={containerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         sx={{
-          width: 360,
-          maxHeight: 320,
+          width: { xs: "100%", sm: 360 },
+          minHeight: { xs: 200, sm: 260 },
+          maxHeight: { xs: 360, sm: 320 },
           borderRadius: "12px",
           overflow: "hidden",
           backgroundColor: "#f9fafb",
@@ -38,7 +42,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
-          cursor: "crosshair",
+          cursor: isMobile ? "default" : "crosshair",
           position: "relative",
           zIndex: 1,
         }}
@@ -51,7 +55,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
             width: "100%",
             height: "100%",
             objectFit: "contain",
-            p: 2,
+            p: { xs: 1, sm: 2 },
             userSelect: "none",
             pointerEvents: "none",
           }}
@@ -60,7 +64,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
 
       {children}
 
-      {zoom.active && (
+      {zoom.active && !isMobile && (
         <Box
           sx={{
             position: "absolute",

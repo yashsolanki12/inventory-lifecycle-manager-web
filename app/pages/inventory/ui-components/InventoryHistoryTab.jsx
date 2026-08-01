@@ -75,8 +75,10 @@ const InventoryHistoryTab = ({ product }) => {
     );
   }
 
+  const headers = ["Type", "Quantity", "Before", "After", "Reference", "Date"];
+
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: { xs: 1.5, sm: 3 } }}>
       <Box
         sx={{
           display: "flex",
@@ -85,13 +87,15 @@ const InventoryHistoryTab = ({ product }) => {
           mb: 2,
         }}
       >
-        <Typography sx={{ fontWeight: 600, fontSize: 16, color: "#0f1111" }}>
+        <Typography sx={{ fontWeight: 600, fontSize: { xs: 14, sm: 16 }, color: "#0f1111" }}>
           Inventory Movements
         </Typography>
       </Box>
 
+      {/* Desktop table */}
       <Box
         sx={{
+          display: { xs: "none", md: "block" },
           border: "1px solid #e5e7eb",
           borderRadius: "12px",
           overflow: "hidden",
@@ -108,16 +112,14 @@ const InventoryHistoryTab = ({ product }) => {
             borderBottom: "1px solid #e5e7eb",
           }}
         >
-          {["Type", "Quantity", "Before", "After", "Reference", "Date"].map(
-            (h) => (
-              <Typography
-                key={h}
-                sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280" }}
-              >
-                {h}
-              </Typography>
-            ),
-          )}
+          {headers.map((h) => (
+            <Typography
+              key={h}
+              sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280" }}
+            >
+              {h}
+            </Typography>
+          ))}
         </Box>
 
         {movements.map((m) => {
@@ -170,6 +172,69 @@ const InventoryHistoryTab = ({ product }) => {
               </Typography>
               <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
                 {formatDate(m.createdAt)}
+              </Typography>
+            </Box>
+          );
+        })}
+      </Box>
+
+      {/* Mobile cards */}
+      <Box
+        sx={{
+          display: { xs: "flex", md: "none" },
+          flexDirection: "column",
+          gap: 1.5,
+        }}
+      >
+        {movements.map((m) => {
+          const config =
+            MOVEMENT_CONFIG[m.changeType] || MOVEMENT_CONFIG.initial;
+          const qtyPrefix =
+            m.changeType === "sale" || m.changeType === "removal" ? "-" : "+";
+          return (
+            <Box
+              key={m.id}
+              sx={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "10px",
+                p: 1.5,
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+              }}
+            >
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Chip
+                  label={config.label}
+                  size="small"
+                  sx={{
+                    height: 22,
+                    fontSize: 11,
+                    fontWeight: 600,
+                    backgroundColor: config.bg,
+                    color: config.color,
+                    borderRadius: "12px",
+                    width: "fit-content",
+                  }}
+                />
+                <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+                  {formatDate(m.createdAt)}
+                </Typography>
+              </Box>
+              <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#0f1111" }}>
+                {qtyPrefix}
+                {m.quantity} units
+              </Typography>
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+                  Before: {m.previousQuantity ?? "—"}
+                </Typography>
+                <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+                  After: {m.newQuantity ?? "—"}
+                </Typography>
+              </Box>
+              <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+                {formatReference(m.reference)}
               </Typography>
             </Box>
           );
