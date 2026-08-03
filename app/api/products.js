@@ -27,7 +27,7 @@ export const syncProduct = async (shop) => {
 
 export const listLocalDbProducts = async (
   shop,
-  { page = 1, limit = 10, search, sort = "createdAt", status = "active" } = {},
+  { page = 1, limit = 10, search, sort = "createdAt", status } = {},
 ) => {
   if (!shop) {
     console.error("No shop domain found in URL parameters.");
@@ -90,7 +90,10 @@ export const getProductTypes = async (shop, { page = 1, limit = 10 } = {}) => {
     });
 };
 
-export const getProductVendors = async (shop, { page = 1, limit = 10 } = {}) => {
+export const getProductVendors = async (
+  shop,
+  { page = 1, limit = 10 } = {},
+) => {
   if (!shop) {
     console.error("No shop domain found in URL parameters.");
     throw new Error("Shop domain is required");
@@ -109,7 +112,6 @@ export const getProductVendors = async (shop, { page = 1, limit = 10 } = {}) => 
       throw error;
     });
 };
-
 
 export const getProductTags = async (shop, { page = 1, limit = 10 } = {}) => {
   if (!shop) {

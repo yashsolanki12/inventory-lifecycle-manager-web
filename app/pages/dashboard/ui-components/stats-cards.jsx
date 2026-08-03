@@ -60,7 +60,7 @@ const StatsCards = ({ dashboardData, plan }) => {
                     </Typography>
                     {card.key === "totalProducts" && rules.limit && (
                       <Chip
-                        label={`${plan?.planName || "Free"}`}
+                        label={`Current plan: ${plan?.planName || "Free"}`}
                         size="small"
                         sx={{
                           backgroundColor: planColor.bg,
