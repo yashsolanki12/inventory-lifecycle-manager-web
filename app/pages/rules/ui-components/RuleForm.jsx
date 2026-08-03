@@ -74,6 +74,9 @@ const RuleForm = ({
         gap: 3,
         maxWidth: 700,
         mx: "auto",
+        backgroundColor: "white",
+        padding: "30px",
+        borderRadius: 3,
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -276,10 +279,10 @@ const RuleForm = ({
       />
 
       <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: 2 }}>
-        {/* <Button
+        <Button
           type="button"
           variant="outlined"
-          onClick={() => reset(defaultRuleValues)}
+          onClick={() => navigate("/app/rules")}
           sx={{
             borderColor: "#cad0d6",
             color: "#374151",
@@ -287,11 +290,11 @@ const RuleForm = ({
             borderRadius: "8px",
             fontWeight: 600,
             fontSize: "13px",
-            px: 3,
+            px: 2,
           }}
         >
-          Reset
-        </Button> */}
+          Cancel
+        </Button>
         <Button
           type="submit"
           variant="contained"

@@ -34,6 +34,7 @@ const ReusableList = ({
   filters = [],
   defaultLimit = 10,
   paginationText = "items",
+  handleProductStatus,
 }) => {
   const allColumns = actions
     ? [
@@ -389,7 +390,10 @@ const ReusableList = ({
                 key={f.param}
                 size="small"
                 value={filterValues[f.param] || ""}
-                onChange={(e) => handleFilterChange(f.param, e.target.value)}
+                onChange={(e) => {
+                  handleFilterChange(f.param, e.target.value);
+                  if (handleProductStatus) handleProductStatus(e.target.value);
+                }}
                 displayEmpty
                 sx={{
                   minWidth: 140,

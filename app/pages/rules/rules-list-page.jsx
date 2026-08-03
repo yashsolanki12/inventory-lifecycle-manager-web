@@ -104,7 +104,7 @@ const RulesListPage = () => {
           sx={{
             borderColor: "#cad0d6",
             color: "#ffffff",
-            backgroundColor: "#110000",
+            backgroundColor: "#000000",
             textTransform: "none",
             borderRadius: "8px",
             fontWeight: 600,
