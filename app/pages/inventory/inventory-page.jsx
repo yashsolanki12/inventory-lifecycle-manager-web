@@ -74,7 +74,7 @@ const InventoryPage = () => {
     setOpenDialog(false);
     generateProductCsvMutation.mutate({
       shop: shopDomain,
-      status: getProductStatus
+      status: getProductStatus,
       // ...(getProductStatus === "archived" && { status: getProductStatus }),
     });
   };
@@ -153,7 +153,6 @@ const InventoryPage = () => {
             param: "status",
             label: "Status",
             options: INVENTORY_FILTER_OPTIONS,
-            defaultValue: "active",
           },
         ]}
         defaultLimit={10}
