@@ -71,17 +71,20 @@ const AgingDistributionChart = ({ agingData }) => {
     return (
       <Box
         sx={{
-          background: bgColor,
-          color: "#000000",
+          background: "#1e293b",
           borderRadius: "6px",
           border: "none",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+          boxShadow: "0 8px 24px rgba(0,0,0,.04)",
           px: 1.5,
           py: 1,
         }}
       >
-        <Typography sx={{ fontWeight: 600, fontSize: 13 }}>{dataItem.name}</Typography>
-        <Typography sx={{ fontSize: 12 }}>{dataItem.value} units</Typography>
+        <Typography sx={{ fontWeight: 600, fontSize: 14, color: bgColor }}>
+          {dataItem.name}
+        </Typography>
+        <Typography sx={{ fontSize: 12, color: "white" }}>
+          {dataItem.value} units
+        </Typography>
       </Box>
     );
   };
@@ -106,10 +109,20 @@ const AgingDistributionChart = ({ agingData }) => {
           boxSizing: "border-box",
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, fontSize: { xs: 15, sm: 18 } }}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, mb: 3, fontSize: { xs: 15, sm: 18 } }}
+        >
           Inventory Aging Distribution
         </Typography>
-        <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <ResponsiveContainer width="100%" height="100%" minHeight={280}>
             <BarChart
               data={chartData}
@@ -133,7 +146,10 @@ const AgingDistributionChart = ({ agingData }) => {
                 axisLine={false}
                 tickLine={false}
               />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
+              <Tooltip
+                content={<CustomTooltip />}
+                cursor={{ fill: "rgba(0,0,0,0.04)" }}
+              />
               <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={60}>
                 {chartData.map((_, index) => (
                   <Cell key={index} fill={COLORS[index]} />

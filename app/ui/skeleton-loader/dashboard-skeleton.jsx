@@ -60,13 +60,31 @@ const DashboardSkeleton = () => {
             }}
           >
             <CardContent sx={{ p: "22px !important" }}>
-              <Skeleton variant="text" width="60%" height={16} />
+              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <Skeleton variant="text" width="40%" height={16} />
+                {i === 1 && (
+                  <Skeleton
+                    variant="rounded"
+                    width={90}
+                    height={22}
+                    sx={{ borderRadius: "50px" }}
+                  />
+                )}
+              </Box>
               <Skeleton
                 variant="text"
                 width="45%"
                 height={28}
                 sx={{ mt: 1.5 }}
               />
+              {i === 1 && (
+                <Skeleton
+                  variant="text"
+                  width="35%"
+                  height={14}
+                  sx={{ mt: 0.5 }}
+                />
+              )}
             </CardContent>
           </Card>
         ))}
