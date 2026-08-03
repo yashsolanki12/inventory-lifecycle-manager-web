@@ -72,6 +72,7 @@ const TopDeadStockTable = ({ agingData }) => {
                     alignItems: "center",
                     gap: 1.5,
                     py: 1.5,
+                    px: 1,
                     borderBottom: "1px solid #ececec",
                     "&:last-child": { borderBottom: "none" },
                   }}
