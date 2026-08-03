@@ -65,9 +65,9 @@ const InventoryViewSkeleton = () => {
             <Skeleton
               variant="rounded"
               sx={{
-                width: { xs: "100%", sm: 360 },
-                minHeight: { xs: 200, sm: 260 },
-                maxHeight: { xs: 360, sm: 320 },
+                width: { xs: "100%", sm: "100%", md: 360 },
+                height: { xs: "auto", sm: "auto", md: 320 },
+                minHeight: { xs: 200, sm: 240 },
                 borderRadius: "12px",
                 flexShrink: 0,
               }}

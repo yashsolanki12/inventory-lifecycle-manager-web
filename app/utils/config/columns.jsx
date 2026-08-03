@@ -7,6 +7,9 @@ import Tooltip from "@mui/material/Tooltip";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RuleDetailsPopover from "../../pages/rules/ui-components/rules-list-popover";
 
 import { LineItemsPopover } from "../../pages/orders/ui-components/line-items";
 import {
@@ -15,9 +18,10 @@ import {
   ORDER_STATUS_CONFIG,
   ORDER_FINANCIAL_STATUS_CONFIG,
   ORDER_FULFILLMENT_STATUS_CONFIG,
+  ARCHIVE_RULE_CONFIG,
 } from "./constants";
 
-// Inventory action column
+// Inventory action
 export const createRenderActions =
   ({ onView, onPreviewUrl }) =>
   (item) => (
@@ -55,7 +59,7 @@ export const createRenderActions =
     </Box>
   );
 
-// Inventory list column
+// Inventory list
 export const INVENTORY_COLUMNS = [
   {
     key: "product",
@@ -194,36 +198,28 @@ export const INVENTORY_COLUMNS = [
     skeletonWidth: 70,
     render: (item) => {
       const config =
-        INVENTORY_STATUS_CONFIG[item.status?.toUpperCase()] ||
-        INVENTORY_STATUS_CONFIG.ACTIVE;
+        INVENTORY_STATUS_CONFIG[
+          item.status?.toUpperCase() ?? "No valid status"
+        ];
       return (
-        <Box
+        <Chip
+          label={config.label}
+          size="small"
           sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 0.5,
             backgroundColor: config.bg,
             color: config.color,
             fontWeight: 600,
             fontSize: 12,
-            px: 1.5,
-            py: 0.5,
-            borderRadius: "16px",
+            height: 26,
+            borderRadius: "50px",
+            border: `1px solid ${config.color}20`,
+            px: 0.4,
           }}
-        >
-          <Box
-            sx={{
-              width: 6,
-              height: 6,
-              borderRadius: "50%",
-              backgroundColor: config.color,
-            }}
-          />
-          {config.label}
-        </Box>
+        />
       );
     },
   },
+
   {
     key: "stockStatus",
     label: "Stock Status",
@@ -233,30 +229,20 @@ export const INVENTORY_COLUMNS = [
       const config =
         STOCK_STATUS_CONFIG[statusKey] || STOCK_STATUS_CONFIG.never_sold;
       return (
-        <Box
+        <Chip
+          label={config.label}
+          size="small"
           sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 0.5,
             backgroundColor: config.bg,
             color: config.color,
             fontWeight: 600,
             fontSize: 12,
-            px: 1.5,
-            py: 0.5,
-            borderRadius: "16px",
+            height: 26,
+            borderRadius: "50px",
+            border: `1px solid ${config.color}20`,
+            px: 0.4,
           }}
-        >
-          <Box
-            sx={{
-              width: 6,
-              height: 6,
-              borderRadius: "50%",
-              backgroundColor: config.color,
-            }}
-          />
-          {config.label}
-        </Box>
+        />
       );
     },
   },
@@ -325,7 +311,7 @@ export const INVENTORY_COLUMNS = [
   },
 ];
 
-// Order action column
+// Order action
 export const ordersRenderActions =
   ({ onPreviewUrl }) =>
   (item) => (
@@ -348,7 +334,7 @@ export const ordersRenderActions =
     </Box>
   );
 
-// Orders list column
+// Orders list
 export const ORDERS_COLUMNS = [
   {
     key: "name",
@@ -415,8 +401,9 @@ export const ORDERS_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "6px",
+            borderRadius: "50px",
             border: `1px solid ${config.color}20`,
+            px: 0.4,
           }}
         />
       );
@@ -441,8 +428,9 @@ export const ORDERS_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "6px",
+            borderRadius: "50px",
             border: `1px solid ${config.color}20`,
+            px: 0.4,
           }}
         />
       );
@@ -466,8 +454,9 @@ export const ORDERS_COLUMNS = [
               fontWeight: 600,
               fontSize: 12,
               height: 26,
-              borderRadius: "6px",
+              borderRadius: "50px",
               border: `1px solid ${ORDER_FULFILLMENT_STATUS_CONFIG.UNFULFILLED.color}20`,
+              px: 0.4,
             }}
           />
         );
@@ -485,8 +474,9 @@ export const ORDERS_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "6px",
+            borderRadius: "50px",
             border: `1px solid ${config.color}20`,
+            px: 0.4,
           }}
         />
       );
@@ -534,6 +524,163 @@ export const ORDERS_COLUMNS = [
             />
           </Box>
         </LineItemsPopover>
+      );
+    },
+  },
+
+  {
+    key: "createdAt",
+    label: "Created At",
+    sortable: true,
+    sortField: "createdAt",
+    skeletonWidth: 100,
+    render: (item) => {
+      if (!item.createdAt)
+        return (
+          <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
+        );
+      const date = new Date(item.createdAt).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+        timeZone: "UTC",
+      });
+      return (
+        <Typography
+          sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}
+        >
+          {date}
+        </Typography>
+      );
+    },
+  },
+];
+
+// Rules action
+export const rulesRenderActions =
+  ({ onEdit, onDelete }) =>
+  (item) => (
+    <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
+      {/* Edit Action */}
+      <Tooltip title="Edit" arrow>
+        <IconButton
+          size="small"
+          onClick={() => onEdit(item)}
+          sx={{
+            color: "#6b7280",
+            "&:hover": {
+              color: "#094799",
+              backgroundColor: "#DBEAFE",
+            },
+          }}
+        >
+          <EditIcon sx={{ fontSize: 18 }} />
+        </IconButton>
+      </Tooltip>
+
+      {/* Delete Action */}
+      <Tooltip title="Delete" arrow>
+        <IconButton
+          size="small"
+          onClick={() => onDelete(item)}
+          sx={{
+            color: "#6b7280",
+            "&:hover": {
+              color: "#dc2626",
+              backgroundColor: "#FEE2E2",
+            },
+          }}
+        >
+          <DeleteIcon sx={{ fontSize: 18 }} />
+        </IconButton>
+      </Tooltip>
+    </Box>
+  );
+
+// Rules list
+export const RULES_COLUMNS = [
+  {
+    key: "rule_name",
+    label: "Rule Name",
+    skeletonWidth: 80,
+    render: (item) => {
+      const ruleName = item.rule_name ?? "—";
+      return (
+        <Tooltip title={ruleName} arrow placement="top-start">
+          <Typography
+            sx={{
+              fontSize: 14,
+              color: "#6b7280",
+              maxWidth: 200,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {ruleName}
+          </Typography>
+        </Tooltip>
+      );
+    },
+  },
+
+  {
+    key: "rule_condition",
+    label: "Conditions",
+    skeletonWidth: 80,
+    render: (item) => {
+      const conditions = item.rule_condition ?? "—";
+      return (
+        <Tooltip title={conditions} arrow placement="top-start">
+          <Typography
+            sx={{
+              fontSize: 14,
+              color: "#6b7280",
+              maxWidth: 250,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {conditions}
+          </Typography>
+        </Tooltip>
+      );
+    },
+  },
+
+  {
+    key: "details",
+    label: "Details",
+    skeletonWidth: 80,
+    render: (item) => <RuleDetailsPopover item={item} />,
+  },
+
+  {
+    key: "actionType",
+    label: "Action",
+    skeletonWidth: 80,
+    render: (item) => {
+      const statusKey = item.actionType.toUpperCase();
+      const config = ARCHIVE_RULE_CONFIG[statusKey];
+      return (
+        <Chip
+          label={config?.label}
+          size="small"
+          sx={{
+            backgroundColor: config.bg,
+            color: config.color,
+            fontWeight: 600,
+            fontSize: 12,
+            height: 26,
+            borderRadius: "50px",
+            border: `1px solid ${config.color}20`,
+            px: 0.4,
+          }}
+        />
       );
     },
   },
