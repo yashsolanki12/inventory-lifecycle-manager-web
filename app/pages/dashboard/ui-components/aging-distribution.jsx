@@ -63,6 +63,29 @@ const AgingDistributionChart = ({ agingData }) => {
     },
   ];
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (!active || !payload?.length) return null;
+    const dataItem = payload[0].payload;
+    const colorIndex = chartData.findIndex((d) => d.name === dataItem.name);
+    const bgColor = colorIndex >= 0 ? COLORS[colorIndex] : "#1e293b";
+    return (
+      <Box
+        sx={{
+          background: bgColor,
+          color: "#000000",
+          borderRadius: "6px",
+          border: "none",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+          px: 1.5,
+          py: 1,
+        }}
+      >
+        <Typography sx={{ fontWeight: 600, fontSize: 13 }}>{dataItem.name}</Typography>
+        <Typography sx={{ fontSize: 12 }}>{dataItem.value} units</Typography>
+      </Box>
+    );
+  };
+
   return (
     <Card
       sx={{
@@ -70,54 +93,55 @@ const AgingDistributionChart = ({ agingData }) => {
         border: "1px solid #ececec",
         boxShadow: "0 8px 24px rgba(0,0,0,.04)",
         height: "100%",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <CardContent sx={{ p: { xs: "16px !important", sm: "24px !important" } }}>
+      <CardContent
+        sx={{
+          p: { xs: "16px !important", sm: "24px !important" },
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          boxSizing: "border-box",
+        }}
+      >
         <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, fontSize: { xs: 15, sm: 18 } }}>
           Inventory Aging Distribution
         </Typography>
-        <ResponsiveContainer width="100%" height={280}>
-          <BarChart
-            data={chartData}
-            margin={{ top: 5, right: 20, bottom: 10, left: -10 }}
-          >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="#e5e7eb"
-              vertical={false}
-            />
-            <XAxis
-              dataKey="name"
-              axisLine={false}
-              tickLine={false}
-              tick={(props) => (
-                <CustomXAxisTick {...props} chartData={chartData} />
-              )}
-            />
-            <YAxis
-              tick={{ fontSize: 13, fill: "#6b7280" }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip
-              formatter={(value, name) => [`${value} units`, name]}
-              contentStyle={{
-                background: "#1e293b",
-                color: "#fff",
-                borderRadius: "10px",
-                border: "none",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
-              }}
-              itemStyle={{ color: "#e2e8f0" }}
-              labelStyle={{ color: "#fff", fontWeight: 600 }}
-            />
-            <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={60}>
-              {chartData.map((_, index) => (
-                <Cell key={index} fill={COLORS[index]} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+        <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <ResponsiveContainer width="100%" height="100%" minHeight={280}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 5, right: 20, bottom: 10, left: -10 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#e5e7eb"
+                vertical={false}
+              />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={(props) => (
+                  <CustomXAxisTick {...props} chartData={chartData} />
+                )}
+              />
+              <YAxis
+                tick={{ fontSize: 13, fill: "#6b7280" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(0,0,0,0.04)" }} />
+              <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={60}>
+                {chartData.map((_, index) => (
+                  <Cell key={index} fill={COLORS[index]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </Box>
       </CardContent>
     </Card>
   );
