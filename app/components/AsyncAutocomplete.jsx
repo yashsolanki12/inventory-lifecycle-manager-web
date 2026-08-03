@@ -30,7 +30,7 @@ const AsyncAutocomplete = ({
   };
 
   const handleChange = (_, newValue) => {
-    onChange(newValue);
+    onChange(multiple ? newValue : (newValue ?? ""));
   };
 
   const getSelectedOption = () => {

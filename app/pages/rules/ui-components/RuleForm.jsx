@@ -13,6 +13,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CircularProgress from "@mui/material/CircularProgress";
 import AsyncAutocomplete from "../../../components/AsyncAutocomplete";
+import AsyncMultiSelectTags from "../../../components/AsyncMultiSelectTags";
 
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -233,12 +234,11 @@ const RuleForm = ({
         name="excludedTags"
         control={control}
         render={({ field }) => (
-          <AsyncAutocomplete
+          <AsyncMultiSelectTags
             label="Excluded Tags"
             value={field.value}
             onChange={field.onChange}
             fetchFn={getProductTags}
-            multiple
             error={!!errors.excludedTags}
             helperText={errors.excludedTags?.message}
           />
@@ -285,6 +285,7 @@ const RuleForm = ({
           type="button"
           variant="outlined"
           onClick={() => navigate("/app/rules")}
+          disabled={isSubmitting}
           sx={{
             borderColor: "#cad0d6",
             color: "#374151",

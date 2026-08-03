@@ -19,9 +19,8 @@ const RuleDetailsPopover = ({ item }) => {
           .map((t) => t.trim())
           .filter(Boolean)
       : [];
-  console.log("tag", tags);
-//   const hasAny = productType || vendor || excludedTags.length > 0;
-  if (tags.length === 0) {
+
+  if (!productType && !vendor && tags.length === 0) {
     return <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>;
   }
   const summary = [
@@ -77,71 +76,90 @@ const RuleDetailsPopover = ({ item }) => {
           },
         }}
       >
-        {productType && (
-          <Box sx={{ px: 2, py: 1.5, borderBottom: "1px solid #b2b7c0" }}>
-            <Typography sx={{ fontSize: 11, color: "#9ca3af", mb: 0.3 }}>
-              Product Type
-            </Typography>
-            <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
-              {productType}
-            </Typography>
-          </Box>
-        )}
-        {vendor && (
-          <Box
-            sx={{
-              px: 2,
-              py: 1.5,
-              borderBottom:
-                excludedTags.length > 0 ? "1px solid #b2b7c0" : "none",
-            }}
-          >
-            <Typography sx={{ fontSize: 11, color: "#9ca3af", mb: 0.3 }}>
-              Vendor
-            </Typography>
-            <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
-              {vendor}
-            </Typography>
-          </Box>
-        )}
-        {excludedTags.length > 0 && (
-          <Box sx={{ px: 2, py: 1.5 }}>
-            <Typography sx={{ fontSize: 11, color: "#9ca3af", mb: 0.5 }}>
-              Excluded Tags
-            </Typography>
-            <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-              {tags.slice(0, 3).map((tag) => (
-                <Chip
-                  key={tag}
-                  label={tag}
-                  size="small"
-                  sx={{
-                    height: 22,
-                    fontSize: 11,
-                    fontWeight: 500,
-                    backgroundColor: "#f3f4f6",
-                    color: "#374151",
-                    borderRadius: "4px",
-                  }}
-                />
-              ))}
-              {tags.length > 3 && (
-                <Tooltip title={tags.slice(3).join(", ")} arrow placement="top">
-                  <Typography
+        <Box sx={{ py: 0.5 }}>
+          {productType && (
+            <Box
+              sx={{
+                px: 2,
+                py: 1.5,
+                borderBottom: !vendor ? "none" : "1px solid #b2b7c0", // add multi conditional check ternary
+              }}
+            >
+              <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.3 }}>
+                Product Type
+              </Typography>
+              <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
+                {productType}
+              </Typography>
+            </Box>
+          )}
+          {vendor && (
+            <Box
+              sx={{
+                px: 2,
+                py: 1.5,
+                borderBottom: tags.length > 0 ? "1px solid #b2b7c0" : "none",
+              }}
+            >
+              <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.3 }}>
+                Vendor
+              </Typography>
+              <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
+                {vendor}
+              </Typography>
+            </Box>
+          )}
+          {excludedTags.length > 0 && (
+            <Box sx={{ px: 2, py: 1.5 }}>
+              <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.5 }}>
+                Excluded Tags
+              </Typography>
+              <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+                {tags.slice(0, 3).map((tag) => (
+                  <Chip
+                    key={tag}
+                    label={tag}
+                    size="small"
                     sx={{
-                      fontSize: 11,
-                      color: "#9ca3af",
-                      alignSelf: "center",
-                      cursor: "default",
+                      height: 22,
+                      fontSize: 13,
+                      fontWeight: 500,
+                      backgroundColor: "#f3f4f6",
+                      color: "#374151",
+                      borderRadius: "4px",
+                    }}
+                  />
+                ))}
+                {tags.length > 3 && (
+                  <Tooltip
+                    title={tags.slice(3).join(", ")}
+                    arrow
+                    placement="top"
+                    slotProps={{
+                      tooltip: {
+                        sx: {
+                          lineHeight: 2,
+                          fontSize: "13px",
+                        },
+                      },
                     }}
                   >
-                    +{tags.length - 3}
-                  </Typography>
-                </Tooltip>
-              )}
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        color: "#9ca3af",
+                        alignSelf: "center",
+                        cursor: "default",
+                      }}
+                    >
+                      +{tags.length - 3}
+                    </Typography>
+                  </Tooltip>
+                )}
+              </Box>
             </Box>
-          </Box>
-        )}
+          )}
+        </Box>
       </Popover>
     </>
   );

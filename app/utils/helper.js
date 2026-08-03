@@ -208,3 +208,26 @@ export const ACTION_TYPE_OPTIONS = [
   { value: "archive", label: "Archive" },
   { value: "email", label: "Email" },
 ];
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const PAPER_ID = "async-multiselect-tags-paper";
+
+export const MenuProps = {
+  PaperProps: {
+    id: PAPER_ID,
+    sx: {
+      maxHeight: `${ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP}px !important`,
+      overflowY: "auto !important",
+    },
+  },
+  slotProps: {
+    paper: {
+      id: PAPER_ID,
+      sx: {
+        maxHeight: `${ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP}px !important`,
+        overflowY: "auto !important",
+      },
+    },
+  },
+};
