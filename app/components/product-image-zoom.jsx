@@ -31,9 +31,9 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         sx={{
-          width: { xs: "100%", sm: 360 },
-          minHeight: { xs: 200, sm: 260 },
-          maxHeight: { xs: 360, sm: 320 },
+          width: { xs: "100%", sm: "100%", md: 360 },
+          height: { xs: "auto", sm: "auto", md: 320 },
+          minHeight: { xs: 200, sm: 240 },
           borderRadius: "12px",
           overflow: "hidden",
           backgroundColor: "#f9fafb",
@@ -55,7 +55,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
             width: "100%",
             height: "100%",
             objectFit: "contain",
-            p: { xs: 1, sm: 2 },
+            p: { xs: 1, sm: 1.5 },
             userSelect: "none",
             pointerEvents: "none",
           }}

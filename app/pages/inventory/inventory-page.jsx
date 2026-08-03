@@ -30,6 +30,7 @@ const InventoryPage = () => {
     message: "",
     severity: "success",
   });
+  const [getProductStatus, setProductStatus] = React.useState("");
   const navigate = useNavigate();
 
   const fetchProducts = (params) => listLocalDbProducts(shopDomain, params);
@@ -51,7 +52,7 @@ const InventoryPage = () => {
   });
 
   const generateProductCsvMutation = useInventorySubmit(
-    (shop) => generateProductCsv(shop),
+    ({ shop, status }) => generateProductCsv(shop, status),
     setSnackbar,
     {
       invalidateKeys: [["generate-product-csv"]],
@@ -69,8 +70,12 @@ const InventoryPage = () => {
 
   const handleDialogConfirm = () => {
     if (!shopDomain) return;
+
     setOpenDialog(false);
-    generateProductCsvMutation.mutate(shopDomain);
+    generateProductCsvMutation.mutate({
+      shop: shopDomain,
+      ...(getProductStatus === "archived" && { status: getProductStatus }),
+    });
   };
 
   const handleDialogOpen = () => {
@@ -79,6 +84,10 @@ const InventoryPage = () => {
 
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
+  };
+
+  const handleProductStatus = (item) => {
+    setProductStatus(item);
   };
 
   return (
@@ -139,10 +148,16 @@ const InventoryPage = () => {
         sortOptions={INVENTORY_SORT_OPTIONS}
         defaultSort="-createdAt"
         filters={[
-          { param: "status", label: "Status", options: INVENTORY_FILTER_OPTIONS, defaultValue: "active" },
+          {
+            param: "status",
+            label: "Status",
+            options: INVENTORY_FILTER_OPTIONS,
+            defaultValue: "active",
+          },
         ]}
         defaultLimit={10}
         paginationText="products"
+        handleProductStatus={handleProductStatus}
       />
 
       <ConfirmDialog

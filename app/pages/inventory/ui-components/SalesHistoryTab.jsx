@@ -3,7 +3,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import useInventoryData from "../../../hooks/useInventoryData";
-import { formatDate, PAGE_SIZE, useCurrentShopDomain } from "../../../utils/helper";
+import {
+  formatDate,
+  PAGE_SIZE,
+  useCurrentShopDomain,
+} from "../../../utils/helper";
 import { getMovements } from "../../../api/movements";
 import TablePagination from "../../../components/TablePagination";
 
@@ -73,7 +77,14 @@ const SalesHistoryTab = ({ product }) => {
 
   return (
     <Box sx={{ p: { xs: 1.5, sm: 3 } }}>
-      <Box sx={{ display: "flex", gap: { xs: 1.5, sm: 3 }, mb: 3, flexWrap: "wrap" }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: { xs: 1.5, sm: 3 },
+          mb: 3,
+          flexWrap: "wrap",
+        }}
+      >
         <Box
           sx={{
             flex: 1,
@@ -87,7 +98,13 @@ const SalesHistoryTab = ({ product }) => {
           <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.5 }}>
             Total Orders
           </Typography>
-          <Typography sx={{ fontSize: { xs: 18, sm: 20 }, fontWeight: 700, color: "#0f1111" }}>
+          <Typography
+            sx={{
+              fontSize: { xs: 18, sm: 20 },
+              fontWeight: 700,
+              color: "#0f1111",
+            }}
+          >
             {total}
           </Typography>
         </Box>
@@ -104,7 +121,13 @@ const SalesHistoryTab = ({ product }) => {
           <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.5 }}>
             Total Units Sold
           </Typography>
-          <Typography sx={{ fontSize: { xs: 18, sm: 20 }, fontWeight: 700, color: "#0f1111" }}>
+          <Typography
+            sx={{
+              fontSize: { xs: 18, sm: 20 },
+              fontWeight: 700,
+              color: "#0f1111",
+            }}
+          >
             {totalUnitsSold}
           </Typography>
         </Box>
@@ -203,7 +226,13 @@ const SalesHistoryTab = ({ product }) => {
               gap: 1,
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <Chip
                 label={formatReference(s.reference)}
                 size="small"
@@ -221,7 +250,13 @@ const SalesHistoryTab = ({ product }) => {
                 {formatDate(s.createdAt)}
               </Typography>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <Typography
                 sx={{ fontSize: 14, fontWeight: 600, color: "#b91c1c" }}
               >
@@ -235,7 +270,7 @@ const SalesHistoryTab = ({ product }) => {
         ))}
       </Box>
 
-      {total > 0 && (
+      {total > 10 && (
         <TablePagination
           page={page}
           totalPages={totalPages}

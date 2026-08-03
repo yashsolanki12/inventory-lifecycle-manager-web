@@ -193,3 +193,18 @@ export const MOVEMENT_CONFIG = {
   restock: { label: "Restocked", color: "#15803d", bg: "#dcfce7" },
   initial: { label: "Initial", color: "#6b7280", bg: "#f3f4f6" },
 };
+
+export const OPERATOR_OPTIONS = [
+  { value: "lt", label: "Less than (<)" },
+  { value: "lte", label: "Less than or equal (≤)" },
+  { value: "gt", label: "Greater than (>)" },
+  { value: "gte", label: "Greater than or equal (≥)" },
+];
+
+export const ACTION_TYPE_OPTIONS = [
+  { value: "active", label: "Active" },
+  { value: "draft", label: "Draft" },
+  { value: "unlisted", label: "Unlisted" },
+  { value: "archive", label: "Archive" },
+  { value: "email", label: "Email" },
+];
