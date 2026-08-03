@@ -74,7 +74,8 @@ const InventoryPage = () => {
     setOpenDialog(false);
     generateProductCsvMutation.mutate({
       shop: shopDomain,
-      ...(getProductStatus === "archived" && { status: getProductStatus }),
+      status: getProductStatus
+      // ...(getProductStatus === "archived" && { status: getProductStatus }),
     });
   };
 
