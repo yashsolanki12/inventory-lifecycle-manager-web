@@ -36,7 +36,9 @@ const RuleFormPage = () => {
 
   const submitMutation = useInventorySubmit(
     ({ shop, data, ruleId }) =>
-      ruleId ? updateArchiveRule(shop, data, ruleId) : createArchiveRule(shop, data),
+      ruleId
+        ? updateArchiveRule(shop, data, ruleId)
+        : createArchiveRule(shop, data),
     setSnackbar,
     {
       invalidateKeys: [["rules-list"], ["archive-rule", id]],
@@ -47,6 +49,16 @@ const RuleFormPage = () => {
       },
     },
   );
+
+  React.useEffect(() => {
+    if (submitMutation.error) {
+      setSnackbar({
+        open: true,
+        message: submitMutation.error,
+        severity: "error",
+      });
+    }
+  }, [submitMutation.error]);
 
   const handleSubmit = async (data) => {
     if (!shopDomain) return;

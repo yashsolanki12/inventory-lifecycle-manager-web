@@ -9,6 +9,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import RuleDetailsPopover from "../../pages/rules/ui-components/rules-list-popover";
 
 import { LineItemsPopover } from "../../pages/orders/ui-components/line-items";
 import {
@@ -429,7 +430,7 @@ export const ORDERS_COLUMNS = [
             height: 26,
             borderRadius: "50px",
             border: `1px solid ${config.color}20`,
-            px: 0.4
+            px: 0.4,
           }}
         />
       );
@@ -455,7 +456,7 @@ export const ORDERS_COLUMNS = [
               height: 26,
               borderRadius: "50px",
               border: `1px solid ${ORDER_FULFILLMENT_STATUS_CONFIG.UNFULFILLED.color}20`,
-              px: 0.4
+              px: 0.4,
             }}
           />
         );
@@ -475,7 +476,7 @@ export const ORDERS_COLUMNS = [
             height: 26,
             borderRadius: "50px",
             border: `1px solid ${config.color}20`,
-            px: 0.4
+            px: 0.4,
           }}
         />
       );
@@ -625,6 +626,7 @@ export const RULES_COLUMNS = [
       );
     },
   },
+
   {
     key: "rule_condition",
     label: "Conditions",
@@ -632,7 +634,7 @@ export const RULES_COLUMNS = [
     render: (item) => {
       const conditions = item.rule_condition ?? "—";
       return (
-        <Tooltip title={conditions} arrow placement="top">
+        <Tooltip title={conditions} arrow placement="top-start">
           <Typography
             sx={{
               fontSize: 14,
@@ -648,6 +650,13 @@ export const RULES_COLUMNS = [
         </Tooltip>
       );
     },
+  },
+
+  {
+    key: "details",
+    label: "Details",
+    skeletonWidth: 80,
+    render: (item) => <RuleDetailsPopover item={item} />,
   },
 
   {

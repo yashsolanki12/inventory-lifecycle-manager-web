@@ -123,6 +123,7 @@ const ReusableList = ({
     sort !== defaultSort ||
     filters.some((f) => filterValues[f.param] !== (f.defaultValue || "")) ||
     page > 1;
+  const hasError = search.length > 0 && search.length < MIN_SEARCH_CHARS;
 
   const handleClear = () => {
     setSearch("");
@@ -323,7 +324,7 @@ const ReusableList = ({
     >
       <CardContent
         sx={{
-          p: "24px !important",
+          p: "24px",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
@@ -357,13 +358,20 @@ const ReusableList = ({
                 borderColor: "#d1d5db",
               },
             }}
+
             helperText={
-              search.length > 0 && search.length < MIN_SEARCH_CHARS
+              hasError
                 ? `Min ${MIN_SEARCH_CHARS} characters to search`
-                : " "
+                : undefined
             }
             FormHelperTextProps={{
-              sx: { fontSize: 11, color: "#9ca3af", mt: 0.5, ml: 0.5 },
+              sx: {
+                fontSize: 11,
+                position: "absolute",
+                bottom: "-20px",
+                left: 0,
+                color: hasError ? "error.main" : "#9ca3af",
+              },
             }}
             InputProps={{
               startAdornment: (
@@ -408,8 +416,8 @@ const ReusableList = ({
                   },
                 }}
               >
-                <MenuItem value="">
-                  <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
+                <MenuItem value="" disabled>
+                  <Typography sx={{ fontSize: 14, color: "#00040a" }}>
                     All {f.label}
                   </Typography>
                 </MenuItem>
@@ -424,6 +432,7 @@ const ReusableList = ({
                 ))}
               </Select>
             ))}
+
             {sortOptions.length > 0 && (
               <Select
                 size="small"
@@ -442,7 +451,7 @@ const ReusableList = ({
                   },
                 }}
               >
-                <MenuItem value="">
+                <MenuItem value="" disabled>
                   <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
                     Default Sort
                   </Typography>

@@ -40,11 +40,13 @@ export const ruleFormSchema = z.object({
 
   vendor: z
     .string()
-    .min(1, "Vendor is required"),
+    .optional()
+    .or(z.literal("")),
 
   excludedTags: z
     .array(z.string())
-    .min(1, "At least one tag is required"),
+    .optional()
+    .default([]),
 
   actionType: z.enum(["active", "draft", "unlisted", "email", "tag", "archive"], {
     required_error: "Action type is required",

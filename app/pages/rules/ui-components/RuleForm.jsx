@@ -11,7 +11,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CircularProgress from "@mui/material/CircularProgress";
 import AsyncAutocomplete from "../../../components/AsyncAutocomplete";
+
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -75,7 +77,7 @@ const RuleForm = ({
         maxWidth: 700,
         mx: "auto",
         backgroundColor: "white",
-        padding: "30px",
+        padding: "20px 30px",
         borderRadius: 3,
       }}
     >

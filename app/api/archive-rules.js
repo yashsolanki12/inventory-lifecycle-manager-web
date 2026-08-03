@@ -38,8 +38,11 @@ export const createArchiveRule = async (shop, data) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while create archive rule:", error);
-      throw error;
+      console.error(
+        "Error while create archive rule:",
+        error.response.data.message,
+      );
+      throw error.response.data.message;
     });
 };
 
@@ -57,8 +60,11 @@ export const updateArchiveRule = async (shop, data, id) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while update archive rule:", error);
-      throw error;
+      console.error(
+        "Error while update archive rule:",
+        error.response.data.message,
+      );
+      throw error.response.data.message ;
     });
 };
 
