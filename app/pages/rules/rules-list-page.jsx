@@ -40,6 +40,11 @@ const RulesListPage = () => {
       setRuleData({ rule_name: item.rule_name, id: item.id });
     }
   };
+  const handleMatch = (item) => {
+    if (item.id) {
+      navigate(`/app/rules/match/${item.id}`);
+    }
+  };
 
   const deleteRuleMutation = useInventorySubmit(
     ({ shop, id }) => deleteArchiveRule(shop, id),
@@ -57,6 +62,7 @@ const RulesListPage = () => {
   const renderActions = rulesRenderActions({
     onEdit: handleEdit,
     onDelete: handleDelete,
+    onMatch: handleMatch,
   });
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false, message: "", severity: "success" });

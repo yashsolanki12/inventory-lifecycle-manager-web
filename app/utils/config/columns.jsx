@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import CompareIcon from "@mui/icons-material/CompareOutlined"
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -561,7 +562,7 @@ export const ORDERS_COLUMNS = [
 
 // Rules action
 export const rulesRenderActions =
-  ({ onEdit, onDelete }) =>
+  ({ onEdit, onDelete, onMatch }) =>
   (item) => (
     <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
       {/* Edit Action */}
@@ -595,6 +596,23 @@ export const rulesRenderActions =
           }}
         >
           <DeleteIcon sx={{ fontSize: 18 }} />
+        </IconButton>
+      </Tooltip>
+
+      {/* Match Action */}
+      <Tooltip title="Rule Match" arrow>
+        <IconButton
+          size="small"
+          onClick={() => onMatch(item)}
+          sx={{
+            color: "#6b7280",
+            "&:hover": {
+              color: "#7c3aed",
+              backgroundColor: "#EDE9FE",
+            },
+          }}
+        >
+          <CompareIcon sx={{ fontSize: 18 }} />
         </IconButton>
       </Tooltip>
     </Box>
