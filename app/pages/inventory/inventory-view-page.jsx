@@ -11,7 +11,7 @@ import InventoryViewSkeleton from "../../ui/skeleton-loader/inventory-view-skele
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useInventoryData from "../../hooks/useInventoryData";
 import { getSingleProduct } from "../../api/products";
-import { useCurrentShopDomain } from "../../utils/helper";
+import { formatDate, useCurrentShopDomain } from "../../utils/helper";
 import {
   INVENTORY_STATUS_CONFIG,
   STOCK_STATUS_CONFIG,
@@ -69,17 +69,20 @@ const InventoryViewPage = () => {
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
       {/* Header */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1.5, sm: 3 }, mb: { xs: 2, sm: 3 } }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: { xs: 1.5, sm: 3 },
+          mb: { xs: 2, sm: 3 },
+        }}
+      >
         <Box
           sx={{
             color: "#374151",
-            backgroundColor: "#ffffff",
             padding: 0.02,
-            borderRadius: 50,
-            border: "1px solid #bfd3e6",
             "&:hover": {
-              backgroundColor: "#f3f4f6",
-              border: "1px solid #CBD5E1",
+              color: "#0f1111",
             },
           }}
         >
@@ -89,7 +92,11 @@ const InventoryViewPage = () => {
         </Box>
         <Typography
           variant="h4"
-          sx={{ fontWeight: 600, color: "#0f1111", fontSize: { xs: 20, sm: 24 } }}
+          sx={{
+            fontWeight: 600,
+            color: "#0f1111",
+            fontSize: { xs: 20, sm: 24 },
+          }}
         >
           {product.title}
         </Typography>
@@ -103,7 +110,15 @@ const InventoryViewPage = () => {
           flexDirection: { xs: "column", md: "row" },
         }}
       >
-        <Box sx={{ display: "flex", gap: 2, flex: 1, flexDirection: { xs: "column", sm: "row" }, overflowX: { xs: "auto", sm: "visible" } }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            flex: 1,
+            flexDirection: { xs: "column", sm: "row" },
+            overflowX: { xs: "auto", sm: "visible" },
+          }}
+        >
           {/* Thumbnails */}
           {allImages.length > 1 && (
             <Box
@@ -231,30 +246,20 @@ const InventoryViewPage = () => {
                     >
                       Status
                     </Typography>
-                    <Box
+                    <Chip
+                      label={statusConfig.label}
+                      size="small"
                       sx={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 0.5,
                         backgroundColor: statusConfig.bg,
                         color: statusConfig.color,
                         fontWeight: 600,
                         fontSize: 12,
-                        px: 1.5,
-                        py: 0.5,
-                        borderRadius: "16px",
+                        height: 26,
+                        borderRadius: "6px",
+                        border: `1px solid ${statusConfig.color}20`,
+                        px: 0.4,
                       }}
-                    >
-                      <Box
-                        sx={{
-                          width: 6,
-                          height: 6,
-                          borderRadius: "50%",
-                          backgroundColor: statusConfig.color,
-                        }}
-                      />
-                      {statusConfig.label}
-                    </Box>
+                    />
                   </Box>
                 )}
 
@@ -284,30 +289,21 @@ const InventoryViewPage = () => {
                         >
                           Stock Status
                         </Typography>
-                        <Box
+
+                        <Chip
+                          label={stockConfig.label}
+                          size="small"
                           sx={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 0.5,
                             backgroundColor: stockConfig.bg,
                             color: stockConfig.color,
                             fontWeight: 600,
                             fontSize: 12,
-                            px: 1.5,
-                            py: 0.5,
-                            borderRadius: "16px",
+                            height: 26,
+                            borderRadius: "6px",
+                            border: `1px solid ${stockConfig.color}20`,
+                            px: 0.4,
                           }}
-                        >
-                          <Box
-                            sx={{
-                              width: 6,
-                              height: 6,
-                              borderRadius: "50%",
-                              backgroundColor: stockConfig.color,
-                            }}
-                          />
-                          {stockConfig.label}
-                        </Box>
+                        />
                       </Box>
                     );
                   })()}
@@ -370,6 +366,14 @@ const InventoryViewPage = () => {
                           title={product.tags.slice(2).join(", ")}
                           arrow
                           placement="top"
+                          slotProps={{
+                            tooltip: {
+                              sx: {
+                                lineHeight: 2,
+                                fontSize: "13px",
+                              },
+                            },
+                          }}
                         >
                           <Typography
                             sx={{
@@ -406,17 +410,7 @@ const InventoryViewPage = () => {
                 <InfoRow
                   label="Created At"
                   value={
-                    product.createdAt
-                      ? new Date(product.createdAt).toLocaleString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                          hour12: true,
-                          timeZone: "UTC",
-                        })
-                      : "—"
+                    product.createdAt ? formatDate(product.createdAt) : "—"
                   }
                 />
               </Box>
@@ -435,7 +429,14 @@ const InventoryViewPage = () => {
           overflow: "hidden",
         }}
       >
-        <Box sx={{ borderBottom: 1, borderColor: "divider", overflowX: "auto", "&::-webkit-scrollbar": { height: 0 } }}>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            overflowX: "auto",
+            "&::-webkit-scrollbar": { height: 0 },
+          }}
+        >
           <Tabs
             value={activeTab}
             onChange={(_, newValue) => setActiveTab(newValue)}

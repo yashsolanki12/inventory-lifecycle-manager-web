@@ -199,14 +199,29 @@ const VariantsTab = ({ variants }) => {
                             {opt.name}:
                           </Typography>
                           {isColor ? (
-                            <Tooltip title={opt.value} arrow placement="top">
+                            <Tooltip
+                              title={opt.value}
+                              arrow
+                              placement="top"
+                              slotProps={{
+                                tooltip: {
+                                  sx: {
+                                    lineHeight: 2,
+                                    fontSize: "13px",
+                                  },
+                                },
+                              }}
+                            >
                               <Box
                                 sx={{
                                   width: 20,
                                   height: 20,
                                   borderRadius: "50%",
                                   backgroundColor: colorHex,
-                                  border: colorHex === "#ffffff" ? "2px solid #e5e7eb" : "2px solid transparent",
+                                  border:
+                                    colorHex === "#ffffff"
+                                      ? "2px solid #e5e7eb"
+                                      : "2px solid transparent",
                                   cursor: "pointer",
                                   transition: "transform 0.15s ease",
                                   "&:hover": {

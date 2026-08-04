@@ -10,10 +10,7 @@ const InventoryViewSkeleton = () => {
         <Box
           sx={{
             color: "#374151",
-            backgroundColor: "#ffffff",
             padding: 0.02,
-            borderRadius: 50,
-            border: "1px solid #bfd3e6",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

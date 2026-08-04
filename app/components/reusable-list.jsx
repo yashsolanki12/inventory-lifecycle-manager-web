@@ -8,6 +8,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import IconButton from "@mui/material/IconButton";
+import Checkbox from "@mui/material/Checkbox";
 import SearchIcon from "@mui/icons-material/Search";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -35,6 +36,11 @@ const ReusableList = ({
   defaultLimit = 10,
   paginationText = "items",
   handleProductStatus,
+  selectable = false,
+  selectedIds = [],
+  onToggleSelect,
+  onToggleSelectAll,
+  hideSearch = false,
 }) => {
   const allColumns = actions
     ? [
@@ -187,54 +193,58 @@ const ReusableList = ({
   const renderEmpty = () => <NoDataFound />;
 
   const renderPagination = () => (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        mt: 3,
-        pt: 2,
-        borderTop: "1px solid #ececec",
-      }}
-    >
-      <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
-        Showing {Math.min((page - 1) * defaultLimit + 1, total)} to{" "}
-        {Math.min(page * defaultLimit, total)} of {total} {paginationText}
-      </Typography>
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <IconButton
-          size="small"
-          disabled={!hasPreviousPage}
-          onClick={() => setPage((p) => p - 1)}
+    <>
+      {totalPages > 1 && (
+        <Box
           sx={{
-            border: "1px solid #e5e7eb",
-            borderRadius: "6px",
-            "&:hover": { backgroundColor: "#0056b3", color: "white" },
-            "&.Mui-disabled": { opacity: 0.4 },
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mt: 3,
+            pt: 2,
+            borderTop: "1px solid #ececec",
           }}
         >
-          <ChevronLeftIcon sx={{ fontSize: 18 }} />
-        </IconButton>
-        <Typography
-          sx={{ fontSize: 13, color: "#374151", fontWeight: 500, px: 1 }}
-        >
-          {page} / {totalPages}
-        </Typography>
-        <IconButton
-          size="small"
-          disabled={!hasNextPage}
-          onClick={() => setPage((p) => p + 1)}
-          sx={{
-            border: "1px solid #e5e7eb",
-            borderRadius: "6px",
-            "&:hover": { backgroundColor: "#0056b3", color: "white" },
-            "&.Mui-disabled": { opacity: 0.4 },
-          }}
-        >
-          <ChevronRightIcon sx={{ fontSize: 18 }} />
-        </IconButton>
-      </Box>
-    </Box>
+          <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
+            Showing {Math.min((page - 1) * defaultLimit + 1, total)} to{" "}
+            {Math.min(page * defaultLimit, total)} of {total} {paginationText}
+          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <IconButton
+              size="small"
+              disabled={!hasPreviousPage}
+              onClick={() => setPage((p) => p - 1)}
+              sx={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "6px",
+                "&:hover": { backgroundColor: "#0056b3", color: "white" },
+                "&.Mui-disabled": { opacity: 0.4 },
+              }}
+            >
+              <ChevronLeftIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+            <Typography
+              sx={{ fontSize: 13, color: "#374151", fontWeight: 500, px: 1 }}
+            >
+              {page} / {totalPages}
+            </Typography>
+            <IconButton
+              size="small"
+              disabled={!hasNextPage}
+              onClick={() => setPage((p) => p + 1)}
+              sx={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "6px",
+                "&:hover": { backgroundColor: "#0056b3", color: "white" },
+                "&.Mui-disabled": { opacity: 0.4 },
+              }}
+            >
+              <ChevronRightIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+          </Box>
+        </Box>
+      )}
+    </>
   );
 
   const renderTable = () =>
@@ -250,6 +260,38 @@ const ReusableList = ({
           }}
         >
           <Box component="tr">
+            {selectable && (
+              <Box
+                component="th"
+                sx={{
+                  textAlign: "left",
+                  py: 1.5,
+                  px: 2,
+                  fontWeight: 600,
+                  fontSize: 14,
+                  color: "#6b7280",
+                  borderBottom: "2px solid #eceef1",
+                  width: 48,
+                }}
+              >
+                <Checkbox
+                  size="small"
+                  checked={
+                    items.length > 0 &&
+                    items.every((item) => selectedIds.includes(item.id))
+                  }
+                  indeterminate={
+                    items.some((item) => selectedIds.includes(item.id)) &&
+                    !items.every((item) => selectedIds.includes(item.id))
+                  }
+                  onChange={(e) =>
+                    onToggleSelectAll &&
+                    onToggleSelectAll(e.target.checked, items)
+                  }
+                  sx={{ p: 0 }}
+                />
+              </Box>
+            )}
             {allColumns.map((col) => (
               <Box
                 key={col.key}
@@ -295,6 +337,25 @@ const ReusableList = ({
                 "&:hover": { backgroundColor: "#f9fafb" },
               }}
             >
+              {selectable && (
+                <Box
+                  component="td"
+                  sx={{
+                    py: 1.2,
+                    px: 2,
+                    fontSize: 14,
+                    verticalAlign: "middle",
+                    width: 48,
+                  }}
+                >
+                  <Checkbox
+                    size="small"
+                    checked={selectedIds.includes(item.id)}
+                    onChange={() => onToggleSelect && onToggleSelect(item.id)}
+                    sx={{ p: 0 }}
+                  />
+                </Box>
+              )}
               {allColumns.map((col) => (
                 <Box
                   component="td"
@@ -335,63 +396,65 @@ const ReusableList = ({
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: hideSearch ? "end" : "space-between",
             alignItems: "center",
             mb: 3,
             gap: 2,
             flexWrap: "wrap",
           }}
         >
-          <TextField
-            size="small"
-            placeholder={searchPlaceholder}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            sx={{
-              minWidth: 280,
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-                backgroundColor: "#ffffff",
-                fontSize: 14,
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#d1d5db",
-              },
-            }}
+          {!hideSearch && (
+            <TextField
+              size="small"
+              placeholder={searchPlaceholder}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              sx={{
+                minWidth: 280,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "8px",
+                  backgroundColor: "#ffffff",
+                  fontSize: 14,
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#d1d5db",
+                },
+              }}
 
-            helperText={
-              hasError
-                ? `Min ${MIN_SEARCH_CHARS} characters to search`
-                : undefined
-            }
-            FormHelperTextProps={{
-              sx: {
-                fontSize: 11,
-                position: "absolute",
-                bottom: "-20px",
-                left: 0,
-                color: hasError ? "error.main" : "#9ca3af",
-              },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: "#9ca3af", fontSize: 20 }} />
-                </InputAdornment>
-              ),
-              endAdornment: search ? (
-                <InputAdornment position="end">
-                  <IconButton
-                    size="small"
-                    onClick={() => setSearch("")}
-                    sx={{ p: 0.5 }}
-                  >
-                    <CloseIcon sx={{ fontSize: 16, color: "#9ca3af" }} />
-                  </IconButton>
-                </InputAdornment>
-              ) : null,
-            }}
-          />
+              helperText={
+                hasError
+                  ? `Min ${MIN_SEARCH_CHARS} characters to search`
+                  : undefined
+              }
+              FormHelperTextProps={{
+                sx: {
+                  fontSize: 11,
+                  position: "absolute",
+                  bottom: "-20px",
+                  left: 0,
+                  color: hasError ? "error.main" : "#9ca3af",
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: "#9ca3af", fontSize: 20 }} />
+                  </InputAdornment>
+                ),
+                endAdornment: search ? (
+                  <InputAdornment position="end">
+                    <IconButton
+                      size="small"
+                      onClick={() => setSearch("")}
+                      sx={{ p: 0.5 }}
+                    >
+                      <CloseIcon sx={{ fontSize: 16, color: "#9ca3af" }} />
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
+              }}
+            />
+          )}
           <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
             {filters.map((f) => (
               <Select

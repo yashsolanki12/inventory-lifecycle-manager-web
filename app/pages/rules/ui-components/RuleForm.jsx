@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import FormHelperText from "@mui/material/FormHelperText";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Switch from "@mui/material/Switch";
@@ -13,6 +14,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CircularProgress from "@mui/material/CircularProgress";
 import AsyncAutocomplete from "../../../components/AsyncAutocomplete";
+import AsyncMultiSelectTags from "../../../components/AsyncMultiSelectTags";
 
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -44,6 +46,7 @@ const RuleForm = ({
   } = useForm({
     resolver: zodResolver(ruleFormSchema),
     defaultValues: initialData || defaultRuleValues,
+    mode: "onBlur",
   });
 
   React.useEffect(() => {
@@ -74,7 +77,7 @@ const RuleForm = ({
         display: "flex",
         flexDirection: "column",
         gap: 3,
-        maxWidth: 700,
+        // maxWidth: 700,
         mx: "auto",
         backgroundColor: "white",
         padding: "20px 30px",
@@ -93,35 +96,37 @@ const RuleForm = ({
         </Typography>
       </Box>
 
-      <Controller
-        name="rule_name"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            label="Rule Name"
-            error={!!errors.rule_name}
-            helperText={errors.rule_name?.message}
-            fullWidth
-            sx={formFieldSx}
-          />
-        )}
-      />
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Controller
+          name="rule_name"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Rule Name"
+              error={!!errors.rule_name}
+              helperText={errors.rule_name?.message}
+              fullWidth
+              sx={formFieldSx}
+            />
+          )}
+        />
 
-      <Controller
-        name="rule_condition"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            label="Rule Condition"
-            error={!!errors.rule_condition}
-            helperText={errors.rule_condition?.message}
-            fullWidth
-            sx={formFieldSx}
-          />
-        )}
-      />
+        <Controller
+          name="rule_condition"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="Rule Condition"
+              error={!!errors.rule_condition}
+              helperText={errors.rule_condition?.message}
+              fullWidth
+              sx={formFieldSx}
+            />
+          )}
+        />
+      </Box>
 
       <Box sx={{ display: "flex", gap: 2 }}>
         <Controller
@@ -199,68 +204,78 @@ const RuleForm = ({
         />
       </Box>
 
-      <Controller
-        name="productType"
-        control={control}
-        render={({ field }) => (
-          <AsyncAutocomplete
-            label="Product Type"
-            value={field.value}
-            onChange={field.onChange}
-            fetchFn={getProductTypes}
-            error={!!errors.productType}
-            helperText={errors.productType?.message}
-          />
-        )}
-      />
+      <Box sx={{ display: "flex", gap: 2, "& > *": { flex: 1 } }}>
+        <Controller
+          name="productType"
+          control={control}
+          render={({ field }) => (
+            <AsyncAutocomplete
+              label="Product Type"
+              value={field.value}
+              onChange={field.onChange}
+              fetchFn={getProductTypes}
+              error={!!errors.productType}
+              helperText={errors.productType?.message}
+            />
+          )}
+        />
+        <Controller
+          name="vendor"
+          control={control}
+          render={({ field }) => (
+            <AsyncAutocomplete
+              label="Vendor"
+              value={field.value}
+              onChange={field.onChange}
+              fetchFn={getProductVendors}
+              error={!!errors.vendor}
+              helperText={errors.vendor?.message}
+            />
+          )}
+        />
+      </Box>
 
-      <Controller
-        name="vendor"
-        control={control}
-        render={({ field }) => (
-          <AsyncAutocomplete
-            label="Vendor"
-            value={field.value}
-            onChange={field.onChange}
-            fetchFn={getProductVendors}
-            error={!!errors.vendor}
-            helperText={errors.vendor?.message}
-          />
-        )}
-      />
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Controller
+          name="excludedTags"
+          control={control}
+          render={({ field }) => (
+            <AsyncMultiSelectTags
+              label="Excluded Tags"
+              value={field.value}
+              onChange={field.onChange}
+              fetchFn={getProductTags}
+              error={!!errors.excludedTags}
+              helperText={errors.excludedTags?.message}
+            />
+          )}
+        />
 
-      <Controller
-        name="excludedTags"
-        control={control}
-        render={({ field }) => (
-          <AsyncAutocomplete
-            label="Excluded Tags"
-            value={field.value}
-            onChange={field.onChange}
-            fetchFn={getProductTags}
-            multiple
-            error={!!errors.excludedTags}
-            helperText={errors.excludedTags?.message}
-          />
-        )}
-      />
-
-      <Controller
-        name="actionType"
-        control={control}
-        render={({ field }) => (
-          <FormControl fullWidth error={!!errors.actionType} sx={formFieldSx}>
-            <InputLabel>Action Type</InputLabel>
-            <Select {...field} label="Action Type">
-              {ACTION_TYPE_OPTIONS.map((opt) => (
-                <MenuItem key={opt.value} value={opt.value}>
-                  {opt.label}
+        <Controller
+          name="actionType"
+          control={control}
+          render={({ field }) => (
+            <FormControl fullWidth error={!!errors.actionType} sx={formFieldSx}>
+              <InputLabel shrink>Action Type</InputLabel>
+              <Select {...field} label="Action Type" displayEmpty labelId="actionType-label">
+                <MenuItem value="" disabled>
+                  <Typography sx={{ fontSize: 14, color: "#00040a" }}>
+                    All type
+                  </Typography>
                 </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-      />
+                {ACTION_TYPE_OPTIONS.map((opt) => (
+                  <MenuItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.actionType && (
+                <FormHelperText>{errors.actionType.message}</FormHelperText>
+              )}
+            </FormControl>
+          )}
+        />
+      </Box>
 
       <Controller
         name="stockZero"
@@ -285,6 +300,7 @@ const RuleForm = ({
           type="button"
           variant="outlined"
           onClick={() => navigate("/app/rules")}
+          disabled={isSubmitting}
           sx={{
             borderColor: "#cad0d6",
             color: "#374151",

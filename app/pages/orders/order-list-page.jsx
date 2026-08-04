@@ -18,7 +18,7 @@ import {
   ORDER_FULFILLMENT_STATUS_FILTER_OPTIONS,
 } from "../../utils/config/constants";
 
-const OrderPage = () => {
+const OrderListPage = () => {
   const shopDomain = useCurrentShopDomain();
   const fetchOrders = (params) => listAllOrders(shopDomain, params);
   const [snackbar, setSnackbar] = React.useState({
@@ -61,7 +61,7 @@ const OrderPage = () => {
       >
         <Typography
           variant="h3"
-          sx={{ fontWeight: 700, color: "#202223", fontSize: 30 }}
+          sx={{ fontWeight: 700, color: "#202223", fontSize: 24 }}
         >
           Orders
         </Typography>
@@ -114,4 +114,4 @@ const OrderPage = () => {
   );
 };
 
-export default OrderPage;
+export default OrderListPage;

@@ -20,6 +20,7 @@ import {
   ORDER_FULFILLMENT_STATUS_CONFIG,
   ARCHIVE_RULE_CONFIG,
 } from "./constants";
+import { formatDate } from "../helper";
 
 // Inventory action
 export const createRenderActions =
@@ -71,7 +72,7 @@ export const INVENTORY_COLUMNS = [
           sx={{
             width: 46,
             height: 46,
-            borderRadius: "10px",
+            borderRadius: "6px",
             overflow: "hidden",
             flexShrink: 0,
             backgroundColor: "#f3f4f6",
@@ -133,7 +134,7 @@ export const INVENTORY_COLUMNS = [
   //               fontWeight: 500,
   //               backgroundColor: "#f3f4f6",
   //               color: "#374151",
-  //               borderRadius: "4px",
+  //               borderRadius: "6px",: "4px",
   //             }}
   //           />
   //         ))}
@@ -197,10 +198,11 @@ export const INVENTORY_COLUMNS = [
     label: "Status",
     skeletonWidth: 70,
     render: (item) => {
-      const config =
-        INVENTORY_STATUS_CONFIG[
-          item.status?.toUpperCase() ?? "No valid status"
-        ];
+      const statusKey = item.status?.toUpperCase();
+      const config = statusKey ? INVENTORY_STATUS_CONFIG[statusKey] : null;
+      if (!config) {
+        return <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>;
+      }
       return (
         <Chip
           label={config.label}
@@ -211,7 +213,7 @@ export const INVENTORY_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "50px",
+            borderRadius: "6px",
             border: `1px solid ${config.color}20`,
             px: 0.4,
           }}
@@ -238,7 +240,7 @@ export const INVENTORY_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "50px",
+            borderRadius: "6px",
             border: `1px solid ${config.color}20`,
             px: 0.4,
           }}
@@ -291,20 +293,12 @@ export const INVENTORY_COLUMNS = [
         return (
           <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
         );
-      const date = new Date(item.createdAt).toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: "UTC",
-      });
+
       return (
         <Typography
           sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}
         >
-          {date}
+          {formatDate(item.createdAt)}
         </Typography>
       );
     },
@@ -401,7 +395,7 @@ export const ORDERS_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "50px",
+            borderRadius: "6px",
             border: `1px solid ${config.color}20`,
             px: 0.4,
           }}
@@ -428,7 +422,7 @@ export const ORDERS_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "50px",
+            borderRadius: "6px",
             border: `1px solid ${config.color}20`,
             px: 0.4,
           }}
@@ -454,7 +448,7 @@ export const ORDERS_COLUMNS = [
               fontWeight: 600,
               fontSize: 12,
               height: 26,
-              borderRadius: "50px",
+              borderRadius: "6px",
               border: `1px solid ${ORDER_FULFILLMENT_STATUS_CONFIG.UNFULFILLED.color}20`,
               px: 0.4,
             }}
@@ -474,7 +468,7 @@ export const ORDERS_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "50px",
+            borderRadius: "6px",
             border: `1px solid ${config.color}20`,
             px: 0.4,
           }}
@@ -539,20 +533,12 @@ export const ORDERS_COLUMNS = [
         return (
           <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
         );
-      const date = new Date(item.createdAt).toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: "UTC",
-      });
+
       return (
         <Typography
           sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}
         >
-          {date}
+          {formatDate(item.createdAt)}
         </Typography>
       );
     },
@@ -609,7 +595,19 @@ export const RULES_COLUMNS = [
     render: (item) => {
       const ruleName = item.rule_name ?? "—";
       return (
-        <Tooltip title={ruleName} arrow placement="top-start">
+        <Tooltip
+          title={ruleName}
+          arrow
+          placement="top-start"
+          slotProps={{
+            tooltip: {
+              sx: {
+                lineHeight: 2,
+                fontSize: "13px",
+              },
+            },
+          }}
+        >
           <Typography
             sx={{
               fontSize: 14,
@@ -634,7 +632,19 @@ export const RULES_COLUMNS = [
     render: (item) => {
       const conditions = item.rule_condition ?? "—";
       return (
-        <Tooltip title={conditions} arrow placement="top-start">
+        <Tooltip
+          title={conditions}
+          arrow
+          placement="top-start"
+          slotProps={{
+            tooltip: {
+              sx: {
+                lineHeight: 2,
+                fontSize: "13px",
+              },
+            },
+          }}
+        >
           <Typography
             sx={{
               fontSize: 14,
@@ -676,7 +686,7 @@ export const RULES_COLUMNS = [
             fontWeight: 600,
             fontSize: 12,
             height: 26,
-            borderRadius: "50px",
+            borderRadius: "6px",
             border: `1px solid ${config.color}20`,
             px: 0.4,
           }}
@@ -696,20 +706,112 @@ export const RULES_COLUMNS = [
         return (
           <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
         );
-      const date = new Date(item.createdAt).toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-        timeZone: "UTC",
-      });
       return (
         <Typography
           sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}
         >
-          {date}
+          {formatDate(item.createdAt)}
+        </Typography>
+      );
+    },
+  },
+];
+
+export const MATCH_COLUMNS = [
+  {
+    key: "title",
+    label: "Product",
+    skeletonWidth: 120,
+    render: (item) => (
+      <Typography sx={{ fontSize: 14, fontWeight: 500, color: "#374151" }}>
+        {item.title}
+      </Typography>
+    ),
+  },
+  {
+    key: "sku",
+    label: "SKU",
+    skeletonWidth: 80,
+    render: (item) => {
+      const sku = item.variants?.[0]?.sku || "—";
+      return (
+        <Typography sx={{ fontSize: 14, color: "#6B7280" }}>{sku}</Typography>
+      );
+    },
+  },
+  {
+    key: "reason",
+    label: "Reason",
+    skeletonWidth: 100,
+    render: (item) => (
+      <Typography sx={{ fontSize: 14, color: "#6B7280", maxWidth: 250 }}>
+        {item.reason || "—"}
+      </Typography>
+    ),
+  },
+  {
+    key: "productAgeDays",
+    label: "Age (Days)",
+    skeletonWidth: 80,
+    render: (item) => (
+      <Typography sx={{ fontSize: 14, color: "#6B7280" }}>
+        {item.productAgeDays ?? "—"}
+      </Typography>
+    ),
+  },
+  {
+    key: "stockQuantity",
+    label: "Stock",
+    skeletonWidth: 60,
+    render: (item) => (
+      <Typography sx={{ fontSize: 14, color: "#6B7280" }}>
+        {item.stockQuantity}
+      </Typography>
+    ),
+  },
+
+  {
+    key: "actionType",
+    label: "Action",
+    skeletonWidth: 80,
+    render: (item) => {
+      const statusKey = item.actionType.toUpperCase();
+      const config = ARCHIVE_RULE_CONFIG[statusKey];
+      return (
+        <Chip
+          label={config?.label}
+          size="small"
+          sx={{
+            backgroundColor: config.bg,
+            color: config.color,
+            fontWeight: 600,
+            fontSize: 12,
+            height: 26,
+            borderRadius: "6px",
+            border: `1px solid ${config.color}20`,
+            px: 0.4,
+          }}
+        />
+      );
+    },
+  },
+
+  {
+    key: "createdAt",
+    label: "Created At",
+    // sortable: true,
+    sortField: "createdAt",
+    skeletonWidth: 100,
+    render: (item) => {
+      if (!item.createdAt)
+        return (
+          <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
+        );
+      return (
+        <Typography
+          sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}
+        >
+          {formatDate(item.createdAt)}
         </Typography>
       );
     },

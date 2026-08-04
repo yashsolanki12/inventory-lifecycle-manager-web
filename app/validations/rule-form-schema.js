@@ -48,9 +48,12 @@ export const ruleFormSchema = z.object({
     .optional()
     .default([]),
 
-  actionType: z.enum(["active", "draft", "unlisted", "email", "tag", "archive"], {
-    required_error: "Action type is required",
-  }),
+  actionType: z
+    .string()
+    .min(1, "Action type is required")
+    .refine((val) => ["active", "draft", "unlisted", "email", "tag", "archive"].includes(val), {
+      message: "Action type is required",
+    }),
 });
 
 export const defaultRuleValues = {
@@ -64,5 +67,5 @@ export const defaultRuleValues = {
   productType: "",
   vendor: "",
   excludedTags: [],
-  actionType: "active",
+  actionType: "",
 };

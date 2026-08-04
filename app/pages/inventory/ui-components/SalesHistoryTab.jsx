@@ -6,6 +6,7 @@ import useInventoryData from "../../../hooks/useInventoryData";
 import {
   formatDate,
   PAGE_SIZE,
+  SALES_HISTORY_HEADER,
   useCurrentShopDomain,
 } from "../../../utils/helper";
 import { getMovements } from "../../../api/movements";
@@ -95,7 +96,7 @@ const SalesHistoryTab = ({ product }) => {
             backgroundColor: "#f9fafb",
           }}
         >
-          <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.5 }}>
+          <Typography sx={{ fontSize: 14, color: "#9ca3af", mb: 0.5 }}>
             Total Orders
           </Typography>
           <Typography
@@ -118,7 +119,7 @@ const SalesHistoryTab = ({ product }) => {
             backgroundColor: "#f9fafb",
           }}
         >
-          <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.5 }}>
+          <Typography sx={{ fontSize: 14, color: "#9ca3af", mb: 0.5 }}>
             Total Units Sold
           </Typography>
           <Typography
@@ -153,10 +154,10 @@ const SalesHistoryTab = ({ product }) => {
             borderBottom: "1px solid #e5e7eb",
           }}
         >
-          {["Order", "Quantity", "Stock After", "Date"].map((h) => (
+          {SALES_HISTORY_HEADER.map((h) => (
             <Typography
               key={h}
-              sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280" }}
+              sx={{ fontSize: 14, fontWeight: 600, color: "#6b7280" }}
             >
               {h}
             </Typography>
@@ -183,23 +184,23 @@ const SalesHistoryTab = ({ product }) => {
               size="small"
               sx={{
                 height: 22,
-                fontSize: 11,
+                fontSize: 13,
                 fontWeight: 600,
                 backgroundColor: "#dbeafe",
                 color: "#2563eb",
-                borderRadius: "12px",
+                borderRadius: "6px",
                 width: "fit-content",
               }}
             />
             <Typography
-              sx={{ fontSize: 13, fontWeight: 600, color: "#b91c1c" }}
+              sx={{ fontSize: 14, fontWeight: 600, color: "#b91c1c" }}
             >
               -{s.quantity} units
             </Typography>
-            <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
+            <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
               {s.newQuantity ?? "—"}
             </Typography>
-            <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+            <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
               {formatDate(s.createdAt)}
             </Typography>
           </Box>
@@ -238,7 +239,7 @@ const SalesHistoryTab = ({ product }) => {
                 size="small"
                 sx={{
                   height: 22,
-                  fontSize: 11,
+                  fontSize: 14,
                   fontWeight: 600,
                   backgroundColor: "#dbeafe",
                   color: "#2563eb",
@@ -262,7 +263,7 @@ const SalesHistoryTab = ({ product }) => {
               >
                 -{s.quantity} units
               </Typography>
-              <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
                 Stock: {s.newQuantity ?? "—"}
               </Typography>
             </Box>
