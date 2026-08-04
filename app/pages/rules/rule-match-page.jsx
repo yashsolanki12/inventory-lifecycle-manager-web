@@ -15,12 +15,13 @@ import { useNavigate, useLocation } from "react-router";
 import { useCurrentShopDomain } from "../../utils/helper";
 import { ruleMatch, runRule } from "../../api/archive-rules";
 import { MATCH_COLUMNS } from "../../utils/config/columns";
+import ConfirmDialog from "../../ui/confirmation-dialog";
 
 const RuleMatchPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const shopDomain = useCurrentShopDomain();
-
+  const [openDialog, setOpenDialog] = React.useState(false);
   const selectedRuleIds = location.state?.selectedRuleIds || [];
   const totalFromState = location.state?.totalItems || 0;
 
@@ -48,7 +49,7 @@ const RuleMatchPage = () => {
 
   const handleRunRule = () => {
     if (!shopDomain || selectedRuleIds.length === 0) return;
-    runRuleMutation.mutate({ shop: shopDomain, ruleIds: selectedRuleIds });
+    setOpenDialog(true);
   };
 
   const handleCancel = () => {
@@ -57,6 +58,15 @@ const RuleMatchPage = () => {
 
   const fetchMatchData = (params) =>
     ruleMatch(shopDomain, selectedRuleIds, params);
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleConfirmRun = () => {
+    runRuleMutation.mutate({ shop: shopDomain, ruleIds: selectedRuleIds });
+    setOpenDialog(false);
+  };
 
   return (
     <Box
@@ -188,6 +198,14 @@ const RuleMatchPage = () => {
           )}
         </Button>
       </Box>
+
+      <ConfirmDialog
+        open={openDialog}
+        title="Execute Rules"
+        message={`Are you sure you want to run ${totalFromState !== 1 ? "all" : ""} ${totalFromState} rule${totalFromState !== 1 ? "s" : ""}?`}
+        onConfirm={handleConfirmRun}
+        onClose={handleCloseDialog}
+      />
 
       <Snackbar
         open={snackbar.open}
