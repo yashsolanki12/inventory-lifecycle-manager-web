@@ -2,16 +2,22 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useCurrentShopDomain } from "../../utils/helper";
-import { deleteArchiveRule, getAllArchiveList } from "../../api/archive-rules";
-import { useNavigate } from "react-router";
-import { RULES_COLUMNS, rulesRenderActions } from "../../utils/config/columns";
-import ReusableList from "../../components/reusable-list";
-import { RULES_SORT_OPTIONS } from "../../utils/config/constants";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
 import ConfirmDialog from "../../ui/confirmation-dialog";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
+import ReusableList from "../../components/reusable-list";
+
+import { useCurrentShopDomain } from "../../utils/helper";
+import {
+  deleteArchiveRule,
+  getAllArchiveList,
+  ruleMatch,
+} from "../../api/archive-rules";
+import { useNavigate } from "react-router";
+import { RULES_COLUMNS, rulesRenderActions } from "../../utils/config/columns";
+import { RULES_SORT_OPTIONS } from "../../utils/config/constants";
 
 const RulesListPage = () => {
   const shopDomain = useCurrentShopDomain();
@@ -27,6 +33,7 @@ const RulesListPage = () => {
     rule_name: "",
     id: "",
   });
+  const [selectedIds, setSelectedIds] = React.useState([]);
 
   const handleEdit = (item) => {
     const id = item.id;
@@ -34,23 +41,39 @@ const RulesListPage = () => {
       navigate(`/app/rules/${id}`);
     }
   };
+
   const handleDelete = (item) => {
     if (item.rule_name && item.id) {
       setDeleteDialog(true);
       setRuleData({ rule_name: item.rule_name, id: item.id });
     }
   };
-  const handleMatch = (item) => {
-    if (item.id) {
-      navigate(`/app/rules/match/${item.id}`);
+
+  const handleToggleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
+  };
+
+  const handleToggleSelectAll = (checked, items) => {
+    if (checked) {
+      const allIds = items.map((item) => item.id).filter(Boolean);
+      setSelectedIds((prev) => [...new Set([...prev, ...allIds])]);
+    } else {
+      const itemIds = items.map((item) => item.id);
+      setSelectedIds((prev) => prev.filter((id) => !itemIds.includes(id)));
     }
+  };
+
+  const handleClearSelection = () => {
+    setSelectedIds([]);
   };
 
   const deleteRuleMutation = useInventorySubmit(
     ({ shop, id }) => deleteArchiveRule(shop, id),
     setSnackbar,
     {
-      invalidateKeys: [["rules-list"]], // ["delete-archive-rule"], pass [] with comma separate to call multiple api on success
+      invalidateKeys: [["rules-list"]],
       onSuccess: (data) => {
         if (data.success === true) {
           setDeleteDialog(false);
@@ -59,11 +82,41 @@ const RulesListPage = () => {
     },
   );
 
+  const matchRuleMutation = useInventorySubmit(
+    ({ shop, ruleIds }) => ruleMatch(shop, ruleIds),
+    setSnackbar,
+    {
+      onSuccess: (data) => {
+        if (data.success) {
+          navigate("/app/rules/match", {
+            state: {
+              selectedRuleIds: selectedIds,
+              totalItems: data.data.pagination.total || data.data.items?.length,
+            },
+          });
+        }
+      },
+    },
+  );
+
+  const handleMatchRule = () => {
+    if (selectedIds.length === 0) {
+      setSnackbar({
+        open: true,
+        message: "Please select at least one rule to match.",
+        severity: "warning",
+      });
+      return;
+    }
+    if (!shopDomain) return;
+    matchRuleMutation.mutate({ shop: shopDomain, ruleIds: selectedIds });
+  };
+
   const renderActions = rulesRenderActions({
     onEdit: handleEdit,
     onDelete: handleDelete,
-    onMatch: handleMatch,
   });
+
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
@@ -77,6 +130,7 @@ const RulesListPage = () => {
     setDeleteDialog(false);
     setRuleData("");
   };
+
   return (
     <Box
       sx={{
@@ -100,26 +154,69 @@ const RulesListPage = () => {
       >
         <Typography
           variant="h3"
-          sx={{ fontWeight: 700, color: "#202223", fontSize: 30 }}
+          sx={{ fontWeight: 700, color: "#202223", fontSize: 24 }}
         >
           Rules
         </Typography>
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/app/rules/create")}
-          sx={{
-            borderColor: "#cad0d6",
-            color: "#ffffff",
-            backgroundColor: "#000000",
-            textTransform: "none",
-            borderRadius: "8px",
-            fontWeight: 600,
-            fontSize: "13px",
-            px: 3,
-          }}
-        >
-          Create Rule
-        </Button>
+        <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
+          {selectedIds.length > 0 && (
+            <Button
+              variant="outlined"
+              onClick={handleClearSelection}
+              sx={{
+                borderColor: "#cad0d6",
+                color: "#374151",
+                textTransform: "none",
+                borderRadius: "8px",
+                fontWeight: 600,
+                fontSize: "13px",
+                px: 3,
+                "&:hover": {
+                  borderColor: "#9ca3af",
+                  backgroundColor: "#f9fafb",
+                },
+              }}
+            >
+              Clear ({selectedIds.length})
+            </Button>
+          )}
+          <Button
+            variant="outlined"
+            onClick={handleMatchRule}
+            disabled={matchRuleMutation.isPending}
+            sx={{
+              color: "#ffffff",
+              backgroundColor: "#000000",
+              borderRadius: "8px",
+              fontWeight: 600,
+              fontSize: "13px",
+              textTransform: "none",
+              px: 3,
+            }}
+          >
+            {matchRuleMutation.isPending ? (
+              <CircularProgress size={18} sx={{ color: "white" }} />
+            ) : (
+              "Match Rule"
+            )}
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/app/rules/create")}
+            sx={{
+              borderColor: "#cad0d6",
+              color: "#ffffff",
+              backgroundColor: "#000000",
+              textTransform: "none",
+              borderRadius: "8px",
+              fontWeight: 600,
+              fontSize: "13px",
+              px: 3,
+            }}
+          >
+            Create Rule
+          </Button>
+        </Box>
       </Box>
 
       <ReusableList
@@ -132,6 +229,10 @@ const RulesListPage = () => {
         defaultSort="-createdAt"
         defaultLimit={10}
         paginationText="rules"
+        selectable
+        selectedIds={selectedIds}
+        onToggleSelect={handleToggleSelect}
+        onToggleSelectAll={handleToggleSelectAll}
       />
 
       <ConfirmDialog

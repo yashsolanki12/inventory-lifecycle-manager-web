@@ -22,7 +22,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router";
 
-const InventoryPage = () => {
+const InventoryListPage = () => {
   const shopDomain = useCurrentShopDomain();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [snackbar, setSnackbar] = React.useState({
@@ -114,7 +114,7 @@ const InventoryPage = () => {
       >
         <Typography
           variant="h3"
-          sx={{ fontWeight: 700, color: "#202223", fontSize: 30 }}
+          sx={{ fontWeight: 700, color: "#202223", fontSize: 24 }}
         >
           Inventory
         </Typography>
@@ -186,4 +186,4 @@ const InventoryPage = () => {
   );
 };
 
-export default InventoryPage;
+export default InventoryListPage;

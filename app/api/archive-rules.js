@@ -64,7 +64,7 @@ export const updateArchiveRule = async (shop, data, id) => {
         "Error while update archive rule:",
         error.response.data.message,
       );
-      throw error.response.data.message ;
+      throw error.response.data.message;
     });
 };
 
@@ -99,6 +99,50 @@ export const deleteArchiveRule = async (shop, id) => {
     .then((res) => res.data)
     .catch((error) => {
       console.error("Error while get archive rule:", error);
+      throw error;
+    });
+};
+
+export const ruleMatch = async (
+  shop,
+  ruleIds,
+  { page = 1, limit = 10 } = {},
+) => {
+  if (!shop) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required");
+  }
+  return axiosInstance
+    .post(
+      "products/scan/preview",
+      { ruleId: ruleIds },
+      {
+        params: { shop, page, limit },
+      },
+    )
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error("Error while matching rules:", error);
+      throw error;
+    });
+};
+
+export const runRule = async (shop, ruleIds) => {
+  if (!shop) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required");
+  }
+  return axiosInstance
+    .post(
+      "products/scan/run",
+      { ruleId: ruleIds },
+      {
+        params: { shop },
+      },
+    )
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error("Error while running rule:", error);
       throw error;
     });
 };

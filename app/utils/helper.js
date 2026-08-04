@@ -172,15 +172,27 @@ export const VELOCITY_CONFIG = {
 };
 
 export const formatDate = (dateStr) => {
-  return new Date(dateStr).toLocaleString("en-US", {
+  const date = new Date(dateStr);
+
+  // Format the date part: "Aug 15, 2026"
+  const datePart = date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
+  });
+
+  // Format the time part: "3:33 PM"
+  const timePart = date.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
     timeZone: "UTC",
   });
+
+  // Rearrange to: "15 Aug 2026, 3:33 PM"
+  const [month, day, year] = datePart.replace(",", "").split(" ");
+  return `${day} ${month} ${year}, ${timePart}`;
 };
 
 export const PAGE_SIZE = 10;
@@ -231,3 +243,14 @@ export const MenuProps = {
     },
   },
 };
+
+export const INVENTORY_HISTORY_HEADER = [
+  "Type",
+  "Quantity",
+  "Before",
+  "After",
+  "Reference",
+  "Created At",
+];
+
+export const SALES_HISTORY_HEADER = ["Order", "Quantity", "Stock After", "Created At"];

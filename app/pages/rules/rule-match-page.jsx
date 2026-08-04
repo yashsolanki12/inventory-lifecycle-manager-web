@@ -3,18 +3,60 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import CircularProgress from "@mui/material/CircularProgress";
+import ReusableList from "../../components/reusable-list";
+import useInventorySubmit from "../../hooks/useInventorySubmit";
 
-import { useParams, useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useCurrentShopDomain } from "../../utils/helper";
-
-import { OPERATOR_OPTIONS } from "../../utils/helper";
+import { ruleMatch, runRule } from "../../api/archive-rules";
+import { MATCH_COLUMNS } from "../../utils/config/columns";
 
 const RuleMatchPage = () => {
-  const { id } = useParams();
-  const shopDomain = useCurrentShopDomain();
   const navigate = useNavigate();
+  const location = useLocation();
+  const shopDomain = useCurrentShopDomain();
+
+  const selectedRuleIds = location.state?.selectedRuleIds || [];
+  const totalFromState = location.state?.totalItems || 0;
+
+  const [snackbar, setSnackbar] = React.useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({ open: false, message: "", severity: "success" });
+  };
+
+  const runRuleMutation = useInventorySubmit(
+    ({ shop, ruleIds }) => runRule(shop, ruleIds),
+    setSnackbar,
+    {
+      onSuccess: () => {
+        setTimeout(() => {
+          navigate("/app/rules");
+        }, 1500);
+      },
+    },
+  );
+
+  const handleRunRule = () => {
+    if (!shopDomain || selectedRuleIds.length === 0) return;
+    runRuleMutation.mutate({ shop: shopDomain, ruleIds: selectedRuleIds });
+  };
+
+  const handleCancel = () => {
+    navigate("/app/rules");
+  };
+
+  const fetchMatchData = (params) =>
+    ruleMatch(shopDomain, selectedRuleIds, params);
 
   return (
     <Box
@@ -35,55 +77,83 @@ const RuleMatchPage = () => {
           mb: 3,
         }}
       >
-        <Tooltip title="Back to Rules" arrow>
-          <IconButton
-            onClick={() => navigate("/app/rules")}
-            sx={{
-              color: "#6b7280",
-              "&:hover": {
-                color: "#374151",
-                backgroundColor: "#f3f4f6",
-              },
-            }}
-          >
-            <ArrowBackIcon />
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          onClick={handleCancel}
+          sx={{
+            color: "#6b7280",
+            "&:hover": {
+              color: "#374151",
+              backgroundColor: "#f3f4f6",
+            },
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
         <Typography
           variant="h3"
           sx={{ fontWeight: 700, color: "#202223", fontSize: 24 }}
         >
-          Rule Match
+          Rule Preview
         </Typography>
       </Box>
+      {totalFromState > 0 && (
+        <Box
+          sx={{
+            backgroundColor: "#EFF6FF",
+            border: "1px solid #BFDBFE",
+            borderRadius: "10px",
+            p: 2.5,
+            mb: 3,
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 1.5,
+          }}
+        >
+          <InfoOutlinedIcon sx={{ color: "#2563EB", mt: 0.25, fontSize: 20 }} />
+          <Box>
+            <Typography
+              sx={{ fontSize: 14, color: "#000000", fontWeight: 600 }}
+            >
+              This rule will affect{" "}
+              <span style={{ color: "#2660db" }}> {totalFromState} </span>{" "}
+              product
+              {totalFromState !== 1 ? "s" : ""}.
+            </Typography>
+            <Typography
+              sx={{ fontSize: 13, color: "#000000", mt: 0.5, fontWeight: 600 }}
+            >
+              Please review the list before running the rule.
+            </Typography>
+          </Box>
+        </Box>
+      )}
+
+      <ReusableList
+        fetchFn={fetchMatchData}
+        queryKey={["rule-match", selectedRuleIds]}
+        columns={MATCH_COLUMNS}
+        sortOptions={[]}
+        defaultSort=""
+        defaultLimit={10}
+        paginationText="products"
+        hideSearch={true}
+      />
 
       <Box
         sx={{
-          backgroundColor: "white",
-          borderRadius: "12px",
-          border: "1px solid #e5e7eb",
-          p: 3,
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: 1.5,
+          mt: 3,
         }}
       >
-        <Typography
-          sx={{
-            fontSize: 14,
-            color: "#6b7280",
-            textAlign: "center",
-            py: 4,
-          }}
-        >
-          Matched products will appear here once the rule is processed.
-        </Typography>
-      </Box>
-
-      <Box sx={{ display: "flex", justifyContent: "flex-start", mt: 3 }}>
-        {/* <Button
+        <Button
           variant="outlined"
-          onClick={() => navigate("/app/rules")}
+          onClick={handleCancel}
+          disabled={runRuleMutation.isPending}
           sx={{
             borderColor: "#cad0d6",
-            color: "#374151",
+            color: "#00050e",
             textTransform: "none",
             borderRadius: "8px",
             fontWeight: 600,
@@ -95,9 +165,44 @@ const RuleMatchPage = () => {
             },
           }}
         >
-          Back to Rules
-        </Button> */}
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleRunRule}
+          disabled={runRuleMutation.isPending || totalFromState === 0}
+          sx={{
+            backgroundColor: "#020005",
+            color: "#ffffff",
+            textTransform: "none",
+            borderRadius: "8px",
+            fontWeight: 600,
+            fontSize: "13px",
+            px: 3,
+          }}
+        >
+          {runRuleMutation.isPending ? (
+            <CircularProgress size={18} sx={{ color: "white" }} />
+          ) : (
+            "Run Rule"
+          )}
+        </Button>
       </Box>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={snackbar.severity === "error" ? 5000 : 3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
