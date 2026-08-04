@@ -5,6 +5,7 @@ import Chip from "@mui/material/Chip";
 import useInventoryData from "../../../hooks/useInventoryData";
 import {
   formatDate,
+  INVENTORY_HISTORY_HEADER,
   MOVEMENT_CONFIG,
   PAGE_SIZE,
   useCurrentShopDomain,
@@ -75,8 +76,6 @@ const InventoryHistoryTab = ({ product }) => {
     );
   }
 
-  const headers = ["Type", "Quantity", "Before", "After", "Reference", "Date"];
-
   return (
     <Box sx={{ p: { xs: 1.5, sm: 3 } }}>
       <Box
@@ -87,7 +86,13 @@ const InventoryHistoryTab = ({ product }) => {
           mb: 2,
         }}
       >
-        <Typography sx={{ fontWeight: 600, fontSize: { xs: 14, sm: 16 }, color: "#0f1111" }}>
+        <Typography
+          sx={{
+            fontWeight: 600,
+            fontSize: { xs: 14, sm: 18 },
+            color: "#0f1111",
+          }}
+        >
           Inventory Movements
         </Typography>
       </Box>
@@ -112,10 +117,10 @@ const InventoryHistoryTab = ({ product }) => {
             borderBottom: "1px solid #e5e7eb",
           }}
         >
-          {headers.map((h) => (
+          {INVENTORY_HISTORY_HEADER.map((h) => (
             <Typography
               key={h}
-              sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280" }}
+              sx={{ fontSize: 14, fontWeight: 600, color: "#6b7280" }}
             >
               {h}
             </Typography>
@@ -147,30 +152,30 @@ const InventoryHistoryTab = ({ product }) => {
                 size="small"
                 sx={{
                   height: 22,
-                  fontSize: 11,
-                  fontWeight: 600,
+                  fontSize: 13,
+                  fontWeight: 500,
                   backgroundColor: config.bg,
                   color: config.color,
-                  borderRadius: "12px",
+                  borderRadius: "6px",
                   width: "fit-content",
                 }}
               />
               <Typography
-                sx={{ fontSize: 13, fontWeight: 600, color: "#0f1111" }}
+                sx={{ fontSize: 14, fontWeight: 600, color: "#0f1111" }}
               >
                 {qtyPrefix}
                 {m.quantity} units
               </Typography>
-              <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
+              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
                 {m.previousQuantity ?? "—"}
               </Typography>
-              <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
+              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
                 {m.newQuantity ?? "—"}
               </Typography>
-              <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
                 {formatReference(m.reference)}
               </Typography>
-              <Typography sx={{ fontSize: 12, color: "#6b7280" }}>
+              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
                 {formatDate(m.createdAt)}
               </Typography>
             </Box>
@@ -189,8 +194,7 @@ const InventoryHistoryTab = ({ product }) => {
         {movements.map((m) => {
           const config =
             MOVEMENT_CONFIG[m.changeType] || MOVEMENT_CONFIG.initial;
-          const qtyPrefix =
-            m.changeType === "sale" || m.changeType === "removal" ? "-" : "+";
+          const qtyPrefix = m.changeType === "sale" || m.changeType === "removal" ? "-" : "+";
           return (
             <Box
               key={m.id}
@@ -203,7 +207,13 @@ const InventoryHistoryTab = ({ product }) => {
                 gap: 1,
               }}
             >
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Chip
                   label={config.label}
                   size="small"
@@ -221,9 +231,10 @@ const InventoryHistoryTab = ({ product }) => {
                   {formatDate(m.createdAt)}
                 </Typography>
               </Box>
-              <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#0f1111" }}>
-                {qtyPrefix}
-                {m.quantity} units
+              <Typography
+                sx={{ fontSize: 14, fontWeight: 600, color: "#0f1111" }}
+              >
+                {qtyPrefix} {m.quantity} units
               </Typography>
               <Box sx={{ display: "flex", gap: 2 }}>
                 <Typography sx={{ fontSize: 12, color: "#6b7280" }}>

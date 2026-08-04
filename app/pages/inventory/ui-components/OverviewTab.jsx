@@ -11,8 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { VELOCITY_CONFIG } from "../../../utils/helper";
-
-
+import Chip from "@mui/material/Chip";
 
 const StatCard = ({ label, value, isLast }) => (
   <Box
@@ -26,10 +25,14 @@ const StatCard = ({ label, value, isLast }) => (
       gap: 0.5,
     }}
   >
-    <Typography sx={{ fontSize: { xs: 11, sm: 12 }, fontWeight: 500, color: "#9ca3af" }}>
+    <Typography
+      sx={{ fontSize: { xs: 11, sm: 14 }, fontWeight: 500, color: "#9ca3af" }}
+    >
       {label}
     </Typography>
-    <Typography sx={{ fontSize: { xs: 16, sm: 18 }, fontWeight: 700, color: "#0f1111" }}>
+    <Typography
+      sx={{ fontSize: { xs: 16, sm: 18 }, fontWeight: 700, color: "#0f1111" }}
+    >
       {value}
     </Typography>
   </Box>
@@ -167,36 +170,33 @@ const OverviewTab = ({ product }) => {
     {
       label: "Velocity",
       value: (
-        <Box
+        <Chip
+          label={velocityConfig.label}
+          size="small"
           sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 0.5,
             backgroundColor: velocityConfig.bg,
             color: velocityConfig.color,
             fontWeight: 600,
-            fontSize: 13,
-            px: 1.2,
-            py: 0.3,
-            borderRadius: "12px",
+            fontSize: 12,
+            height: 26,
+            borderRadius: "6px",
+            border: `1px solid ${velocityConfig.color}20`,
+            px: 0.4,
           }}
-        >
-          <Box
-            sx={{
-              width: 6,
-              height: 6,
-              borderRadius: "50%",
-              backgroundColor: velocityConfig.color,
-            }}
-          />
-          {velocityConfig.label}
-        </Box>
+        />
       ),
     },
   ];
 
   return (
-    <Box sx={{ p: { xs: 1.5, sm: 3 }, display: "flex", flexDirection: "column", gap: 3 }}>
+    <Box
+      sx={{
+        p: { xs: 1.5, sm: 3 },
+        display: "flex",
+        flexDirection: "column",
+        gap: 3,
+      }}
+    >
       {/* Stat Cards */}
       <Box
         sx={{

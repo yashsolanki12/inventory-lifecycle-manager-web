@@ -106,7 +106,7 @@ const RuleFormPage = () => {
         productType: rule.productType || "",
         vendor: rule.vendor || "",
         excludedTags: rule.excludedTags || [],
-        actionType: rule.actionType || "active",
+        actionType: rule.actionType || "",
       }
     : null;
 
