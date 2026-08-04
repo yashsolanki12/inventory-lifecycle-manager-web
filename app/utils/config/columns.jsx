@@ -609,7 +609,19 @@ export const RULES_COLUMNS = [
     render: (item) => {
       const ruleName = item.rule_name ?? "—";
       return (
-        <Tooltip title={ruleName} arrow placement="top-start">
+        <Tooltip
+          title={ruleName}
+          arrow
+          placement="top-start"
+          slotProps={{
+            tooltip: {
+              sx: {
+                lineHeight: 2,
+                fontSize: "13px",
+              },
+            },
+          }}
+        >
           <Typography
             sx={{
               fontSize: 14,
@@ -634,7 +646,19 @@ export const RULES_COLUMNS = [
     render: (item) => {
       const conditions = item.rule_condition ?? "—";
       return (
-        <Tooltip title={conditions} arrow placement="top-start">
+        <Tooltip
+          title={conditions}
+          arrow
+          placement="top-start"
+          slotProps={{
+            tooltip: {
+              sx: {
+                lineHeight: 2,
+                fontSize: "13px",
+              },
+            },
+          }}
+        >
           <Typography
             sx={{
               fontSize: 14,

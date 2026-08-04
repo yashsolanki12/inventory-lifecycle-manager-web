@@ -19,7 +19,6 @@ const RuleDetailsPopover = ({ item }) => {
           .map((t) => t.trim())
           .filter(Boolean)
       : [];
-
   if (!productType && !vendor && tags.length === 0) {
     return <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>;
   }
@@ -82,7 +81,10 @@ const RuleDetailsPopover = ({ item }) => {
               sx={{
                 px: 2,
                 py: 1.5,
-                borderBottom: !vendor ? "none" : "1px solid #b2b7c0", // add multi conditional check ternary
+                borderBottom:
+                  vendor.length > 0 || tags.length > 0
+                    ? "1px solid #b2b7c0"
+                    : "none",
               }}
             >
               <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.3 }}>

@@ -71,7 +71,7 @@ export const LineItemsPopover = ({ lineItems, children }) => {
               />
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Typography
-                  sx={{ fontSize: 13, fontWeight: 600, lineHeight: 1.3 }}
+                  sx={{ fontSize: 14, fontWeight: 600, lineHeight: 1.3 }}
                 >
                   {li.title}
                 </Typography>
@@ -89,15 +89,15 @@ export const LineItemsPopover = ({ lineItems, children }) => {
                   }}
                 >
                   {li.sku && (
-                    <Typography sx={{ fontSize: 11, color: "#9ca3af" }}>
+                    <Typography sx={{ fontSize: 12, color: "#9ca3af" }}>
                       SKU: {li.sku}
                     </Typography>
                   )}
-                  <Typography sx={{ fontSize: 11, color: "#9ca3af" }}>
+                  <Typography sx={{ fontSize: 12, color: "#9ca3af" }}>
                     Qty: {li.quantity}
                   </Typography>
                   {li.price && (
-                    <Typography sx={{ fontSize: 11, color: "#9ca3af" }}>
+                    <Typography sx={{ fontSize: 12, color: "#9ca3af" }}>
                       Price: {li.price}
                     </Typography>
                   )}
