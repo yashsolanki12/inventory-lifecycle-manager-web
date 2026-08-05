@@ -124,7 +124,7 @@ const DeadStockTrend = () => {
                       </Typography>
                       <Typography
                         sx={{ fontSize: 12, color: "#e2e8f0" }}
-                      >{`${val} units`}</Typography>
+                      >{`${val.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} units`}</Typography>
                     </Box>
                   );
                 }}
