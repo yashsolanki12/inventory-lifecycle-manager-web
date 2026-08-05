@@ -14,6 +14,7 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
   const chartData = inventoryByAge.map((item, i) => ({
     name: item.label,
     value: item.value,
+    valueFormatted: item.valueFormatted,
     percentage: item.percentage,
     color: COLORS[i],
   }));
@@ -28,11 +29,15 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
           borderRadius: "10px",
           px: 2,
           py: 1.5,
+          zIndex: 100,
           boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
           border: "none",
+          pointerEvents: "none",
         }}
       >
-        <Typography sx={{ fontSize: 13, fontWeight: 600, color: data.payload.color }}>
+        <Typography
+          sx={{ fontSize: 13, fontWeight: 600, color: data.payload.color }}
+        >
           {data.name}
         </Typography>
         <Typography sx={{ fontSize: 12, color: "#e2e8f0", mt: 0.5 }}>
@@ -55,7 +60,10 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
       }}
     >
       <CardContent sx={{ p: { xs: "16px !important", sm: "24px !important" } }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 3, fontSize: { xs: 15, sm: 18 } }}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, mb: 3, fontSize: { xs: 15, sm: 18 } }}
+        >
           Inventory Value By Age
         </Typography>
         <Box sx={{ position: "relative" }}>
@@ -75,7 +83,10 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
                   <Cell key={index} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip
+                content={<CustomTooltip />}
+                wrapperStyle={{ zIndex: 1000, pointerEvents: "none" }}
+              />
             </PieChart>
           </ResponsiveContainer>
           <Box
@@ -88,24 +99,58 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
               pointerEvents: "none",
             }}
           >
-            <Typography sx={{ fontSize: 12, color: "#6b7280", fontWeight: 500 }}>
+            <Typography
+              sx={{ fontSize: 12, color: "#6b7280", fontWeight: 500 }}
+            >
               Total
             </Typography>
-            <Typography sx={{ fontSize: 16, fontWeight: 700, color: "#202223" }}>
-              {currency}{totalValue}
+            <Typography
+              sx={{ fontSize: 16, fontWeight: 700, color: "#202223" }}
+            >
+              {currency}
+              {totalValue}
             </Typography>
           </Box>
         </Box>
         <Box sx={{ mt: 2 }}>
           {chartData.map((item, i) => (
-            <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-              <Box sx={{ width: 12, height: 12, borderRadius: "50%", backgroundColor: item.color, flexShrink: 0 }} />
-              <Typography sx={{ fontSize: { xs: 12, sm: 14 }, color: "#374151" }}>{item.name}</Typography>
-              <Typography sx={{ fontSize: { xs: 11, sm: 13 }, color: item.color, fontWeight: 600, ml: 0.5 }}>
+            <Box
+              key={i}
+              sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
+            >
+              <Box
+                sx={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: "50%",
+                  backgroundColor: item.color,
+                  flexShrink: 0,
+                }}
+              />
+              <Typography
+                sx={{ fontSize: { xs: 12, sm: 14 }, color: "#374151" }}
+              >
+                {item.name}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: { xs: 11, sm: 13 },
+                  color: item.color,
+                  fontWeight: 600,
+                  ml: 0.5,
+                }}
+              >
                 {item.percentage}%
               </Typography>
-              <Typography sx={{ fontSize: { xs: 12, sm: 14 }, color: "#6b7280", ml: "auto" }}>
-                {currency}{item.value.toLocaleString()}
+              <Typography
+                sx={{
+                  fontSize: { xs: 12, sm: 14 },
+                  color: "#6b7280",
+                  ml: "auto",
+                }}
+              >
+                {currency}
+                {item.valueFormatted}
               </Typography>
             </Box>
           ))}
