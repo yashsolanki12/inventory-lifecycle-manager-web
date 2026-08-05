@@ -142,7 +142,7 @@ export const runRule = async (shop, ruleIds) => {
     )
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while running rule:", error);
-      throw error;
+      console.error("Error while running rule:", error.response.data.message);
+      throw error.response.data.message;
     });
 };

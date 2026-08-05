@@ -19,8 +19,8 @@ import { useCurrentShopDomain } from "../../utils/helper";
 import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
 import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
-import { getPlanUsage } from "../../api/plan-usage";
 import { useSearchParams } from "react-router";
+import { getPlanFromBackend } from "../../api/plan";
 
 const DashboardPage = () => {
   const shopDomain = useCurrentShopDomain();
@@ -42,7 +42,7 @@ const DashboardPage = () => {
 
   const { data: planData } = useInventoryData(
     ["plan-usage"],
-    () => getPlanUsage(shopDomain),
+    () => getPlanFromBackend(shopDomain),
     null,
     { enabled: !!shopDomain },
   );
@@ -80,7 +80,11 @@ const DashboardPage = () => {
     (shop) => syncProduct(shop),
     setSnackbar,
     {
-      invalidateKeys: [["inventory-dashboard-data"], ["inventory-aging-data"]],
+      invalidateKeys: [
+        ["inventory-dashboard-data"],
+        ["inventory-aging-data"],
+        ["plan-usage"],
+      ],
       onSuccess: () => {
         sessionStorage.setItem(`inventory_synced_${shopDomain}`, "true");
         setHasSynced(true);
