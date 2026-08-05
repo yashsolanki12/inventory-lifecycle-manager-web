@@ -45,6 +45,7 @@ const DeadStockTrend = () => {
   );
 
   const trend = trendData?.data?.trend ?? [];
+  const currency = trendData?.data.currency === "USD" ? "$" : "";
   const hasData = trend.length > 0;
 
   return (
@@ -64,7 +65,10 @@ const DeadStockTrend = () => {
           flex: 1,
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: 600, fontSize: { xs: 15, sm: 18 }, mb: 3 }}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, fontSize: { xs: 15, sm: 18 }, mb: 3 }}
+        >
           Dead Stock Trend
         </Typography>
         {hasData ? (
@@ -124,7 +128,7 @@ const DeadStockTrend = () => {
                       </Typography>
                       <Typography
                         sx={{ fontSize: 12, color: "#e2e8f0" }}
-                      >{`${val.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} units`}</Typography>
+                      >{`${currency}${val.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} units`}</Typography>
                     </Box>
                   );
                 }}
