@@ -20,7 +20,7 @@ export const getAllArchiveList = async (
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching archive rules list:", error);
+      // console.error("Error while fetching archive rules list:", error);
       throw error;
     });
 };
@@ -38,10 +38,10 @@ export const createArchiveRule = async (shop, data) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error(
-        "Error while create archive rule:",
-        error.response.data.message,
-      );
+      // console.error(
+      //   "Error while create archive rule:",
+      //   error.response.data.message,
+      // );
       throw error.response.data.message;
     });
 };
@@ -60,10 +60,10 @@ export const updateArchiveRule = async (shop, data, id) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error(
-        "Error while update archive rule:",
-        error.response.data.message,
-      );
+      // console.error(
+      //   "Error while update archive rule:",
+      //   error.response.data.message,
+      // );
       throw error.response.data.message;
     });
 };
@@ -79,7 +79,7 @@ export const getArchiveRule = async (shop, id) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while get archive rule:", error);
+      // console.error("Error while get archive rule:", error);
       throw error;
     });
 };
@@ -98,7 +98,7 @@ export const deleteArchiveRule = async (shop, id) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while get archive rule:", error);
+      // console.error("Error while get archive rule:", error);
       throw error;
     });
 };
@@ -122,7 +122,7 @@ export const ruleMatch = async (
     )
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while matching rules:", error);
+      // console.error("Error while matching rules:", error);
       throw error;
     });
 };
@@ -142,7 +142,7 @@ export const runRule = async (shop, ruleIds) => {
     )
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while running rule:", error.response.data.message);
+      // console.error("Error while running rule:", error.response.data.message);
       throw error.response.data.message;
     });
 };

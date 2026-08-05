@@ -22,6 +22,7 @@ import OverviewTab from "./ui-components/OverviewTab";
 import InventoryHistoryTab from "./ui-components/InventoryHistoryTab";
 import SalesHistoryTab from "./ui-components/SalesHistoryTab";
 import VariantsTab from "./ui-components/VariantsTab";
+import Button from "@mui/material/Button";
 
 const FALLBACK_IMAGE = "/fallback-image.jpg";
 
@@ -73,7 +74,7 @@ const InventoryViewPage = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: { xs: 1.5, sm: 3 },
+          gap: { xs: 1.5, sm: 1 },
           mb: { xs: 2, sm: 3 },
         }}
       >
@@ -100,6 +101,29 @@ const InventoryViewPage = () => {
         >
           {product.title}
         </Typography>
+        <Tooltip
+          title="Open Preview"
+          arrow
+          placement="right"
+          slotProps={{
+            tooltip: {
+              sx: {
+                lineHeight: 2,
+                fontSize: "12px",
+              },
+            },
+          }}
+        >
+          <IconButton
+            sx={{
+              borderRadius: 0,
+              transition: "none",
+              "--IconButton-hoverBg": "transparent",
+            }}
+          >
+            ↗
+          </IconButton>
+        </Tooltip>
       </Box>
 
       {/* Image & Product Info */}

@@ -14,28 +14,17 @@ const InventoryViewSkeleton = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: { xs: 1.5, sm: 3 },
+          gap: { xs: 1.5, sm: 1 },
           mb: { xs: 2, sm: 3 },
         }}
       >
-        <Box
-          sx={{
-            color: "#374151",
-            padding: 0.02,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 40,
-            height: 40,
-          }}
-        >
-          <Skeleton variant="circular" width={24} height={24} />
-        </Box>
+        <Skeleton variant="circular" width={24} height={24} />
         <Skeleton
           variant="text"
-          sx={{ width: { xs: 200, sm: 300 } }}
+          sx={{ width: { xs: 160, sm: 240 } }}
           height={32}
         />
+        <Skeleton variant="text" width={20} height={24} />
       </Box>
 
       {/* Image & Product Info */}
@@ -67,6 +56,7 @@ const InventoryViewSkeleton = () => {
               overflowY: { xs: "visible", sm: "auto" },
               pb: { xs: 0.5, sm: 0 },
               pr: { xs: 0, sm: 0.5 },
+              flexShrink: 0,
             }}
           >
             {Array.from({ length: 4 }).map((_, i) => (
@@ -93,8 +83,7 @@ const InventoryViewSkeleton = () => {
               variant="rounded"
               sx={{
                 width: { xs: "100%", sm: "100%", md: 360 },
-                height: { xs: "auto", sm: "auto", md: 320 },
-                minHeight: { xs: 200, sm: 240 },
+                height: { xs: 200, sm: 240, md: 320 },
                 borderRadius: "12px",
                 flexShrink: 0,
               }}
@@ -120,8 +109,8 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={80} height={16} />
-                  <Skeleton variant="text" width={100} height={18} />
+                  <Skeleton variant="text" width={40} height={16} />
+                  <Skeleton variant="text" width={80} height={18} />
                 </Box>
 
                 {/* Stock */}
@@ -132,8 +121,8 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={60} height={16} />
-                  <Skeleton variant="text" width={80} height={18} />
+                  <Skeleton variant="text" width={50} height={16} />
+                  <Skeleton variant="text" width={70} height={18} />
                 </Box>
 
                 {/* Inventory Age */}
@@ -144,8 +133,8 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={110} height={16} />
-                  <Skeleton variant="text" width={90} height={18} />
+                  <Skeleton variant="text" width={100} height={16} />
+                  <Skeleton variant="text" width={80} height={18} />
                 </Box>
 
                 {/* Last Sale */}
@@ -156,8 +145,8 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={80} height={16} />
-                  <Skeleton variant="text" width={100} height={18} />
+                  <Skeleton variant="text" width={70} height={16} />
+                  <Skeleton variant="text" width={90} height={18} />
                 </Box>
 
                 {/* Inventory Value */}
@@ -168,8 +157,8 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={130} height={16} />
-                  <Skeleton variant="text" width={120} height={18} />
+                  <Skeleton variant="text" width={110} height={16} />
+                  <Skeleton variant="text" width={100} height={18} />
                 </Box>
 
                 {/* Status Chip */}
@@ -180,12 +169,12 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={60} height={16} />
+                  <Skeleton variant="text" width={50} height={16} />
                   <Skeleton
                     variant="rounded"
-                    width={80}
-                    height={24}
-                    sx={{ borderRadius: "16px" }}
+                    width={70}
+                    height={26}
+                    sx={{ borderRadius: "6px" }}
                   />
                 </Box>
 
@@ -197,12 +186,12 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={100} height={16} />
+                  <Skeleton variant="text" width={90} height={16} />
                   <Skeleton
                     variant="rounded"
-                    width={70}
-                    height={24}
-                    sx={{ borderRadius: "16px" }}
+                    width={60}
+                    height={26}
+                    sx={{ borderRadius: "6px" }}
                   />
                 </Box>
 
@@ -214,8 +203,8 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={110} height={16} />
-                  <Skeleton variant="text" width={90} height={18} />
+                  <Skeleton variant="text" width={95} height={16} />
+                  <Skeleton variant="text" width={80} height={18} />
                 </Box>
 
                 {/* Vendor */}
@@ -226,8 +215,8 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={70} height={16} />
-                  <Skeleton variant="text" width={100} height={18} />
+                  <Skeleton variant="text" width={55} height={16} />
+                  <Skeleton variant="text" width={90} height={18} />
                 </Box>
 
                 {/* Tags */}
@@ -238,13 +227,21 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={50} height={16} />
-                  <Skeleton
-                    variant="rounded"
-                    width={120}
-                    height={22}
-                    sx={{ borderRadius: "4px" }}
-                  />
+                  <Skeleton variant="text" width={40} height={16} />
+                  <Box sx={{ display: "flex", gap: 0.5 }}>
+                    <Skeleton
+                      variant="rounded"
+                      width={60}
+                      height={22}
+                      sx={{ borderRadius: "4px" }}
+                    />
+                    <Skeleton
+                      variant="rounded"
+                      width={50}
+                      height={22}
+                      sx={{ borderRadius: "4px" }}
+                    />
+                  </Box>
                 </Box>
 
                 {/* Created At */}
@@ -255,8 +252,8 @@ const InventoryViewSkeleton = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Skeleton variant="text" width={90} height={16} />
-                  <Skeleton variant="text" width={140} height={18} />
+                  <Skeleton variant="text" width={80} height={16} />
+                  <Skeleton variant="text" width={120} height={18} />
                 </Box>
               </Box>
             </Box>
@@ -278,21 +275,24 @@ const InventoryViewSkeleton = () => {
         <Box
           sx={{
             display: "flex",
-            gap: { xs: 1, sm: 2 },
-            px: { xs: 1.5, sm: 2 },
-            py: 1.5,
-            borderBottom: "1px solid #e5e7eb",
+            borderBottom: 1,
+            borderColor: "divider",
             overflowX: "auto",
+            "&::-webkit-scrollbar": { height: 0 },
           }}
         >
-          {" "}
-          {INVENTORY_VIEW_TABS_LABEL.map((i) => (
-            <Skeleton variant="rounded" width={`${i.length}%`} height={16} />
-          ))}
-          {INVENTORY_VIEW_TABS_LABEL.map((_, i) => (
-            <Box sx={{ display: "flex" }}>
-              <Skeleton variant="rounded" width="60%" height={16} />
-            </Box>
+          {INVENTORY_VIEW_TABS_LABEL.map((tab, i) => (
+            <Skeleton
+              key={tab}
+              variant="text"
+              sx={{
+                width: tab.length * 9,
+                height: 20,
+                mx: 2,
+                my: 1.5,
+                opacity: i === 0 ? 1 : 0.5,
+              }}
+            />
           ))}
         </Box>
 
