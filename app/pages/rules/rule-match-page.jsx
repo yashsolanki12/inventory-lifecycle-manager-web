@@ -39,6 +39,7 @@ const RuleMatchPage = () => {
     ({ shop, ruleIds }) => runRule(shop, ruleIds),
     setSnackbar,
     {
+      invalidateKeys: [["plan-usage"]],
       onSuccess: () => {
         setTimeout(() => {
           navigate("/app/rules");
@@ -67,6 +68,16 @@ const RuleMatchPage = () => {
     runRuleMutation.mutate({ shop: shopDomain, ruleIds: selectedRuleIds });
     setOpenDialog(false);
   };
+
+  React.useEffect(() => {
+    if (runRuleMutation.error) {
+      setSnackbar({
+        open: true,
+        message: runRuleMutation.error,
+        severity: "error",
+      });
+    }
+  }, [runRuleMutation.error]);
 
   return (
     <Box
