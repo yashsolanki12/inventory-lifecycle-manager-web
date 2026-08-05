@@ -29,11 +29,15 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
           borderRadius: "10px",
           px: 2,
           py: 1.5,
+          zIndex: 100,
           boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
           border: "none",
+          pointerEvents: "none",
         }}
       >
-        <Typography sx={{ fontSize: 13, fontWeight: 600, color: data.payload.color }}>
+        <Typography
+          sx={{ fontSize: 13, fontWeight: 600, color: data.payload.color }}
+        >
           {data.name}
         </Typography>
         <Typography sx={{ fontSize: 12, color: "#e2e8f0", mt: 0.5 }}>
@@ -79,7 +83,10 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
                   <Cell key={index} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip
+                content={<CustomTooltip />}
+                wrapperStyle={{ zIndex: 1000, pointerEvents: "none" }}
+              />
             </PieChart>
           </ResponsiveContainer>
           <Box
