@@ -254,3 +254,17 @@ export const INVENTORY_HISTORY_HEADER = [
 ];
 
 export const SALES_HISTORY_HEADER = ["Order", "Quantity", "Stock After", "Created At"];
+
+export const INVENTORY_VIEW_TABS_LABEL = [
+  "Overview",
+  "Inventory History",
+  "Sales History",
+  "Variants",
+];
+
+export const INVENTORY_VIEW_TABS_STATS_CARD = [
+  "Total Sold",
+  "Sell Through Rate",
+  "Days Since Added",
+  "Velocity",
+];
