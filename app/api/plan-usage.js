@@ -8,7 +8,7 @@ export const getPlanUsage = (shop) => {
     .get("/rules/plan", { params: { shop } })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error fetching plan usage:", error);
+      // console.error("Error fetching plan usage:", error);
       throw error;
     });
 };

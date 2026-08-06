@@ -13,7 +13,7 @@ export const getInventoryDashboard = async (shop) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching Inventory dashboard", error);
+      // console.error("Error while fetching Inventory dashboard", error);
       throw error;
     });
 };

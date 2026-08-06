@@ -42,7 +42,7 @@ export const createRenderActions =
           <VisibilityIcon sx={{ fontSize: 18 }} />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Open in Shopify Admin" arrow>
+      <Tooltip title="Open Preview" arrow>
         <IconButton
           size="small"
           onClick={() => onPreviewUrl(item)}
@@ -63,8 +63,9 @@ export const createRenderActions =
 // Inventory list
 export const INVENTORY_COLUMNS = [
   {
-    key: "product",
+    key: "title",
     label: "Product",
+    sortable: true,
     skeletonWidth: 180,
     render: (item) => (
       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -201,7 +202,9 @@ export const INVENTORY_COLUMNS = [
       const statusKey = item.status?.toUpperCase();
       const config = statusKey ? INVENTORY_STATUS_CONFIG[statusKey] : null;
       if (!config) {
-        return <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>;
+        return (
+          <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
+        );
       }
       return (
         <Chip
@@ -310,7 +313,7 @@ export const ordersRenderActions =
   ({ onPreviewUrl }) =>
   (item) => (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
-      <Tooltip title="Open in Shopify Admin" arrow>
+      <Tooltip title="Open Preview" arrow>
         <IconButton
           size="small"
           onClick={() => onPreviewUrl(item)}
@@ -333,6 +336,7 @@ export const ORDERS_COLUMNS = [
   {
     key: "name",
     label: "Order",
+    sortable: true,
     skeletonWidth: 80,
     render: (item) => {
       const name = item.name || "—";
@@ -591,6 +595,7 @@ export const RULES_COLUMNS = [
   {
     key: "rule_name",
     label: "Rule Name",
+    sortable: true,
     skeletonWidth: 80,
     render: (item) => {
       const ruleName = item.rule_name ?? "—";
@@ -672,6 +677,7 @@ export const RULES_COLUMNS = [
   {
     key: "actionType",
     label: "Action",
+    sortable: true,
     skeletonWidth: 80,
     render: (item) => {
       const statusKey = item.actionType.toUpperCase();
@@ -717,6 +723,7 @@ export const RULES_COLUMNS = [
   },
 ];
 
+// Run rule list
 export const MATCH_COLUMNS = [
   {
     key: "title",
@@ -800,6 +807,126 @@ export const MATCH_COLUMNS = [
     key: "createdAt",
     label: "Created At",
     // sortable: true,
+    sortField: "createdAt",
+    skeletonWidth: 100,
+    render: (item) => {
+      if (!item.createdAt)
+        return (
+          <Typography sx={{ fontSize: 14, color: "#9ca3af" }}>—</Typography>
+        );
+      return (
+        <Typography
+          sx={{ fontSize: 14, color: "#6b7280", whiteSpace: "nowrap" }}
+        >
+          {formatDate(item.createdAt)}
+        </Typography>
+      );
+    },
+  },
+];
+
+// Archive history action
+export const archiveHistoryRenderActions =
+  ({ onPreviewUrl }) =>
+  (item) => (
+    <Box>
+      <Tooltip title="Open Preview" arrow>
+        <IconButton
+          size="small"
+          onClick={() => onPreviewUrl(item)}
+          sx={{
+            color: "#6b7280",
+            "&:hover": {
+              color: "#094799",
+              backgroundColor: "#DBEAFE",
+            },
+          }}
+        >
+          <OpenInNewIcon sx={{ fontSize: 18 }} />
+        </IconButton>
+      </Tooltip>
+    </Box>
+  );
+
+// Archive history list
+export const ARCHIVE_HISTORY_COLUMN = [
+  {
+    key: "productTitle",
+    label: "Product",
+    sortable: true,
+    skeletonWidth: 120,
+    render: (item) => (
+      <Typography sx={{ fontSize: 14, fontWeight: 500, color: "#374151" }}>
+        {item.productTitle ?? "—"}
+      </Typography>
+    ),
+  },
+
+  {
+    key: "sku",
+    label: "SKU",
+    skeletonWidth: 80,
+    render: (item) => {
+      const sku = item.sku ?? "—";
+      return (
+        <Typography sx={{ fontSize: 14, color: "#6B7280" }}>{sku}</Typography>
+      );
+    },
+  },
+  {
+    key: "ruleName",
+    label: "Reason",
+    sortable: true,
+    skeletonWidth: 100,
+    render: (item) => (
+      <Typography sx={{ fontSize: 14, color: "#6B7280", maxWidth: 250 }}>
+        {item.ruleName ?? "—"}
+      </Typography>
+    ),
+  },
+
+  // {
+  //   key: "ruleCondition",
+  //   label: "Condition",
+  //   skeletonWidth: 100,
+  //   render: (item) => (
+  //     <Typography sx={{ fontSize: 14, color: "#6B7280", maxWidth: 250 }}>
+  //       {item.ruleCondition ?? "—"}
+  //     </Typography>
+  //   ),
+  // },
+
+  {
+    key: "actionTaken",
+    label: "Action",
+    sortable: true,
+    skeletonWidth: 80,
+    render: (item) => {
+      const statusKey = item.actionTaken.toUpperCase();
+      const config = ARCHIVE_RULE_CONFIG[statusKey];
+      return (
+        <Chip
+          label={config?.label}
+          size="small"
+          sx={{
+            backgroundColor: config.bg,
+            color: config.color,
+            fontWeight: 600,
+            fontSize: 12,
+            height: 26,
+            borderRadius: "6px",
+            border: `1px solid ${config.color}20`,
+            px: 0.4,
+          }}
+        />
+      );
+    },
+  },
+
+  {
+    key: "createdAt",
+    label: "Created At",
+    sortable: true,
     sortField: "createdAt",
     skeletonWidth: 100,
     render: (item) => {

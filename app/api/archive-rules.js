@@ -20,7 +20,7 @@ export const getAllArchiveList = async (
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching archive rules list:", error);
+      // console.error("Error while fetching archive rules list:", error);
       throw error;
     });
 };
@@ -38,10 +38,10 @@ export const createArchiveRule = async (shop, data) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error(
-        "Error while create archive rule:",
-        error.response.data.message,
-      );
+      // console.error(
+      //   "Error while create archive rule:",
+      //   error.response.data.message,
+      // );
       throw error.response.data.message;
     });
 };
@@ -60,10 +60,10 @@ export const updateArchiveRule = async (shop, data, id) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error(
-        "Error while update archive rule:",
-        error.response.data.message,
-      );
+      // console.error(
+      //   "Error while update archive rule:",
+      //   error.response.data.message,
+      // );
       throw error.response.data.message;
     });
 };
@@ -79,7 +79,7 @@ export const getArchiveRule = async (shop, id) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while get archive rule:", error);
+      // console.error("Error while get archive rule:", error);
       throw error;
     });
 };
@@ -98,7 +98,7 @@ export const deleteArchiveRule = async (shop, id) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while get archive rule:", error);
+      // console.error("Error while get archive rule:", error);
       throw error;
     });
 };
@@ -122,7 +122,7 @@ export const ruleMatch = async (
     )
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while matching rules:", error);
+      // console.error("Error while matching rules:", error);
       throw error;
     });
 };
@@ -142,7 +142,52 @@ export const runRule = async (shop, ruleIds) => {
     )
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while running rule:", error.response.data.message);
+      // console.error("Error while running rule:", error.response.data.message);
       throw error.response.data.message;
+    });
+};
+
+export const archiveHistory = async (
+  shop,
+  { page = 1, limit = 10, search, sort } = {},
+) => {
+  if (!shop) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required");
+  }
+  return axiosInstance
+    .get("products/scan/history", {
+      params: {
+        shop,
+        page,
+        limit,
+        search,
+        sort,
+      },
+    })
+    .then((res) => res.data)
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const generateArchiveHistoryCsv = async (shop) => {
+  if (!shop) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required");
+  }
+  return axiosInstance
+    .post(
+      "products/scan/history/export",
+      {},
+      {
+        params: {
+          shop,
+        },
+      },
+    )
+    .then((res) => res.data)
+    .catch((error) => {
+      throw error;
     });
 };

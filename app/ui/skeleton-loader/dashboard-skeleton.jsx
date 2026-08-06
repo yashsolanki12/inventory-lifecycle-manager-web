@@ -260,7 +260,7 @@ const DashboardSkeleton = () => {
           <CardContent
             sx={{ p: { xs: "16px !important", sm: "24px !important" } }}
           >
-            <Skeleton variant="text" width="55%" height={24} sx={{ mb: 2.5 }} />
+            <Skeleton variant="text" width="55%" height={38} sx={{ mb: 2.5 }} />
             {[1, 2, 3].map((i) => (
               <Box
                 key={i}

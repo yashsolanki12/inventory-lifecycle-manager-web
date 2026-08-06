@@ -9,7 +9,7 @@ export const generateProductCsv = async (shop, status) => {
     .post("products/export", {}, { params: { shop: shop, status } })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while generate product csv:", error);
+      // console.error("Error while generate product csv:", error);
       throw error;
     });
 };

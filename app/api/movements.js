@@ -12,7 +12,7 @@ export const getMovements = (shop, { productId, changeType, page = 1, limit = 20
     .get("analytics/movements", { params })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching movements:", error);
+      // console.error("Error while fetching movements:", error);
       throw error;
     });
 };

@@ -19,7 +19,7 @@ export const getAgingBucket = (
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching getAgingBucket:", error);
+      // console.error("Error while fetching getAgingBucket:", error);
       throw error;
     });
 };
@@ -41,7 +41,7 @@ export const populateSnapshot = (shop) => {
     )
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error in populateSnapshot API:", error);
+      // console.error("Error in populateSnapshot API:", error);
       throw error;
     });
 };

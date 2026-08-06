@@ -154,7 +154,7 @@ const ReusableList = ({
     if (sort === ascending) {
       setSort(descending);
     } else if (sort === descending) {
-      setSort(descending === defaultSort ? ascending : "");
+      setSort(ascending);
     } else {
       setSort(ascending);
     }

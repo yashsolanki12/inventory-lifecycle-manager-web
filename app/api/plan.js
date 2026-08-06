@@ -7,7 +7,7 @@ export const syncPlanToBackend = async (shop, plan, chargeId) => {
       return res.data;
     })
     .catch((err) => {
-      console.error("[Plan] Backend sync failed:", err.message);
+      // console.error("[Plan] Backend sync failed:", err.message);
       return null;
     });
 };
@@ -19,7 +19,7 @@ export const resetPlanOnBackend = async (shop) => {
       return res.data;
     })
     .catch((err) => {
-      console.error("[Plan] Backend reset failed:", err.message);
+      // console.error("[Plan] Backend reset failed:", err.message);
       return null;
     });
 };
@@ -29,7 +29,7 @@ export const getPlanFromBackend = async (shop) => {
     .get("/rules/plan", { params: { shop } })
     .then((res) => res.data)
     .catch((err) => {
-      console.error("[Plan] Backend fetch failed:", err.message);
+      // console.error("[Plan] Backend fetch failed:", err.message);
       return null;
     });
 };

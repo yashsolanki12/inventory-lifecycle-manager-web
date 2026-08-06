@@ -40,10 +40,10 @@ const RuleMatchPage = () => {
     setSnackbar,
     {
       invalidateKeys: [["plan-usage"]],
-      onSuccess: () => {
-        setTimeout(() => {
+      onSuccess: (data) => {
+        if (data.success === true) {
           navigate("/app/rules");
-        }, 1500);
+        }
       },
     },
   );
@@ -94,7 +94,7 @@ const RuleMatchPage = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          gap: 1.5,
+          gap: 1,
           mb: 3,
         }}
       >
