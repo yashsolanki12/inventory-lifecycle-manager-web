@@ -11,7 +11,7 @@ export const getDeadStockTrend = (shop) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching dead stock trend:", error);
+      // console.error("Error while fetching dead stock trend:", error);
       throw error;
     });
 };

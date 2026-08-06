@@ -17,10 +17,10 @@ export const syncProduct = async (shop) => {
     )
     .then((res) => res.data)
     .catch((error) => {
-      console.error(
-        "API Error while sync product",
-        error.response.data.message,
-      );
+      // console.error(
+      //   "API Error while sync product",
+      //   error.response.data.message,
+      // );
       throw error.response.data.message;
     });
 };
@@ -46,7 +46,7 @@ export const listLocalDbProducts = async (
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching local Db Products:", error);
+      // console.error("Error while fetching local Db Products:", error);
       throw error;
     });
 };
@@ -65,7 +65,7 @@ export const getSingleProduct = async (shop, productId) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching single product:", error);
+      // console.error("Error while fetching single product:", error);
       throw error;
     });
 };
@@ -85,7 +85,7 @@ export const getProductTypes = async (shop, { page = 1, limit = 10 } = {}) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching product types:", error);
+      // console.error("Error while fetching product types:", error);
       throw error;
     });
 };
@@ -108,7 +108,7 @@ export const getProductVendors = async (
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching product vendors:", error);
+      // console.error("Error while fetching product vendors:", error);
       throw error;
     });
 };
@@ -128,7 +128,7 @@ export const getProductTags = async (shop, { page = 1, limit = 10 } = {}) => {
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching product tags:", error);
+      // console.error("Error while fetching product tags:", error);
       throw error;
     });
 };

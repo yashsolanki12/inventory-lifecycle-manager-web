@@ -50,8 +50,8 @@ export const ORDER_FULFILLMENT_STATUS_CONFIG = {
 };
 
 export const INVENTORY_SORT_OPTIONS = [
-  { value: "title", label: "Name A-Z" },
-  { value: "-title", label: "Name Z-A" },
+  { value: "title", label: "Product A-Z" },
+  { value: "-title", label: "Product Z-A" },
   { value: "-createdAt", label: "Newest First" },
   { value: "createdAt", label: "Oldest First" },
   // { value: "-updatedAt", label: "Recently Updated" },
@@ -66,18 +66,21 @@ export const INVENTORY_FILTER_OPTIONS = [
 export const ORDERS_SORT_OPTIONS = [
   { value: "-createdAt", label: "Newest First" },
   { value: "createdAt", label: "Oldest First" },
+  { value: "name", label: "Order A-Z" },
+  { value: "-name", label: "Order Z-A" },
   // { value: "-updatedAt", label: "Recently Updated" },
 ];
 
 export const RULES_SORT_OPTIONS = [
-  { value: "rule_name", label: "Name A-Z" },
-  { value: "-rule_name", label: "Name Z-A" },
+  { value: "rule_name", label: "Rule Name A-Z" },
+  { value: "-rule_name", label: "Rule Name Z-A" },
   { value: "-createdAt", label: "Newest First" },
   { value: "createdAt", label: "Oldest First" },
   // { value: "daysWithoutSales", label: "Days Without Sales" },
   // { value: "daysWithoutSalesOperator", label: "Days Without Sales Operator" },
   { value: "productType", label: "Product Type" },
-  { value: "actionType", label: "Action Type" },
+  { value: "actionType", label: "Action A-Z" },
+  { value: "-actionType", label: "Action Z-A" },
 ];
 
 export const ORDER_STATUS_FILTER_OPTIONS = [
@@ -116,3 +119,14 @@ export const ARCHIVE_RULE_CONFIG = {
   ARCHIVE: { label: "Archive", color: "#dc2626", bg: "#fee2e2" },
   EMAIL: { label: "Email", color: "#2563eb", bg: "#dbeafe" },
 };
+
+export const ARCHIVE_HISTORY_SORT_OPTIONS = [
+  { value: "productTitle", label: "Product A-Z" },
+  { value: "-productTitle", label: "Product Z-A" },
+  { value: "-createdAt", label: "Newest First" },
+  { value: "createdAt", label: "Oldest First" },
+  { value: "ruleName", label: "Reason A-Z" },
+  { value: "-ruleName", label: "Reason Z-A" },
+  { value: "actionTaken", label: "Action A-Z" },
+  { value: "-actionTaken", label: "Action Z-A" },
+];

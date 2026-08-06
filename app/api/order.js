@@ -31,7 +31,7 @@ export const listAllOrders = async (
     })
     .then((res) => res.data)
     .catch((error) => {
-      console.error("Error while fetching list order:", error);
+      // console.error("Error while fetching list order:", error);
       throw error;
     });
 };

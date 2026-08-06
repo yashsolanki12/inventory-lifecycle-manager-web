@@ -1,28 +1,26 @@
 import React from "react";
+import useInventorySubmit from "../../hooks/useInventorySubmit";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import ReusableList from "../../components/reusable-list";
-import ConfirmDialog from "../../ui/confirmation-dialog";
 
-import { generateProductCsv } from "../../api/generate-csv";
-import { useCurrentShopDomain } from "../../utils/helper";
-import { listLocalDbProducts } from "../../api/products";
 import {
-  createRenderActions,
-  INVENTORY_COLUMNS,
+  ARCHIVE_HISTORY_COLUMN,
+  archiveHistoryRenderActions,
 } from "../../utils/config/columns";
+import { useCurrentShopDomain } from "../../utils/helper";
 import {
-  INVENTORY_SORT_OPTIONS,
-  INVENTORY_FILTER_OPTIONS,
-} from "../../utils/config/constants";
-import useInventorySubmit from "../../hooks/useInventorySubmit";
+  archiveHistory,
+  generateArchiveHistoryCsv,
+} from "../../api/archive-rules";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { useNavigate } from "react-router";
+import ConfirmDialog from "../../ui/confirmation-dialog";
+import ReusableList from "../../components/reusable-list";
+import { ARCHIVE_HISTORY_SORT_OPTIONS } from "../../utils/config/constants";
+import Button from "@mui/material/Button";
 
-const InventoryListPage = () => {
+const ArchiveHistoryListPage = () => {
   const shopDomain = useCurrentShopDomain();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [snackbar, setSnackbar] = React.useState({
@@ -30,34 +28,21 @@ const InventoryListPage = () => {
     message: "",
     severity: "success",
   });
-  const [getProductStatus, setProductStatus] = React.useState("");
-  const navigate = useNavigate();
-
-  const fetchProducts = (params) => listLocalDbProducts(shopDomain, params);
-
-  const handleView = (item) => {
-    const productId = item.productId.split("/").pop();
-    if (productId) {
-      navigate(`/app/inventory/${productId}`);
-    }
-  };
-
-  const handlePreviewProduct = (item) => {
+  const fetchArchiveHistory = (params) => archiveHistory(shopDomain, params);
+  const handleProductPreview = (item) => {
     if (item.previewUrl) window.open(item.previewUrl, "_blank");
   };
 
-  const renderActions = createRenderActions({
-    onView: handleView,
-    onPreviewUrl: handlePreviewProduct,
+  const renderActions = archiveHistoryRenderActions({
+    onPreviewUrl: handleProductPreview,
   });
 
-  const generateProductCsvMutation = useInventorySubmit(
-    ({ shop, status }) => generateProductCsv(shop, status),
+  const archiveHistoryCsvMutation = useInventorySubmit(
+    (shop) => generateArchiveHistoryCsv(shop),
     setSnackbar,
     {
-      invalidateKeys: [["generate-product-csv"]],
       onSuccess: (data) => {
-        if (data?.success === true && data?.data?.downloadUrl) {
+        if (data.success === true && data.data.downloadUrl) {
           window.open(data.data.downloadUrl, "_top");
         }
       },
@@ -70,13 +55,8 @@ const InventoryListPage = () => {
 
   const handleDialogConfirm = () => {
     if (!shopDomain) return;
-
     setOpenDialog(false);
-    generateProductCsvMutation.mutate({
-      shop: shopDomain,
-      status: getProductStatus,
-      // ...(getProductStatus === "archived" && { status: getProductStatus }),
-    });
+    archiveHistoryCsvMutation.mutate(shopDomain);
   };
 
   const handleDialogOpen = () => {
@@ -85,10 +65,6 @@ const InventoryListPage = () => {
 
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
-  };
-
-  const handleProductStatus = (item) => {
-    setProductStatus(item);
   };
 
   return (
@@ -116,7 +92,7 @@ const InventoryListPage = () => {
           variant="h3"
           sx={{ fontWeight: 700, color: "#202223", fontSize: 24 }}
         >
-          Inventory
+          Archive History
         </Typography>
         <Button
           variant="outlined"
@@ -141,33 +117,24 @@ const InventoryListPage = () => {
       </Box>
 
       <ReusableList
-        fetchFn={fetchProducts}
-        queryKey="products-local"
-        columns={INVENTORY_COLUMNS}
+        fetchFn={fetchArchiveHistory}
+        queryKey="archive-history"
+        columns={ARCHIVE_HISTORY_COLUMN}
         actions={renderActions}
-        searchPlaceholder="Search by product name..."
-        sortOptions={INVENTORY_SORT_OPTIONS}
+        searchPlaceholder="Search by product, reason..."
+        sortOptions={ARCHIVE_HISTORY_SORT_OPTIONS}
         defaultSort="-createdAt"
-        filters={[
-          {
-            param: "status",
-            label: "Status",
-            options: INVENTORY_FILTER_OPTIONS,
-          },
-        ]}
+        paginationText="history"
         defaultLimit={10}
-        paginationText="products"
-        handleProductStatus={handleProductStatus}
       />
 
       <ConfirmDialog
         open={openDialog}
-        title="Export Products"
-        message="Are you sure you want to export your product data to a CSV file?"
+        title="Export Archive History"
+        message="Are you sure you want to export archive history data to a CSV file?"
         onConfirm={handleDialogConfirm}
         onClose={handleDialogClose}
       />
-
       <Snackbar
         open={snackbar.open}
         autoHideDuration={snackbar.severity === "error" ? 5000 : 3000}
@@ -186,4 +153,4 @@ const InventoryListPage = () => {
   );
 };
 
-export default InventoryListPage;
+export default ArchiveHistoryListPage;
