@@ -121,6 +121,7 @@ export default function App() {
           <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
           <s-link href="/app/rules">Rules</s-link>
           <s-link href="/app/archive-history">Archive History</s-link>
+          <s-link href="/app/alerts">Alerts</s-link>
           <s-link href="/app/orders">Orders</s-link>
           {/* 🛍️  */}
           <s-link href="/app/plans">Plans</s-link>
