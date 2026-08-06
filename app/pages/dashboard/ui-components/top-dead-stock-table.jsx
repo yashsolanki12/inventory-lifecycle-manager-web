@@ -53,7 +53,7 @@ const TopDeadStockTable = ({ agingData }) => {
           <>
             <Box
               sx={{
-                maxHeight: 250,
+                maxHeight: 200,
                 overflowY: "auto",
                 borderRadius: "8px",
                 "&::-webkit-scrollbar": { width: 6 },

@@ -146,3 +146,48 @@ export const runRule = async (shop, ruleIds) => {
       throw error.response.data.message;
     });
 };
+
+export const archiveHistory = async (
+  shop,
+  { page = 1, limit = 10, search, sort } = {},
+) => {
+  if (!shop) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required");
+  }
+  return axiosInstance
+    .get("products/scan/history", {
+      params: {
+        shop,
+        page,
+        limit,
+        search,
+        sort,
+      },
+    })
+    .then((res) => res.data)
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const generateArchiveHistoryCsv = async (shop) => {
+  if (!shop) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required");
+  }
+  return axiosInstance
+    .post(
+      "products/scan/history/export",
+      {},
+      {
+        params: {
+          shop,
+        },
+      },
+    )
+    .then((res) => res.data)
+    .catch((error) => {
+      throw error;
+    });
+};
