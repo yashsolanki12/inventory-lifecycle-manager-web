@@ -11,6 +11,7 @@ import {
 } from "../../../utils/helper";
 import { getMovements } from "../../../api/movements";
 import TablePagination from "../../../components/TablePagination";
+import ErrorCard from "../../../components/error-card";
 
 const formatReference = (ref) => {
   if (!ref) return "—";
@@ -56,13 +57,11 @@ const SalesHistoryTab = ({ product }) => {
 
   if (error) {
     return (
-      <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
-        <Typography sx={{ color: "#b91c1c", fontSize: 14 }}>
-          {error?.response?.data?.message ||
-            error.message ||
-            "Failed to load sales history"}
-        </Typography>
-      </Box>
+      <ErrorCard
+        errorMessage={
+          error?.response?.data?.message || "Failed to load sales movements"
+        }
+      />
     );
   }
 

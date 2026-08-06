@@ -3,6 +3,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Chip from "@mui/material/Chip";
 import useInventoryData from "../../../hooks/useInventoryData";
+import TablePagination from "../../../components/TablePagination";
+import ErrorCard from "../../../components/error-card";
+
 import {
   formatDate,
   INVENTORY_HISTORY_HEADER,
@@ -11,7 +14,6 @@ import {
   useCurrentShopDomain,
 } from "../../../utils/helper";
 import { getMovements } from "../../../api/movements";
-import TablePagination from "../../../components/TablePagination";
 
 const formatReference = (ref) => {
   if (!ref) return "—";
@@ -56,13 +58,11 @@ const InventoryHistoryTab = ({ product }) => {
 
   if (error) {
     return (
-      <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
-        <Typography sx={{ color: "#b91c1c", fontSize: 14 }}>
-          {error?.response?.data?.message ||
-            error.message ||
-            "Failed to load movements"}
-        </Typography>
-      </Box>
+      <ErrorCard
+        errorMessage={
+          error?.response?.data?.message || "Failed to load inventory movements"
+        }
+      />
     );
   }
 
@@ -194,7 +194,8 @@ const InventoryHistoryTab = ({ product }) => {
         {movements.map((m) => {
           const config =
             MOVEMENT_CONFIG[m.changeType] || MOVEMENT_CONFIG.initial;
-          const qtyPrefix = m.changeType === "sale" || m.changeType === "removal" ? "-" : "+";
+          const qtyPrefix =
+            m.changeType === "sale" || m.changeType === "removal" ? "-" : "+";
           return (
             <Box
               key={m.id}

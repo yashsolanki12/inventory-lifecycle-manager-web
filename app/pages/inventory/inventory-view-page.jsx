@@ -101,29 +101,32 @@ const InventoryViewPage = () => {
         >
           {product.title}
         </Typography>
-        <Tooltip
-          title="Open Preview"
-          arrow
-          placement="right"
-          slotProps={{
-            tooltip: {
-              sx: {
-                lineHeight: 2,
-                fontSize: "12px",
+        {product.previewUrl && (
+          <Tooltip
+            title="Open Preview"
+            arrow
+            placement="right"
+            slotProps={{
+              tooltip: {
+                sx: {
+                  lineHeight: 2,
+                  fontSize: "12px",
+                },
               },
-            },
-          }}
-        >
-          <IconButton
-            sx={{
-              borderRadius: 0,
-              transition: "none",
-              "--IconButton-hoverBg": "transparent",
             }}
           >
-            ↗
-          </IconButton>
-        </Tooltip>
+            <IconButton
+              onClick={() => window.open(product.previewUrl, "_blank")}
+              sx={{
+                borderRadius: 0,
+                transition: "none",
+                "--IconButton-hoverBg": "transparent",
+              }}
+            >
+              ↗
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
 
       {/* Image & Product Info */}
