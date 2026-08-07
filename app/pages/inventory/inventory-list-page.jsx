@@ -65,7 +65,7 @@ const InventoryListPage = () => {
           });
         }
         if (
-          data.data.totalRecords > 1 &&
+          data.data.totalRecords > 0 &&
           data?.success === true &&
           data?.data?.downloadUrl
         ) {

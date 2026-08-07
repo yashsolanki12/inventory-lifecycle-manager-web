@@ -179,7 +179,16 @@ const AlertsListPage = () => {
       {alerts.length === 0 ? (
         <EmptyAlertsCard />
       ) : (
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            maxHeight: "calc(100vh - 100px)",
+            overflowY: "auto",
+            px: 2,
+          }}
+        >
           {alerts.map((alert) => {
             const config =
               ALERT_TYPE_CONFIG[alert.type] || ALERT_TYPE_CONFIG.dead_stock;
