@@ -130,3 +130,35 @@ export const ARCHIVE_HISTORY_SORT_OPTIONS = [
   { value: "actionTaken", label: "Action A-Z" },
   { value: "-actionTaken", label: "Action Z-A" },
 ];
+
+export const ALERT_TYPE_CONFIG = {
+  dead_stock: {
+    color: "#dc2626",
+    bg: "#fef2f2",
+    label: "Dead Stock",
+  },
+  inventory_age: {
+    color: "#d97706",
+    bg: "#fffbeb",
+    label: "Inventory Age",
+  },
+  archive_rule: {
+    color: "#7c3aed",
+    bg: "#f5f3ff",
+    label: "Archive Rule",
+  },
+  low_stock: {
+    color: "#2563eb",
+    bg: "#eff6ff",
+    label: "Low Stock",
+  },
+};
+
+export const ALERT_ACTION_CONFIG = {
+  active: { color: "#16a34a", bg: "#f0fdf4", label: "Active" },
+  draft: { color: "#d97706", bg: "#fffbeb", label: "Draft" },
+  unlisted: { color: "#6b7280", bg: "#f3f4f6", label: "Unlisted" },
+  archive: { color: "#dc2626", bg: "#fef2f2", label: "Archived" },
+  archived: { color: "#dc2626", bg: "#fef2f2", label: "Archived" },
+  tag: { color: "#7c3aed", bg: "#f5f3ff", label: "Tagged" },
+};
