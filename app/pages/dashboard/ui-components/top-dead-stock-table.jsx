@@ -5,12 +5,12 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { useNavigate } from "react-router";
-import { PRODUCT_COLORS } from "../../../utils/helper";
+import { formatPrice, PRODUCT_COLORS } from "../../../utils/helper";
 
 const TopDeadStockTable = ({ agingData }) => {
   const navigate = useNavigate();
   const items = agingData?.data?.items ?? [];
-  const currency = agingData?.data?.currency === "USD" ? "$" : "";
+  const currency = agingData?.data?.currency
 
   return (
     <Card
@@ -116,8 +116,7 @@ const TopDeadStockTable = ({ agingData }) => {
                       flexShrink: 0,
                     }}
                   >
-                    {currency}
-                    {item.value.toLocaleString()}
+                    {formatPrice(currency, item.value)}
                   </Typography>
                 </Box>
               ))}

@@ -14,7 +14,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import useInventoryData from "../../../hooks/useInventoryData";
-import { useCurrentShopDomain } from "../../../utils/helper";
+import { formatPrice, useCurrentShopDomain } from "../../../utils/helper";
 import { getDeadStockTrend } from "../../../api/dead-stock-trend";
 
 const EmptyState = () => (
@@ -45,7 +45,7 @@ const DeadStockTrend = () => {
   );
 
   const trend = trendData?.data?.trend ?? [];
-  const currency = trendData?.data.currency === "USD" ? "$" : "";
+  const currency = trendData?.data.currency;
   const hasData = trend.length > 0;
 
   return (
@@ -126,9 +126,9 @@ const DeadStockTrend = () => {
                       >
                         {label}
                       </Typography>
-                      <Typography
-                        sx={{ fontSize: 12, color: "#e2e8f0" }}
-                      >{`${currency}${val.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} units`}</Typography>
+                      <Typography sx={{ fontSize: 12, color: "#e2e8f0" }}>
+                        {formatPrice(currency, val)} units
+                      </Typography>
                     </Box>
                   );
                 }}
