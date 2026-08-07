@@ -57,7 +57,18 @@ const InventoryListPage = () => {
     {
       invalidateKeys: [["generate-product-csv"]],
       onSuccess: (data) => {
-        if (data?.success === true && data?.data?.downloadUrl) {
+        if (data.data.totalRecords === 0) {
+          setSnackbar({
+            open: true,
+            message: "No products found to export.",
+            severity: "warning",
+          });
+        }
+        if (
+          data.data.totalRecords > 1 &&
+          data?.success === true &&
+          data?.data?.downloadUrl
+        ) {
           window.open(data.data.downloadUrl, "_top");
         }
       },

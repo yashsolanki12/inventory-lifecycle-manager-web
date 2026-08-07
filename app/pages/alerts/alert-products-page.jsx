@@ -1,5 +1,4 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -7,11 +6,13 @@ import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import AlertsSkeleton from "../../ui/skeleton-loader/alerts-skeleton";
+
 import { useCurrentShopDomain, formatDate } from "../../utils/helper";
+import { useParams, useNavigate } from "react-router";
 import { ALERT_ACTION_CONFIG } from "../../utils/config/constants";
 import { getAlertById } from "../../api/alerts";
 import { useInventoryData } from "../../hooks/useInventoryData";
-import AlertsSkeleton from "../../ui/skeleton-loader/alerts-skeleton";
 
 const AlertProductsPage = () => {
   const { id } = useParams();
@@ -43,7 +44,17 @@ const AlertProductsPage = () => {
   }
 
   const actions = alert.metadata?.actions || [];
+  const productIds = alert.metadata?.productIds || [];
   const ruleName = alert.metadata?.ruleName || null;
+
+  const items =
+    actions.length > 0
+      ? actions
+      : productIds.map((id) => ({
+          productId: id,
+          title: id.split("/").pop(),
+          action: alert.type,
+        }));
 
   const getPreviewUrl = (productId) => {
     const numericId = productId.split("/").pop();
@@ -60,7 +71,10 @@ const AlertProductsPage = () => {
           mb: 3,
         }}
       >
-        <IconButton onClick={() => navigate("/app/alerts")} sx={{ color: "#374151" }}>
+        <IconButton
+          onClick={() => navigate("/app/alerts")}
+          sx={{ color: "#374151" }}
+        >
           <ArrowBackIcon />
         </IconButton>
         <Typography
@@ -84,7 +98,9 @@ const AlertProductsPage = () => {
           mb: 3,
         }}
       >
-        <Typography sx={{ fontSize: 16, fontWeight: 600, color: "#0f1111", mb: 1 }}>
+        <Typography
+          sx={{ fontSize: 16, fontWeight: 600, color: "#0f1111", mb: 1 }}
+        >
           {alert.title}
         </Typography>
         <Typography sx={{ fontSize: 14, color: "#6b7280", mb: 1 }}>
@@ -128,19 +144,38 @@ const AlertProductsPage = () => {
             borderBottom: "1px solid #e5e7eb",
           }}
         >
-          <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280", textTransform: "uppercase" }}>
+          <Typography
+            sx={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: "#6b7280",
+            }}
+          >
             Product
           </Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280", textTransform: "uppercase" }}>
+          <Typography
+            sx={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: "#6b7280",
+            }}
+          >
             Action
           </Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280", textTransform: "uppercase" }}>
+          <Typography
+            sx={{
+              fontSize: 12,
+              fontWeight: 600,
+              color: "#6b7280",
+            }}
+          >
             Preview
           </Typography>
         </Box>
 
-        {actions.map((item, index) => {
-          const actionConfig = ALERT_ACTION_CONFIG[item.action] || ALERT_ACTION_CONFIG.active;
+        {items.map((item, index) => {
+          const actionConfig =
+            ALERT_ACTION_CONFIG[item.action] || ALERT_ACTION_CONFIG.active;
           const previewUrl = getPreviewUrl(item.productId);
           return (
             <Box
@@ -173,13 +208,15 @@ const AlertProductsPage = () => {
                 label={actionConfig.label}
                 size="small"
                 sx={{
-                  height: 22,
-                  fontSize: 11,
+                  height: 26,
+                  fontSize: 12,
                   fontWeight: 600,
                   backgroundColor: actionConfig.bg,
                   color: actionConfig.color,
-                  borderRadius: "4px",
+                  borderRadius: "6px",
                   width: "fit-content",
+                  border: `1px solid ${actionConfig.color}20`,
+                  px: 0.4,
                 }}
               />
               <Tooltip title="Open Preview" arrow>
