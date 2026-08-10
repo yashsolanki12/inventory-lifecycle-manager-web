@@ -4,11 +4,11 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { COLORS } from "../../../utils/helper";
+import { COLORS, formatPrice } from "../../../utils/helper";
 
 const InventoryValueChart = ({ dashboardData, agingData }) => {
   const inventoryByAge = dashboardData?.data?.inventoryValueByAge ?? [];
-  const currency = dashboardData?.data?.currency === "USD" ? "$" : "";
+  const currency = dashboardData?.data?.currency;
   const totalValue = dashboardData?.data?.totalInventoryValue ?? "0";
 
   const chartData = inventoryByAge.map((item, i) => ({
@@ -41,7 +41,7 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
           {data.name}
         </Typography>
         <Typography sx={{ fontSize: 12, color: "#e2e8f0", mt: 0.5 }}>
-          {`${currency}${data.value.toLocaleString()}`}
+          {formatPrice(currency, data.value)}
         </Typography>
         <Typography sx={{ fontSize: 11, color: "#94a3b8" }}>
           {`${data.payload.percentage}%`}
@@ -107,8 +107,7 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
             <Typography
               sx={{ fontSize: 16, fontWeight: 700, color: "#202223" }}
             >
-              {currency}
-              {totalValue}
+              {formatPrice(currency, totalValue)}
             </Typography>
           </Box>
         </Box>
@@ -149,8 +148,7 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
                   ml: "auto",
                 }}
               >
-                {currency}
-                {item.valueFormatted}
+                {formatPrice(currency, item.valueFormatted)}
               </Typography>
             </Box>
           ))}

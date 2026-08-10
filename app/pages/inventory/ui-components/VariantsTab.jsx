@@ -7,11 +7,10 @@ import Chip from "@mui/material/Chip";
 import Tooltip from "@mui/material/Tooltip";
 import TabPanel from "./TabPanel";
 import DetailItem from "./DetailItem";
-import { getColorHex } from "../../../utils/helper";
+import { formatPrice, getColorHex } from "../../../utils/helper";
 
 const VariantsTab = ({ variants }) => {
   const [selectedVariant, setSelectedVariant] = React.useState(0);
-
   if (!variants?.length) {
     return (
       <Box sx={{ p: 3 }}>
@@ -24,9 +23,11 @@ const VariantsTab = ({ variants }) => {
 
   const selectedVariantData = variants[selectedVariant];
   const selectedColorOption = selectedVariantData?.selectedOptions?.find(
-    (opt) => opt.name?.toLowerCase() === "color" || "colour"
+    (opt) => opt.name?.toLowerCase() === "color" || "colour",
   );
-  const selectedColorHex = selectedColorOption ? getColorHex(selectedColorOption.value) : null;
+  const selectedColorHex = selectedColorOption
+    ? getColorHex(selectedColorOption.value)
+    : null;
 
   return (
     <Box>
@@ -58,9 +59,11 @@ const VariantsTab = ({ variants }) => {
         >
           {variants.map((variant, index) => {
             const colorOption = variant.selectedOptions?.find(
-              (opt) => opt.name?.toLowerCase() === "color" || "colour"
+              (opt) => opt.name?.toLowerCase() === "color" || "colour",
             );
-            const colorHex = colorOption ? getColorHex(colorOption.value) : null;
+            const colorHex = colorOption
+              ? getColorHex(colorOption.value)
+              : null;
 
             return (
               <Tab
@@ -78,7 +81,10 @@ const VariantsTab = ({ variants }) => {
                           height: 12,
                           borderRadius: "50%",
                           backgroundColor: colorHex,
-                          border: colorHex === "#ffffff" ? "1px solid #e5e7eb" : "1px solid transparent",
+                          border:
+                            colorHex === "#ffffff"
+                              ? "1px solid #e5e7eb"
+                              : "1px solid transparent",
                           flexShrink: 0,
                         }}
                       />
@@ -146,7 +152,7 @@ const VariantsTab = ({ variants }) => {
                 <DetailItem label="Title" value={variant.title || "—"} />
                 <DetailItem
                   label="Price"
-                  value={`${variant.price || "0.00"}`}
+                  value={formatPrice(variant.currencyCode, variant.price)}
                 />
                 <DetailItem label="SKU" value={variant.sku || "—"} />
                 <DetailItem
@@ -173,7 +179,9 @@ const VariantsTab = ({ variants }) => {
                   <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
                     {variant.selectedOptions.map((opt) => {
                       const colorHex = getColorHex(opt.value);
-                      const isColor = opt.name?.toLowerCase() === "color" || "colour" && colorHex;
+                      const isColor =
+                        opt.name?.toLowerCase() === "color" ||
+                        ("colour" && colorHex);
 
                       return (
                         <Box
