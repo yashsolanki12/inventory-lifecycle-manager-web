@@ -70,9 +70,9 @@ const InventoryViewPage = () => {
 
   const sku = product.variants?.[0]?.sku || "—";
   const inventoryValue =
-    product.inventoryValue > 0
-      ? formatPrice(product.currencyCode, product.inventoryValue)
-      : product.inventoryValue;
+    product.inventoryValue === 0
+      ? product.inventoryValue
+      : formatPrice(product.currencyCode, product.inventoryValue);
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
