@@ -152,6 +152,11 @@ export const ALERT_TYPE_CONFIG = {
     bg: "#eff6ff",
     label: "Low Stock",
   },
+  inventory_not_tracked: {
+    color: "#6b7280",
+    bg: "#f3f4f6",
+    label: "Inventory Not Tracked",
+  },
 };
 
 export const ALERT_ACTION_CONFIG = {
@@ -161,4 +166,5 @@ export const ALERT_ACTION_CONFIG = {
   archive: { color: "#dc2626", bg: "#fef2f2", label: "Archived" },
   archived: { color: "#dc2626", bg: "#fef2f2", label: "Archived" },
   tag: { color: "#7c3aed", bg: "#f5f3ff", label: "Tagged" },
+  inventory_not_tracked: { color: "#6b7280", bg: "#f3f4f6", label: "Not Tracked" },
 };

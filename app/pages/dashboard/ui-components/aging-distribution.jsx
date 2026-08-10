@@ -40,27 +40,14 @@ const AgingDistributionChart = ({ agingData }) => {
       (buckets?.aging ?? 0) +
       (buckets?.dead ?? 0) || 1;
 
+  const formatNumber = (n) =>
+    (n ?? 0).toLocaleString("en-IN");
+
   const chartData = [
-    {
-      name: "Fresh",
-      value: buckets?.fresh ?? 0,
-      pct: Math.round(((buckets?.fresh ?? 0) / total) * 100),
-    },
-    {
-      name: "Mild",
-      value: buckets?.mild ?? 0,
-      pct: Math.round(((buckets?.mild ?? 0) / total) * 100),
-    },
-    {
-      name: "Aging",
-      value: buckets?.aging ?? 0,
-      pct: Math.round(((buckets?.aging ?? 0) / total) * 100),
-    },
-    {
-      name: "Dead",
-      value: buckets?.dead ?? 0,
-      pct: Math.round(((buckets?.dead ?? 0) / total) * 100),
-    },
+    { name: "Fresh", value: buckets?.fresh ?? 0, displayValue: formatNumber(buckets?.fresh), pct: Math.round(((buckets?.fresh ?? 0) / total) * 100) },
+    { name: "Mild", value: buckets?.mild ?? 0, displayValue: formatNumber(buckets?.mild), pct: Math.round(((buckets?.mild ?? 0) / total) * 100) },
+    { name: "Aging", value: buckets?.aging ?? 0, displayValue: formatNumber(buckets?.aging), pct: Math.round(((buckets?.aging ?? 0) / total) * 100) },
+    { name: "Dead", value: buckets?.dead ?? 0, displayValue: formatNumber(buckets?.dead), pct: Math.round(((buckets?.dead ?? 0) / total) * 100) },
   ];
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -83,7 +70,7 @@ const AgingDistributionChart = ({ agingData }) => {
           {dataItem.name}
         </Typography>
         <Typography sx={{ fontSize: 12, color: "white" }}>
-          {dataItem.value} units
+          {dataItem.displayValue} units
         </Typography>
       </Box>
     );

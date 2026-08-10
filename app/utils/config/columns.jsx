@@ -20,7 +20,7 @@ import {
   ORDER_FULFILLMENT_STATUS_CONFIG,
   ARCHIVE_RULE_CONFIG,
 } from "./constants";
-import { formatDate } from "../helper";
+import { formatDate, formatPrice } from "../helper";
 
 // Inventory action
 export const createRenderActions =
@@ -362,8 +362,7 @@ export const ORDERS_COLUMNS = [
     label: "Total",
     skeletonWidth: 80,
     render: (item) => {
-      const totalPrice = item.totalPrice || "—";
-      const currencyCode = item.currencyCode || "—";
+      const currencyCodeAndPrice = formatPrice(item.currencyCode, item.totalPrice);
       const financialStatus = item.financialStatus;
 
       return (
@@ -375,7 +374,7 @@ export const ORDERS_COLUMNS = [
               financialStatus === "REFUNDED" ? "line-through" : "none",
           }}
         >
-          {currencyCode} {totalPrice}
+          {currencyCodeAndPrice}
         </Typography>
       );
     },

@@ -71,19 +71,20 @@ export const DASHBOARD_CARDS = [
     key: "value",
     label: "Inventory Value",
     color: "#008060",
-    getValue: (d) =>
-      d.currency === "USD"
-        ? `$${d.totalInventoryValue ?? 0}`
-        : (d.totalInventoryValue ?? 0),
+    getValue: (d) => {
+      if (d.totalInventoryValue)
+        return formatPrice(d.currency, d.totalInventoryValue);
+      return 0;
+    },
   },
   {
     key: "deadValue",
     label: "Dead Stock Value",
     color: "#fb493c",
-    getValue: (d) =>
-      d.currency === "USD"
-        ? `$${d.deadStockValue ?? 0}`
-        : (d.deadStockValue ?? 0),
+    getValue: (d) => {
+      if (d.deadStockValue) return formatPrice(d.currency, d.deadStockValue);
+      return 0;
+    },
   },
 ];
 
@@ -253,7 +254,12 @@ export const INVENTORY_HISTORY_HEADER = [
   "Created At",
 ];
 
-export const SALES_HISTORY_HEADER = ["Order", "Quantity", "Stock After", "Created At"];
+export const SALES_HISTORY_HEADER = [
+  "Order",
+  "Quantity",
+  "Stock After",
+  "Created At",
+];
 
 export const INVENTORY_VIEW_TABS_LABEL = [
   "Overview",
@@ -268,3 +274,12 @@ export const INVENTORY_VIEW_TABS_STATS_CARD = [
   "Days Since Added",
   "Velocity",
 ];
+
+export const formatPrice = (currency, price) => {
+  if (price === null || price === undefined || isNaN(price))
+    return `${currency || ""} 0`;
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: currency || "USD",
+  }).format(price);
+};

@@ -6,7 +6,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 
-function ConfirmDialog({ open, title, message, onClose, onConfirm }) {
+function ConfirmDialog({ open, title, message, confirmText = "Confirm", cancelText = "Cancel", onClose, onConfirm }) {
   return (
     <Dialog
       open={open}
@@ -31,7 +31,7 @@ function ConfirmDialog({ open, title, message, onClose, onConfirm }) {
           onClick={onClose}
           sx={{ textTransform: "none", fontWeight: 600 }}
         >
-          Cancel
+          {cancelText}
         </Button>
         <Button
           onClick={onConfirm}
@@ -39,7 +39,7 @@ function ConfirmDialog({ open, title, message, onClose, onConfirm }) {
           color="error"
           sx={{ textTransform: "none", fontWeight: 600 }}
         >
-          Confirm
+          {confirmText}
         </Button>
       </DialogActions>
     </Dialog>
@@ -50,6 +50,8 @@ ConfirmDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
+  confirmText: PropTypes.string,
+  cancelText: PropTypes.string,
   onClose: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
 };

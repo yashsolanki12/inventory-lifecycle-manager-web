@@ -11,7 +11,11 @@ import InventoryViewSkeleton from "../../ui/skeleton-loader/inventory-view-skele
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useInventoryData from "../../hooks/useInventoryData";
 import { getSingleProduct } from "../../api/products";
-import { formatDate, useCurrentShopDomain } from "../../utils/helper";
+import {
+  formatDate,
+  formatPrice,
+  useCurrentShopDomain,
+} from "../../utils/helper";
 import {
   INVENTORY_STATUS_CONFIG,
   STOCK_STATUS_CONFIG,
@@ -47,7 +51,6 @@ const InventoryViewPage = () => {
       ? [product.image]
       : [];
   const mainImage = allImages[selectedImage] || product?.image || null;
-
   const statusConfig =
     INVENTORY_STATUS_CONFIG[product?.status?.toUpperCase()] || null;
 
@@ -66,6 +69,10 @@ const InventoryViewPage = () => {
   }
 
   const sku = product.variants?.[0]?.sku || "—";
+  const inventoryValue = formatPrice(
+    product.currencyCode,
+    product.inventoryValue,
+  );
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
@@ -248,10 +255,7 @@ const InventoryViewPage = () => {
 
                 {/* Inventory Value */}
                 {product.inventoryValue && (
-                  <InfoRow
-                    label="Inventory Value"
-                    value={product.inventoryValue}
-                  />
+                  <InfoRow label="Inventory Value" value={inventoryValue} />
                 )}
 
                 {/* Status */}
