@@ -22,7 +22,7 @@ const TablePagination = ({ page, totalPages, total, limit, onPageChange }) => {
       }}
     >
       <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
-        Showing {start} to {end} of {total} records
+        Showing {start} to {end} of {total} alerts
       </Typography>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <IconButton

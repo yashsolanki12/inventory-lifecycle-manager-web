@@ -106,14 +106,15 @@ const AlertProductsPage = () => {
         <Typography sx={{ fontSize: 14, color: "#6b7280", mb: 1 }}>
           {alert.message}
         </Typography>
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
           {ruleName && (
             <Typography sx={{ fontSize: 13, color: "#9ca3af" }}>
               Rule: {ruleName}
             </Typography>
           )}
+          {ruleName && <Typography sx={{ color: "#9ca3af" }}>•</Typography>}
           <Typography sx={{ fontSize: 13, color: "#9ca3af" }}>
-            {formatDate(alert.createdAt)}
+            Date & Time: {formatDate(alert.createdAt)}
           </Typography>
         </Box>
       </Box>

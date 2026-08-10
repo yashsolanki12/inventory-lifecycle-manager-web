@@ -23,7 +23,8 @@ const VariantsTab = ({ variants }) => {
 
   const selectedVariantData = variants[selectedVariant];
   const selectedColorOption = selectedVariantData?.selectedOptions?.find(
-    (opt) => opt.name?.toLowerCase() === "color" || "colour",
+    (opt) =>
+      ["color", "colour", "Color", "COLOR"].includes(opt.name.toLowerCase()),
   );
   const selectedColorHex = selectedColorOption
     ? getColorHex(selectedColorOption.value)
@@ -43,7 +44,7 @@ const VariantsTab = ({ variants }) => {
             "& .MuiTab-root": {
               textTransform: "none",
               fontWeight: 600,
-              fontSize: 13,
+              fontSize: 14,
               color: "#6b7280",
               minHeight: 40,
               "&.Mui-selected": {
@@ -58,8 +59,10 @@ const VariantsTab = ({ variants }) => {
           }}
         >
           {variants.map((variant, index) => {
-            const colorOption = variant.selectedOptions?.find(
-              (opt) => opt.name?.toLowerCase() === "color" || "colour",
+            const colorOption = variant.selectedOptions?.find((opt) =>
+              ["color", "colour", "Color", "COLOR"].includes(
+                opt.name.toLowerCase(),
+              ),
             );
             const colorHex = colorOption
               ? getColorHex(colorOption.value)
@@ -92,7 +95,7 @@ const VariantsTab = ({ variants }) => {
                     <Typography
                       component="span"
                       sx={{
-                        fontSize: 13,
+                        fontSize: 14,
                         fontWeight: 600,
                         textTransform: "none",
                       }}
@@ -166,11 +169,11 @@ const VariantsTab = ({ variants }) => {
                 <Box>
                   <Typography
                     sx={{
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: 600,
                       color: "#9ca3af",
                       mb: 1,
-                      textTransform: "uppercase",
+                      textTransform: "none",
                       letterSpacing: "0.5px",
                     }}
                   >
@@ -181,7 +184,9 @@ const VariantsTab = ({ variants }) => {
                       const colorHex = getColorHex(opt.value);
                       const isColor =
                         opt.name?.toLowerCase() === "color" ||
-                        ("colour" && colorHex);
+                        "colour" ||
+                        "Color" ||
+                        ("COLOR" && colorHex);
 
                       return (
                         <Box
@@ -199,12 +204,12 @@ const VariantsTab = ({ variants }) => {
                         >
                           <Typography
                             sx={{
-                              fontSize: 12,
+                              fontSize: 14,
                               fontWeight: 500,
                               color: "#6b7280",
                             }}
                           >
-                            {opt.name}:
+                            {opt.name}: {opt.value}
                           </Typography>
                           {isColor ? (
                             <Tooltip
@@ -215,7 +220,7 @@ const VariantsTab = ({ variants }) => {
                                 tooltip: {
                                   sx: {
                                     lineHeight: 2,
-                                    fontSize: "13px",
+                                    fontSize: "14px",
                                   },
                                 },
                               }}
@@ -241,7 +246,7 @@ const VariantsTab = ({ variants }) => {
                           ) : (
                             <Typography
                               sx={{
-                                fontSize: 12,
+                                fontSize: 14,
                                 fontWeight: 600,
                                 color: "#0f1111",
                               }}
@@ -261,11 +266,11 @@ const VariantsTab = ({ variants }) => {
                 <Box>
                   <Typography
                     sx={{
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: 600,
                       color: "#9ca3af",
                       mb: 1,
-                      textTransform: "uppercase",
+                      textTransform: "none",
                       letterSpacing: "0.5px",
                     }}
                   >
@@ -279,7 +284,7 @@ const VariantsTab = ({ variants }) => {
                         size="small"
                         sx={{
                           height: 24,
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: 500,
                           backgroundColor: "#eff6ff",
                           color: "#1d4ed8",
