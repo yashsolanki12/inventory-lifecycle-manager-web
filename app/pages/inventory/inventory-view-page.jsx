@@ -69,10 +69,10 @@ const InventoryViewPage = () => {
   }
 
   const sku = product.variants?.[0]?.sku || "—";
-  const inventoryValue = formatPrice(
-    product.currencyCode,
-    product.inventoryValue,
-  );
+  const inventoryValue =
+    product.inventoryValue > 0
+      ? formatPrice(product.currencyCode, product.inventoryValue)
+      : product.inventoryValue;
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
@@ -201,7 +201,7 @@ const InventoryViewPage = () => {
                     component="img"
                     src={img.url || FALLBACK_IMAGE}
                     alt={img.altText || ""}
-                    sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    sx={{ width: "100%", height: "100%", objectFit: "contain" }}
                   />
                 </Box>
               ))}
@@ -384,7 +384,7 @@ const InventoryViewPage = () => {
                           size="small"
                           sx={{
                             height: 22,
-                            fontSize: 11,
+                            fontSize: 14,
                             fontWeight: 500,
                             backgroundColor: "#f3f4f6",
                             color: "#0f1111",

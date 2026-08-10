@@ -6,11 +6,11 @@ const DetailItem = ({ label, value }) => {
     <Box>
       <Typography
         sx={{
-          fontSize: 12,
+          fontSize: 14,
           fontWeight: 600,
           color: "#9ca3af",
           mb: 0.5,
-          textTransform: "uppercase",
+          textTransform: "none",
           letterSpacing: "0.5px",
         }}
       >
