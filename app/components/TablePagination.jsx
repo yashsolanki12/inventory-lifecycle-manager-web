@@ -16,6 +16,8 @@ const TablePagination = ({ page, totalPages, total, limit, onPageChange }) => {
         alignItems: "center",
         mt: 3,
         pt: 2,
+        mb: 2,
+        px: 2,
         borderTop: "1px solid #ececec",
       }}
     >

@@ -14,6 +14,7 @@ import LowPriorityIcon from "@mui/icons-material/LowPriority";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutlined";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import CloseIcon from "@mui/icons-material/Close";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
 import TablePagination from "../../components/TablePagination";
 import ConfirmDialog from "../../ui/confirmation-dialog";
@@ -111,10 +112,13 @@ const AlertsListPage = () => {
         maxWidth: 1450,
         mx: "auto",
         px: { xs: 1, sm: 2 },
+        py: { xs: 2, sm: 3 },
+        borderRadius: "16px",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         height: "100%",
+        backgroundColor: "white",
       }}
     >
       <Box
@@ -123,6 +127,7 @@ const AlertsListPage = () => {
           justifyContent: "space-between",
           alignItems: "center",
           mb: 3,
+          px: 2,
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -146,34 +151,60 @@ const AlertsListPage = () => {
             />
           )}
         </Box>
-        {unreadCount > 0 && (
-          <Button
-            variant="outlined"
-            startIcon={<CheckCircleOutlineIcon />}
-            onClick={handleMarkAllRead}
-            disabled={markAllReadMutation.isPending}
-            sx={{
-              borderColor: "#e5e7eb",
-              color: "#374151",
-              backgroundColor: "#FFFFFF",
-              textTransform: "none",
-              borderRadius: "8px",
-              fontWeight: 600,
-              fontSize: 13,
-              px: 2,
-              py: 1,
-              "&:hover": {
-                borderColor: "#d1d5db",
-                backgroundColor: "#f9fafb",
-              },
-              "&.Mui-disabled": {
-                opacity: 0.6,
-              },
-            }}
-          >
-            {markAllReadMutation.isPending ? "Marking..." : "Mark all as read"}
-          </Button>
-        )}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {unreadCount > 0 && (
+            <Button
+              variant="outlined"
+              startIcon={<CheckCircleOutlineIcon />}
+              onClick={handleMarkAllRead}
+              disabled={markAllReadMutation.isPending}
+              sx={{
+                borderColor: "#e5e7eb",
+                color: "#374151",
+                backgroundColor: "#FFFFFF",
+                textTransform: "none",
+                borderRadius: "8px",
+                fontWeight: 600,
+                fontSize: 13,
+                px: 2,
+                py: 1,
+                "&:hover": {
+                  borderColor: "#d1d5db",
+                  backgroundColor: "#f9fafb",
+                },
+                "&.Mui-disabled": {
+                  opacity: 0.6,
+                },
+              }}
+            >
+              {markAllReadMutation.isPending
+                ? "Marking..."
+                : "Mark all as read"}
+            </Button>
+          )}
+          {page > 1 && (
+            <IconButton
+              size="small"
+              onClick={() => setPage(1)}
+              sx={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "8px",
+                px: 1,
+                color: "#6b7280",
+                fontSize: 12,
+                "&:hover": {
+                  backgroundColor: "#ffebee",
+                  borderColor: "#d1d5db",
+                },
+              }}
+            >
+              <CloseIcon sx={{ fontSize: 16, mr: 0.5 }} />
+              <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                Clear
+              </Typography>
+            </IconButton>
+          )}
+        </Box>
       </Box>
 
       {alerts.length === 0 ? (
@@ -184,7 +215,7 @@ const AlertsListPage = () => {
             display: "flex",
             flexDirection: "column",
             gap: 1,
-            maxHeight: "calc(100vh - 100px)",
+            maxHeight: "calc(100vh - 282px)",
             overflowY: "auto",
             px: 2,
           }}
