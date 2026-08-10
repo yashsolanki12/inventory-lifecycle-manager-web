@@ -106,7 +106,6 @@ const RulesListPage = () => {
         message: "Please select at least one rule to match.",
         severity: "warning",
       });
-      return;
     }
     if (!shopDomain) return;
     matchRuleMutation.mutate({ shop: shopDomain, ruleIds: selectedIds });
@@ -130,6 +129,16 @@ const RulesListPage = () => {
     setDeleteDialog(false);
     setRuleData("");
   };
+
+  React.useEffect(() => {
+    if (matchRuleMutation.error) {
+      setSnackbar({
+        open: true,
+        message: matchRuleMutation.error.response.data.message,
+        severity: "warning",
+      });
+    }
+  }, [matchRuleMutation.error]);
 
   return (
     <Box

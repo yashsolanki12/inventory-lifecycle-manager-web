@@ -7,9 +7,10 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
   const [zoom, setZoom] = React.useState({ active: false, x: 50, y: 50 });
   const containerRef = React.useRef(null);
   const isMobile = useMediaQuery("(max-width:767px)");
+  const isFallbackImage = imageUrl === "/fallback-image.jpg";
 
   const handleMouseMove = (e) => {
-    if (isMobile) return;
+    if (isMobile || isFallbackImage) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -25,7 +26,15 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
   };
 
   return (
-    <Box sx={{ display: "flex", gap: 2, flex: 1, flexDirection: { xs: "column", sm: "row" }, position: "relative" }}>
+    <Box
+      sx={{
+        display: "flex",
+        gap: 2,
+        flex: 1,
+        flexDirection: { xs: "column", sm: "row" },
+        position: "relative",
+      }}
+    >
       <Box
         ref={containerRef}
         onMouseMove={handleMouseMove}
@@ -42,7 +51,7 @@ const ProductImageZoom = ({ imageUrl, altText, children }) => {
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
-          cursor: isMobile ? "default" : "crosshair",
+          cursor: isMobile || isFallbackImage ? "not-allowed" : "crosshair",
           position: "relative",
           zIndex: 1,
         }}

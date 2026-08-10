@@ -139,7 +139,7 @@ const AlertsListPage = () => {
           </Typography>
           {unreadCount > 0 && (
             <Chip
-              label={`${unreadCount} unread`}
+              label={`${unreadCount} new`}
               size="small"
               sx={{
                 backgroundColor: "#005ea2",
