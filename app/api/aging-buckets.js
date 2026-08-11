@@ -6,7 +6,7 @@ export const getAgingBuckets = async (shop) => {
     .get("inventory/aging-buckets", { params: { shop } })
     .then((res) => res.data)
     .catch((error) => {
-      throw error.response.data.message;
+      throw error;
     });
 };
 

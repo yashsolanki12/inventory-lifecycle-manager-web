@@ -5,28 +5,41 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import LockIcon from "@mui/icons-material/Lock";
-import { usePricingRedirect } from "../../../utils/helper";
+import { usePricingRedirect } from "../utils/helper";
 
-const UpgradePrompt = ({ feature, description, requiredPlan = "Starter" }) => {
+const PlanGate = ({
+  requiredPlan = "Pro",
+  feature,
+  message,
+  upgradeUrl,
+  children,
+}) => {
   const redirectToPricing = usePricingRedirect();
-
-  const handleClick = () => {
-    redirectToPricing();
+  console.log("up",upgradeUrl)
+  const handleUpgrade = () => {
+    if (upgradeUrl) {
+      window.open(upgradeUrl, "_top");
+    } else {
+      redirectToPricing();
+    }
   };
 
-  return (
+  const content = (
     <Card
       sx={{
         borderRadius: "14px",
         border: "2px dashed #d1d5db",
         backgroundColor: "#fafafa",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        width: "100%",
       }}
     >
-      <CardContent sx={{ textAlign: "center", py: { xs: 3, sm: 4 }, px: { xs: 2, sm: 3 } }}>
+      <CardContent
+        sx={{
+          textAlign: "center",
+          py: { xs: 3, sm: 5 },
+          px: { xs: 2, sm: 4 },
+        }}
+      >
         <Box
           sx={{
             width: 56,
@@ -42,15 +55,29 @@ const UpgradePrompt = ({ feature, description, requiredPlan = "Starter" }) => {
         >
           <LockIcon sx={{ fontSize: 28, color: "#9ca3af" }} />
         </Box>
-        <Typography variant="h6" sx={{ fontWeight: 600, color: "#374151", mb: 0.5 }}>
-          {feature}
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 600, color: "#374151", mb: 0.5 }}
+        >
+          {feature
+            ? `${feature} requires ${requiredPlan} plan`
+            : `Requires ${requiredPlan} plan`}
         </Typography>
-        <Typography sx={{ fontSize: 14, color: "#6b7280", mb: 2.5, maxWidth: 280, mx: "auto" }}>
-          {description}
+        <Typography
+          sx={{
+            fontSize: 14,
+            color: "#6b7280",
+            mb: 2.5,
+            maxWidth: 320,
+            mx: "auto",
+          }}
+        >
+          {message ||
+            `Your current plan does not include this feature. Upgrade to ${requiredPlan} to unlock it.`}
         </Typography>
         <Button
           variant="contained"
-          onClick={handleClick}
+          onClick={handleUpgrade}
           sx={{
             backgroundColor: "#008060",
             textTransform: "none",
@@ -61,11 +88,13 @@ const UpgradePrompt = ({ feature, description, requiredPlan = "Starter" }) => {
             "&:hover": { backgroundColor: "#006F60" },
           }}
         >
-          Upgrade to {requiredPlan} or Pro
+          Upgrade to {requiredPlan}
         </Button>
       </CardContent>
     </Card>
   );
+
+  return content;
 };
 
-export default UpgradePrompt;
+export default PlanGate;
