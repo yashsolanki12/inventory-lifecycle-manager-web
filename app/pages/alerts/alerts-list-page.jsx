@@ -46,6 +46,9 @@ const AlertsListPage = () => {
     severity: "success",
   });
 
+
+  const tableRef = React.useRef(null);
+
   const {
     data: responseData,
     isLoading,
@@ -101,24 +104,22 @@ const AlertsListPage = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
 
+  React.useEffect(() => {
+    if (tableRef.current) {
+      tableRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [page]);
+
   if (isLoading) {
     return <AlertsSkeleton />;
   }
 
   return (
-    <Box
-      sx={{
+      <Box
+        sx={{
         width: "100%",
         maxWidth: 1450,
         mx: "auto",
-        px: { xs: 1, sm: 2 },
-        py: { xs: 2, sm: 3 },
-        borderRadius: "16px",
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        backgroundColor: "white",
       }}
     >
       <Box
@@ -127,7 +128,6 @@ const AlertsListPage = () => {
           justifyContent: "space-between",
           alignItems: "center",
           mb: 3,
-          px: 2,
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
@@ -191,6 +191,7 @@ const AlertsListPage = () => {
                 borderRadius: "8px",
                 px: 1,
                 color: "#6b7280",
+                backgroundColor: "white",
                 fontSize: 12,
                 "&:hover": {
                   backgroundColor: "#ffebee",
@@ -206,187 +207,204 @@ const AlertsListPage = () => {
           )}
         </Box>
       </Box>
-
-      {alerts.length === 0 ? (
-        <EmptyAlertsCard />
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-            maxHeight: "calc(100vh - 282px)",
-            overflowY: "auto",
-            px: 2,
-          }}
-        >
-          {alerts.map((alert) => {
-            const config =
-              ALERT_TYPE_CONFIG[alert.type] || ALERT_TYPE_CONFIG.dead_stock;
-            const IconComponent = ALERT_ICON_MAP[alert.type] || InventoryIcon;
-            const isUnread = !alert.isRead;
-            return (
-              <Box
-                key={alert.id}
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 2,
-                  p: 2,
-                  borderRadius: "8px",
-                  border: "1px solid",
-                  borderColor: isUnread ? "#005ea2" : "#e5e7eb",
-                  backgroundColor: isUnread ? "#f0f6ff" : "#ffffff",
-                  cursor: "default",
-                  transition: "all 0.15s ease",
-                  "&:hover": {
-                    borderColor: isUnread ? "#004d8a" : "#d1d5db",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-                  },
-                }}
-              >
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 1450,
+          mx: "auto",
+          px: { xs: 1, sm: 2 },
+          py: { xs: 2, sm: 3 },
+          borderRadius: "16px",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          backgroundColor: "white",
+        }}
+      >
+        {alerts.length === 0 ? (
+          <EmptyAlertsCard />
+        ) : (
+          <Box
+            ref={tableRef}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+              maxHeight: "calc(100vh - 282px)",
+              overflowY: "auto",
+              px: 2,
+            }}
+          >
+            {alerts.map((alert) => {
+              const config =
+                ALERT_TYPE_CONFIG[alert.type] || ALERT_TYPE_CONFIG.dead_stock;
+              const IconComponent = ALERT_ICON_MAP[alert.type] || InventoryIcon;
+              const isUnread = !alert.isRead;
+              return (
                 <Box
+                  key={alert.id}
                   sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "8px",
-                    backgroundColor: config.bg,
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
+                    alignItems: "flex-start",
+                    gap: 2,
+                    p: 2,
+                    borderRadius: "8px",
+                    border: "1px solid",
+                    borderColor: isUnread ? "#005ea2" : "#e5e7eb",
+                    backgroundColor: isUnread ? "#f0f6ff" : "#ffffff",
+                    cursor: "default",
+                    transition: "all 0.15s ease",
+                    "&:hover": {
+                      borderColor: isUnread ? "#004d8a" : "#d1d5db",
+                      boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                    },
                   }}
                 >
-                  <IconComponent sx={{ fontSize: 20, color: config.color }} />
-                </Box>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "8px",
+                      backgroundColor: config.bg,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <IconComponent sx={{ fontSize: 20, color: config.color }} />
+                  </Box>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        mb: 0.25,
+                      }}
+                    >
+                      {isUnread && (
+                        <FiberManualRecordIcon
+                          sx={{
+                            fontSize: 8,
+                            color: "#005ea2",
+                            flexShrink: 0,
+                          }}
+                        />
+                      )}
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          fontWeight: isUnread ? 600 : 500,
+                          color: "#202223",
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        {alert.title}
+                      </Typography>
+                    </Box>
+                    <Typography
+                      sx={{
+                        fontSize: 13,
+                        color: "#6b7280",
+                        mb: 0.5,
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {alert.message}
+                    </Typography>
+                    <Typography sx={{ fontSize: 12, color: "#8c9196" }}>
+                      {formatDate(alert.createdAt)}
+                    </Typography>
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      gap: 1,
-                      mb: 0.25,
+                      gap: 0.5,
+                      flexShrink: 0,
                     }}
                   >
-                    {isUnread && (
-                      <FiberManualRecordIcon
-                        sx={{
-                          fontSize: 8,
-                          color: "#005ea2",
-                          flexShrink: 0,
+                    {alert.metadata?.productIds?.length > 0 && (
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleView(alert);
                         }}
-                      />
+                        title="View details"
+                        sx={{
+                          color: "#005ea2",
+                          "&:hover": {
+                            backgroundColor: "#e6f0fa",
+                          },
+                        }}
+                      >
+                        <OpenInNewIcon sx={{ fontSize: 18 }} />
+                      </IconButton>
                     )}
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        fontWeight: isUnread ? 600 : 500,
-                        color: "#202223",
-                        lineHeight: 1.4,
-                      }}
-                    >
-                      {alert.title}
-                    </Typography>
+                    {isUnread && (
+                      <IconButton
+                        size="small"
+                        onClick={(e) => handleMarkRead(e, alert)}
+                        disabled={markReadMutation.isPending}
+                        title="Mark as read"
+                        sx={{
+                          color: "#005ea2",
+                          "&:hover": {
+                            backgroundColor: "#e6f0fa",
+                          },
+                        }}
+                      >
+                        <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
+                      </IconButton>
+                    )}
                   </Box>
-                  <Typography
-                    sx={{
-                      fontSize: 13,
-                      color: "#6b7280",
-                      mb: 0.5,
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {alert.message}
-                  </Typography>
-                  <Typography sx={{ fontSize: 12, color: "#8c9196" }}>
-                    {formatDate(alert.createdAt)}
-                  </Typography>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
-                    flexShrink: 0,
-                  }}
-                >
-                  {alert.metadata?.productIds?.length > 0 && (
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleView(alert);
-                      }}
-                      title="View details"
-                      sx={{
-                        color: "#005ea2",
-                        "&:hover": {
-                          backgroundColor: "#e6f0fa",
-                        },
-                      }}
-                    >
-                      <OpenInNewIcon sx={{ fontSize: 18 }} />
-                    </IconButton>
-                  )}
-                  {isUnread && (
-                    <IconButton
-                      size="small"
-                      onClick={(e) => handleMarkRead(e, alert)}
-                      disabled={markReadMutation.isPending}
-                      title="Mark as read"
-                      sx={{
-                        color: "#005ea2",
-                        "&:hover": {
-                          backgroundColor: "#e6f0fa",
-                        },
-                      }}
-                    >
-                      <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
-                    </IconButton>
-                  )}
-                </Box>
-              </Box>
-            );
-          })}
-        </Box>
-      )}
+              );
+            })}
+          </Box>
+        )}
 
-      {pagination && pagination.total > 10 && (
-        <TablePagination
-          page={pagination.page}
-          totalPages={pagination.totalPages}
-          total={pagination.total}
-          limit={10}
-          onPageChange={setPage}
+        {pagination && pagination.total > 10 && (
+          <TablePagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            total={pagination.total}
+            limit={10}
+            onPageChange={setPage}
+            paginationText="alerts"
+          />
+        )}
+
+        <ConfirmDialog
+          open={openDialog}
+          title="Mark All Confirmation"
+          message="Are you sure you want to mark all alerts as read?"
+          onConfirm={handleDialogConfirm}
+          onClose={handleDialogClose}
         />
-      )}
 
-      <ConfirmDialog
-        open={openDialog}
-        title="Mark All Confirmation"
-        message="Are you sure you want to mark all alerts as read?"
-        onConfirm={handleDialogConfirm}
-        onClose={handleDialogClose}
-      />
-
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={snackbar.severity === "error" ? 5000 : 3000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={snackbar.severity === "error" ? 5000 : 3000}
           onClose={handleCloseSnackbar}
-          severity={snackbar.severity}
-          sx={{
-            width: "100%",
-            borderRadius: "8px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-          }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
         >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            sx={{
+              width: "100%",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Box>
     </Box>
   );
 };

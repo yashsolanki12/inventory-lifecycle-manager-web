@@ -8,7 +8,7 @@ export const useInventorySubmit = (
 ) => {
   const queryClient = useQueryClient();
 
-  const { onSuccess, invalidateKeys = [] } = options;
+  const { onSuccess, invalidateKeys = [], showSuccess = true } = options;
 
   const mutation = useMutation({
     mutationFn,
@@ -22,7 +22,7 @@ export const useInventorySubmit = (
       }
     },
     onSuccess: (data) => {
-      if (typeof setSnackBar === "function") {
+      if (showSuccess && typeof setSnackBar === "function") {
         setSnackBar({
           open: true,
           message: data?.message || "Operation successful",

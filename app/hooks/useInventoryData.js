@@ -10,14 +10,12 @@ export const useInventoryData = (
   const { enabled = true, staleTime, showSuccessToast = false } = options;
 
   // Call useQuery at the top level
-  const { error, data, isLoading, refetch, isSuccess } = useQuery({
+  const { error, data, isLoading, isFetching, refetch, isSuccess } = useQuery({
     queryKey: Array.isArray(queryKey) ? queryKey : [queryKey],
     queryFn: queryFn,
     enabled: enabled,
     staleTime: staleTime,
-    // Refetch every time component mounts
     refetchOnMount: true,
-    // Optional: Prevent retries to stop repeated error cycles during debugging
     retry: false,
   });
 
@@ -54,6 +52,6 @@ export const useInventoryData = (
     }
   }, [isSuccess, setSnackBar, data]);
 
-  return { error, data, isLoading, refetch };
+  return { error, data, isLoading, isFetching, refetch };
 };
 export default useInventoryData;

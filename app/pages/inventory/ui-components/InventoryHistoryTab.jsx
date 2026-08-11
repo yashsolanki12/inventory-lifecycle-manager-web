@@ -5,6 +5,7 @@ import Chip from "@mui/material/Chip";
 import useInventoryData from "../../../hooks/useInventoryData";
 import TablePagination from "../../../components/TablePagination";
 import ErrorCard from "../../../components/error-card";
+import CloseIcon from "@mui/icons-material/Close";
 
 import {
   formatDate,
@@ -14,6 +15,7 @@ import {
   useCurrentShopDomain,
 } from "../../../utils/helper";
 import { getMovements } from "../../../api/movements";
+import IconButton from "@mui/material/IconButton";
 
 const formatReference = (ref) => {
   if (!ref) return "—";
@@ -24,7 +26,14 @@ const formatReference = (ref) => {
 
 const InventoryHistoryTab = ({ product }) => {
   const shopDomain = useCurrentShopDomain();
+  const scrollRef = React.useRef(null);
   const [page, setPage] = React.useState(1);
+
+  React.useEffect(() => {
+    if (scrollRef.current && scrollRef.current.scrollHeight > scrollRef.current.clientHeight) {
+      scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [page]);
 
   const {
     data: responseData,
@@ -95,6 +104,29 @@ const InventoryHistoryTab = ({ product }) => {
         >
           Inventory Movements
         </Typography>
+        {page > 1 && (
+          <IconButton
+            size="small"
+            onClick={() => setPage(1)}
+            sx={{
+              border: "1px solid #e5e7eb",
+              borderRadius: "8px",
+              px: 1,
+              color: "#6b7280",
+              backgroundColor: "white",
+              fontSize: 12,
+              "&:hover": {
+                backgroundColor: "#ffebee",
+                borderColor: "#d1d5db",
+              },
+            }}
+          >
+            <CloseIcon sx={{ fontSize: 16, mr: 0.5 }} />
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+              Clear
+            </Typography>
+          </IconButton>
+        )}
       </Box>
 
       {/* Desktop table */}
@@ -127,60 +159,74 @@ const InventoryHistoryTab = ({ product }) => {
           ))}
         </Box>
 
-        {movements.map((m) => {
-          const config =
-            MOVEMENT_CONFIG[m.changeType] || MOVEMENT_CONFIG.initial;
-          const qtyPrefix =
-            m.changeType === "sale" || m.changeType === "removal" ? "-" : "+";
-          return (
-            <Box
-              key={m.id}
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1.2fr 1fr 1fr 1fr 1.2fr",
-                gap: 1,
-                px: 2,
-                py: 1.5,
-                borderBottom: "1px solid #f3f4f6",
-                alignItems: "center",
-                "&:last-child": { borderBottom: "none" },
-                "&:hover": { backgroundColor: "#f9fafb" },
-              }}
-            >
-              <Chip
-                label={config.label}
-                size="small"
+        <Box
+          ref={scrollRef}
+          sx={{
+            maxHeight: "calc(100vh - 560px)",
+            overflowY: "auto",
+            "&::-webkit-scrollbar": { width: 6 },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#d1d5db",
+              borderRadius: 3,
+            },
+            "&::-webkit-scrollbar-track": { backgroundColor: "#f9fafb" },
+          }}
+        >
+          {movements.map((m) => {
+            const config =
+              MOVEMENT_CONFIG[m.changeType] || MOVEMENT_CONFIG.initial;
+            const qtyPrefix =
+              m.changeType === "sale" || m.changeType === "removal" ? "-" : "+";
+            return (
+              <Box
+                key={m.id}
                 sx={{
-                  height: 22,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  backgroundColor: config.bg,
-                  color: config.color,
-                  borderRadius: "6px",
-                  width: "fit-content",
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1.2fr 1fr 1fr 1fr 1.2fr",
+                  gap: 1,
+                  px: 2,
+                  py: 1.5,
+                  borderBottom: "1px solid #f3f4f6",
+                  alignItems: "center",
+                  "&:last-child": { borderBottom: "none" },
+                  "&:hover": { backgroundColor: "#f9fafb" },
                 }}
-              />
-              <Typography
-                sx={{ fontSize: 14, fontWeight: 600, color: "#0f1111" }}
               >
-                {qtyPrefix}
-                {m.quantity} units
-              </Typography>
-              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
-                {m.previousQuantity ?? "—"}
-              </Typography>
-              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
-                {m.newQuantity ?? "—"}
-              </Typography>
-              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
-                {formatReference(m.reference)}
-              </Typography>
-              <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
-                {formatDate(m.createdAt)}
-              </Typography>
-            </Box>
-          );
-        })}
+                <Chip
+                  label={config.label}
+                  size="small"
+                  sx={{
+                    height: 22,
+                    fontSize: 13,
+                    fontWeight: 500,
+                    backgroundColor: config.bg,
+                    color: config.color,
+                    borderRadius: "6px",
+                    width: "fit-content",
+                  }}
+                />
+                <Typography
+                  sx={{ fontSize: 14, fontWeight: 600, color: "#0f1111" }}
+                >
+                  {qtyPrefix}
+                  {m.quantity} units
+                </Typography>
+                <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
+                  {m.previousQuantity ?? "—"}
+                </Typography>
+                <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
+                  {m.newQuantity ?? "—"}
+                </Typography>
+                <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
+                  {formatReference(m.reference)}
+                </Typography>
+                <Typography sx={{ fontSize: 14, color: "#6b7280" }}>
+                  {formatDate(m.createdAt)}
+                </Typography>
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
 
       {/* Mobile cards */}
@@ -260,10 +306,10 @@ const InventoryHistoryTab = ({ product }) => {
           total={total}
           limit={PAGE_SIZE}
           onPageChange={setPage}
+          paginationText="history"
         />
       )}
     </Box>
   );
 };
-
 export default InventoryHistoryTab;

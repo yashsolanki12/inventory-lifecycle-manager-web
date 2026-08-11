@@ -4,7 +4,14 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-const TablePagination = ({ page, totalPages, total, limit, onPageChange }) => {
+const TablePagination = ({
+  page,
+  totalPages,
+  total,
+  limit,
+  onPageChange,
+  paginationText,
+}) => {
   const start = Math.min((page - 1) * limit + 1, total);
   const end = Math.min(page * limit, total);
 
@@ -22,7 +29,7 @@ const TablePagination = ({ page, totalPages, total, limit, onPageChange }) => {
       }}
     >
       <Typography sx={{ fontSize: 13, color: "#6b7280" }}>
-        Showing {start} to {end} of {total} alerts
+        Showing {start} to {end} of {total} {paginationText}
       </Typography>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <IconButton

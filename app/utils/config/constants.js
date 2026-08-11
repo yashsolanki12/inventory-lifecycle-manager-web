@@ -166,5 +166,49 @@ export const ALERT_ACTION_CONFIG = {
   archive: { color: "#dc2626", bg: "#fef2f2", label: "Archived" },
   archived: { color: "#dc2626", bg: "#fef2f2", label: "Archived" },
   tag: { color: "#7c3aed", bg: "#f5f3ff", label: "Tagged" },
-  inventory_not_tracked: { color: "#6b7280", bg: "#f3f4f6", label: "Not Tracked" },
+  inventory_not_tracked: {
+    color: "#6b7280",
+    bg: "#f3f4f6",
+    label: "Not Tracked",
+  },
 };
+
+export const FRESH_OPTIONS = [
+  { value: 5, label: "5 days" },
+  { value: 10, label: "10 days" },
+  { value: 15, label: "15 days" },
+  { value: 20, label: "20 days" },
+  { value: 25, label: "25 days" },
+  { value: 30, label: "30 days" },
+  { value: 45, label: "45 days" },
+  { value: 60, label: "60 days" },
+  { value: 90, label: "90 days" },
+];
+
+export const MILD_OPTIONS = [
+  { value: 10, label: "10 days" },
+  { value: 15, label: "15 days" },
+  { value: 20, label: "20 days" },
+  { value: 25, label: "25 days" },
+  { value: 30, label: "30 days" },
+  { value: 45, label: "45 days" },
+  { value: 60, label: "60 days" },
+  { value: 75, label: "75 days" },
+  { value: 90, label: "90 days" },
+  { value: 120, label: "120 days" },
+  { value: 150, label: "150 days" },
+  { value: 180, label: "180 days" },
+];
+
+export const AGING_OPTIONS = [
+  { value: 30, label: "30 days" },
+  { value: 45, label: "45 days" },
+  { value: 60, label: "60 days" },
+  { value: 75, label: "75 days" },
+  { value: 90, label: "90 days" },
+  { value: 120, label: "120 days" },
+  { value: 150, label: "150 days" },
+  { value: 180, label: "180 days" },
+  { value: 240, label: "240 days" },
+  { value: 365, label: "365 days" },
+];

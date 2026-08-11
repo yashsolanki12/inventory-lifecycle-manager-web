@@ -44,14 +44,14 @@ export const markAllAlertsRead = async (shop) => {
     });
 };
 
-export const getAlertById = async (shop, alertId, params = {}) => {
+export const getAlertById = async (shop, alertId, { page = 1, limit = 10 } = {}) => {
   if (!shop) {
     console.error("No shop domain found in URL parameters.");
     throw new Error("Shop domain is required");
   }
   return axiosInstance
     .get("alerts", {
-      params: { shop, id: alertId, ...params },
+      params: { shop, id: alertId, page, limit },
     })
     .then((res) => res.data)
     .catch((error) => {
