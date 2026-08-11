@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { COLORS } from "../../../utils/helper";
+import { COLORS } from "../../../utils/config/constants";
 
 const CustomXAxisTick = ({ x, y, payload, chartData }) => {
   const index = chartData.findIndex((d) => d.name === payload.value);

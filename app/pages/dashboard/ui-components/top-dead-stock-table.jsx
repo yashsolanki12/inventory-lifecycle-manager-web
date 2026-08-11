@@ -5,12 +5,13 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { useNavigate } from "react-router";
-import { formatPrice, PRODUCT_COLORS } from "../../../utils/helper";
+import { formatPrice } from "../../../utils/helper";
+import { PRODUCT_COLORS } from "../../../utils/config/constants";
 
 const TopDeadStockTable = ({ agingData }) => {
   const navigate = useNavigate();
   const items = agingData?.data?.items ?? [];
-  const currency = agingData?.data?.currency
+  const currency = agingData?.data?.currency;
 
   return (
     <Card

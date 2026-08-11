@@ -10,8 +10,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { VELOCITY_CONFIG } from "../../../utils/helper";
 import Chip from "@mui/material/Chip";
+import { VELOCITY_CONFIG } from "../../../utils/config/constants";
 
 const StatCard = ({ label, value, isLast }) => (
   <Box

@@ -8,13 +8,12 @@ import ErrorCard from "../../../components/error-card";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { formatDate, useCurrentShopDomain } from "../../../utils/helper";
+import { getMovements } from "../../../api/movements";
 import {
-  formatDate,
   PAGE_SIZE,
   SALES_HISTORY_HEADER,
-  useCurrentShopDomain,
-} from "../../../utils/helper";
-import { getMovements } from "../../../api/movements";
+} from "../../../utils/config/constants";
 
 const formatReference = (ref) => {
   if (!ref) return "—";

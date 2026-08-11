@@ -23,12 +23,15 @@ import {
   ruleFormSchema,
   defaultRuleValues,
 } from "../../../validations/rule-form-schema";
-import { ACTION_TYPE_OPTIONS, OPERATOR_OPTIONS } from "../../../utils/helper";
 import {
   getProductTypes,
   getProductVendors,
   getProductTags,
 } from "../../../api/products";
+import {
+  ACTION_TYPE_OPTIONS,
+  OPERATOR_OPTIONS,
+} from "../../../utils/config/constants";
 
 const RuleForm = ({
   initialData,
@@ -257,7 +260,12 @@ const RuleForm = ({
           render={({ field }) => (
             <FormControl fullWidth error={!!errors.actionType} sx={formFieldSx}>
               <InputLabel shrink>Action Type</InputLabel>
-              <Select {...field} label="Action Type" displayEmpty labelId="actionType-label">
+              <Select
+                {...field}
+                label="Action Type"
+                displayEmpty
+                labelId="actionType-label"
+              >
                 <MenuItem value="" disabled>
                   <Typography sx={{ fontSize: 14, color: "#00040a" }}>
                     All type

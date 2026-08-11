@@ -22,7 +22,7 @@ import {
   ReusableListSkeleton,
   PaginationSkeleton,
 } from "../ui/skeleton-loader/reusable-list-skeleton";
-import { MIN_SEARCH_CHARS } from "../utils/helper";
+import { MIN_SEARCH_CHARS } from "../utils/config/constants";
 
 const ReusableList = ({
   fetchFn,

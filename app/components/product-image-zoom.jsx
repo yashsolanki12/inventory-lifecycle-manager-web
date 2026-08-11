@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { ZOOM_FACTOR } from "../utils/helper";
+import { ZOOM_FACTOR } from "../utils/config/constants";
 
 const ProductImageZoom = ({ imageUrl, altText, children }) => {
   const [zoom, setZoom] = React.useState({ active: false, x: 50, y: 50 });

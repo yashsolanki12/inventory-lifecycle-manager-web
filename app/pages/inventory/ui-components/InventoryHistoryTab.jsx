@@ -7,15 +7,14 @@ import TablePagination from "../../../components/TablePagination";
 import ErrorCard from "../../../components/error-card";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { formatDate, useCurrentShopDomain } from "../../../utils/helper";
+import { getMovements } from "../../../api/movements";
+import IconButton from "@mui/material/IconButton";
 import {
-  formatDate,
   INVENTORY_HISTORY_HEADER,
   MOVEMENT_CONFIG,
   PAGE_SIZE,
-  useCurrentShopDomain,
-} from "../../../utils/helper";
-import { getMovements } from "../../../api/movements";
-import IconButton from "@mui/material/IconButton";
+} from "../../../utils/config/constants";
 
 const formatReference = (ref) => {
   if (!ref) return "—";
@@ -30,7 +29,10 @@ const InventoryHistoryTab = ({ product }) => {
   const [page, setPage] = React.useState(1);
 
   React.useEffect(() => {
-    if (scrollRef.current && scrollRef.current.scrollHeight > scrollRef.current.clientHeight) {
+    if (
+      scrollRef.current &&
+      scrollRef.current.scrollHeight > scrollRef.current.clientHeight
+    ) {
       scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [page]);

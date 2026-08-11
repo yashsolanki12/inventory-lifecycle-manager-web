@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
-import { DASHBOARD_CARDS, PLAN_COLORS } from "../../../utils/helper";
+import { DASHBOARD_CARDS, PLAN_COLORS } from "../../../utils/config/constants";
 
 const StatsCards = ({ dashboardData, plan }) => {
   const data = dashboardData?.data;
@@ -34,11 +34,13 @@ const StatsCards = ({ dashboardData, plan }) => {
             boxShadow: "0 8px 24px rgba(0,0,0,.04)",
           }}
         >
-          <CardContent sx={{ p: { xs: "16px !important", sm: "22px !important" } }}>
+          <CardContent
+            sx={{ p: { xs: "16px !important", sm: "22px !important" } }}
+          >
             {(() => {
               const val = data ? String(card.getValue(data)) : "--";
               // const len = val.length;
-              const valueFontSize = 22
+              const valueFontSize = 22;
               const labelFontSize = 14;
               return (
                 <>

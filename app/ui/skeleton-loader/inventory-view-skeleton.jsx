@@ -4,7 +4,7 @@ import Skeleton from "@mui/material/Skeleton";
 import {
   INVENTORY_VIEW_TABS_LABEL,
   INVENTORY_VIEW_TABS_STATS_CARD,
-} from "../../utils/helper";
+} from "../../utils/config/constants";
 
 const InventoryViewSkeleton = () => {
   return (
@@ -324,10 +324,16 @@ const InventoryViewSkeleton = () => {
                   px: { xs: 1.5, sm: 2.5 },
                   py: 2,
                   borderRight: {
-                    sm: i === INVENTORY_VIEW_TABS_STATS_CARD.length - 1 ? "none" : "1px solid #e5e7eb",
+                    sm:
+                      i === INVENTORY_VIEW_TABS_STATS_CARD.length - 1
+                        ? "none"
+                        : "1px solid #e5e7eb",
                   },
                   borderBottom: {
-                    xs: i === INVENTORY_VIEW_TABS_STATS_CARD.length - 1 ? "none" : "1px solid #e5e7eb",
+                    xs:
+                      i === INVENTORY_VIEW_TABS_STATS_CARD.length - 1
+                        ? "none"
+                        : "1px solid #e5e7eb",
                     sm: "none",
                   },
                   display: "flex",
@@ -360,7 +366,12 @@ const InventoryViewSkeleton = () => {
                   p: { xs: "16px", sm: "24px" },
                 }}
               >
-                <Skeleton variant="text" width="35%" height={20} sx={{ mb: 2.5 }} />
+                <Skeleton
+                  variant="text"
+                  width="35%"
+                  height={20}
+                  sx={{ mb: 2.5 }}
+                />
                 <Skeleton
                   variant="rounded"
                   width="100%"
