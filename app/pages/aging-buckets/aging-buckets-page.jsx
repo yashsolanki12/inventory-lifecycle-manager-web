@@ -200,7 +200,7 @@ const AgingBucketsPage = () => {
                 pb: 1,
                 mb: 1,
                 borderBottom: "2px solid #e5e7eb",
-                gap: 4,
+                gap: 13,
               }}
             >
               <Typography

@@ -28,7 +28,10 @@ const SalesHistoryTab = ({ product }) => {
   const [page, setPage] = React.useState(1);
 
   React.useEffect(() => {
-    if (scrollRef.current) {
+    if (
+      scrollRef.current &&
+      scrollRef.current.scrollHeight > scrollRef.current.clientHeight
+    ) {
       scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [page]);
@@ -86,12 +89,12 @@ const SalesHistoryTab = ({ product }) => {
   }
 
   return (
-    <Box sx={{ p: { xs: 1.5, sm: 3 } }}>
+    <Box sx={{ p: { xs: 1.5, sm: 2 } }}>
       <Box
         sx={{
           display: "flex",
           gap: { xs: 1.5, sm: 3 },
-          mb: 3,
+          mb: 1.8,
           flexWrap: "wrap",
         }}
       >
@@ -144,7 +147,7 @@ const SalesHistoryTab = ({ product }) => {
       </Box>
 
       {page > 1 && (
-        <Box sx={{ display: "flex", justifyContent: "end",mb: 0.5 }}>
+        <Box sx={{ display: "flex", justifyContent: "end", mb: 0.5 }}>
           <IconButton
             size="small"
             onClick={() => setPage(1)}
