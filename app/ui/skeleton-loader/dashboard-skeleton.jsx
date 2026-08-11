@@ -3,8 +3,17 @@ import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import { DASHBOARD_CARDS } from "../../utils/config/constants";
 
-const DashboardSkeleton = () => {
+const DashboardSkeleton = ({ dashboardData }) => {
+  const data = dashboardData?.data;
+  const visibleCards = data
+    ? DASHBOARD_CARDS.filter((card) => {
+        const val = card.getValue(data);
+        return val !== undefined && val !== null;
+      })
+    : DASHBOARD_CARDS;
+
   return (
     <Box
       sx={{
@@ -37,7 +46,7 @@ const DashboardSkeleton = () => {
         />
       </Box>
 
-      {/* Stats Cards - Row 1 */}
+      {/* Stats Cards */}
       <Box
         sx={{
           display: "grid",
@@ -45,24 +54,27 @@ const DashboardSkeleton = () => {
             xs: "1fr",
             sm: "repeat(2, 1fr)",
             md: "repeat(4, 1fr)",
+            lg: "repeat(4, 1fr)",
           },
           gap: 2,
-          mb: 2,
+          mb: 3,
         }}
       >
-        {[1, 2, 3, 4].map((i) => (
+        {visibleCards.map((card, idx) => (
           <Card
-            key={i}
+            key={card.key}
             sx={{
               borderRadius: "14px",
               border: "1px solid #ececec",
               boxShadow: "0 8px 24px rgba(0,0,0,.04)",
             }}
           >
-            <CardContent sx={{ p: "22px !important" }}>
+            <CardContent
+              sx={{ p: { xs: "16px !important", sm: "22px !important" } }}
+            >
               <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <Skeleton variant="text" width="40%" height={16} />
-                {i === 1 && (
+                {idx === 0 && (
                   <Skeleton
                     variant="rounded"
                     width={90}
@@ -77,7 +89,7 @@ const DashboardSkeleton = () => {
                 height={28}
                 sx={{ mt: 1.5 }}
               />
-              {i === 1 && (
+              {idx === 0 && (
                 <Skeleton
                   variant="text"
                   width="35%"
@@ -85,43 +97,6 @@ const DashboardSkeleton = () => {
                   sx={{ mt: 0.5 }}
                 />
               )}
-            </CardContent>
-          </Card>
-        ))}
-      </Box>
-
-      {/* Stats Cards - Row 2 */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: {
-            xs: "1fr",
-            sm: "repeat(2, 1fr)",
-            md: "repeat(4, 1fr)",
-          },
-          gap: 2,
-          mb: 3,
-        }}
-      >
-        {[1, 2, 3, 4].map((i) => (
-          <Card
-            key={i}
-            sx={{
-              borderRadius: "14px",
-              border: "1px solid #ececec",
-              boxShadow: "0 8px 24px rgba(0,0,0,.04)",
-            }}
-          >
-            <CardContent
-              sx={{ p: { xs: "16px !important", sm: "22px !important" } }}
-            >
-              <Skeleton variant="text" width="60%" height={16} />
-              <Skeleton
-                variant="text"
-                width="45%"
-                height={28}
-                sx={{ mt: 1.5 }}
-              />
             </CardContent>
           </Card>
         ))}

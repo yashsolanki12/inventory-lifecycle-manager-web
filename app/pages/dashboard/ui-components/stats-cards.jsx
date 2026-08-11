@@ -25,7 +25,11 @@ const StatsCards = ({ dashboardData, plan }) => {
         mb: 3,
       }}
     >
-      {DASHBOARD_CARDS.map((card) => (
+      {DASHBOARD_CARDS.map((card) => {
+        const raw = data ? card.getValue(data) : undefined;
+        if (raw === undefined || raw === null) return null;
+        const val = String(raw);
+        return (
         <Card
           key={card.key}
           sx={{
@@ -38,7 +42,6 @@ const StatsCards = ({ dashboardData, plan }) => {
             sx={{ p: { xs: "16px !important", sm: "22px !important" } }}
           >
             {(() => {
-              const val = data ? String(card.getValue(data)) : "--";
               // const len = val.length;
               const valueFontSize = 22;
               const labelFontSize = 14;
@@ -103,7 +106,8 @@ const StatsCards = ({ dashboardData, plan }) => {
             })()}
           </CardContent>
         </Card>
-      ))}
+        );
+      })}
     </Box>
   );
 };

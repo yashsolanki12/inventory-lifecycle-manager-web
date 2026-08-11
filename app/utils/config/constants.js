@@ -463,13 +463,13 @@ export const DASHBOARD_CARDS = [
     key: "mild",
     label: "Mild Stock",
     color: "#84CC16",
-    getValue: (d) => d.buckets?.mild ?? 0,
+    getValue: (d) => d.buckets?.mild,
   },
   {
     key: "aging",
     label: "Aging Stock",
     color: "#f97316",
-    getValue: (d) => d.buckets?.aging ?? 0,
+    getValue: (d) => d.buckets?.aging,
   },
   {
     key: "dead",

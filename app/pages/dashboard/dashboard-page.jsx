@@ -133,7 +133,7 @@ const DashboardPage = () => {
   } else if (isSyncing && !hasDashboardData) {
     content = <SyncProductSkeleton />;
   } else if (isResyncing) {
-    content = <DashboardSkeleton />;
+    content = <DashboardSkeleton dashboardData={dashboardData} />;
   } else if (hasDashboardData) {
     content = (
       <Box
