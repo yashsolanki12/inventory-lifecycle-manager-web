@@ -5,19 +5,18 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { formatPrice } from "../../../utils/helper";
-import { COLORS } from "../../../utils/config/constants";
+import { BUCKET_COLOR_MAP, COLORS } from "../../../utils/config/constants";
 
 const InventoryValueChart = ({ dashboardData, agingData }) => {
   const inventoryByAge = dashboardData?.data?.inventoryValueByAge ?? [];
   const currency = dashboardData?.data?.currency;
   const totalValue = dashboardData?.data?.totalInventoryValue ?? "0";
-
-  const chartData = inventoryByAge.map((item, i) => ({
+  const chartData = inventoryByAge.map((item) => ({
     name: item.label,
     value: item.value,
     valueFormatted: item.valueFormatted,
     percentage: item.percentage,
-    color: COLORS[i],
+    color: BUCKET_COLOR_MAP[item.bucket] ?? COLORS[4],
   }));
 
   const CustomTooltip = ({ active, payload }) => {

@@ -596,3 +596,10 @@ export const INVENTORY_VIEW_TABS_STATS_CARD = [
 export const ITEM_HEIGHT = 48;
 export const ITEM_PADDING_TOP = 8;
 export const PAPER_ID = "async-multiselect-tags-paper";
+
+export const BUCKET_COLOR_MAP = {
+  fresh: COLORS[0],
+  mild: COLORS[1],
+  aging: COLORS[2],
+  dead: COLORS[3],
+};

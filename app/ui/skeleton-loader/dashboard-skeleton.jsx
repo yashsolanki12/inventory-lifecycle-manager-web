@@ -13,7 +13,7 @@ const DashboardSkeleton = ({ dashboardData }) => {
         return val !== undefined && val !== null;
       })
     : DASHBOARD_CARDS;
-
+  const inventoryValueByAge = data?.inventoryValueByAge;
   return (
     <Box
       sx={{
@@ -167,7 +167,7 @@ const DashboardSkeleton = ({ dashboardData }) => {
               </Box>
             </Box>
             <Box sx={{ mt: 2 }}>
-              {[1, 2, 3, 4].map((i) => (
+              {inventoryValueByAge?.map((i) => (
                 <Box
                   key={i}
                   sx={{
