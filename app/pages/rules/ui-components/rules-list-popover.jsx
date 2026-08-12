@@ -87,7 +87,7 @@ const RuleDetailsPopover = ({ item }) => {
                     : "none",
               }}
             >
-              <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.3 }}>
+              <Typography sx={{ fontSize: 13, color: "#9ca3af", mb: 0.3 }}>
                 Product Type
               </Typography>
               <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
@@ -103,7 +103,7 @@ const RuleDetailsPopover = ({ item }) => {
                 borderBottom: tags.length > 0 ? "1px solid #b2b7c0" : "none",
               }}
             >
-              <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.3 }}>
+              <Typography sx={{ fontSize: 13, color: "#9ca3af", mb: 0.3 }}>
                 Vendor
               </Typography>
               <Typography sx={{ fontSize: 13, fontWeight: 500 }}>
@@ -113,7 +113,7 @@ const RuleDetailsPopover = ({ item }) => {
           )}
           {excludedTags.length > 0 && (
             <Box sx={{ px: 2, py: 1.5 }}>
-              <Typography sx={{ fontSize: 12, color: "#9ca3af", mb: 0.5 }}>
+              <Typography sx={{ fontSize: 13, color: "#9ca3af", mb: 0.5 }}>
                 Excluded Tags
               </Typography>
               <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>

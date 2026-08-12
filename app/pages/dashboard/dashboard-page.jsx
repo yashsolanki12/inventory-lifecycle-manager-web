@@ -138,15 +138,19 @@ const DashboardPage = () => {
     content = (
       <Box
         sx={{
-          width: "100%",
+          width: "95%",
           maxWidth: 1450,
           mx: "auto",
+          my: 0,
           px: { xs: 2, sm: 3 },
           py: 3,
           mb: 5,
           boxSizing: "border-box",
           background: "#f5f7fb",
           borderRadius: "12px",
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
         }}
       >
         <DashboardHeader onSync={() => handleSync(true)} />

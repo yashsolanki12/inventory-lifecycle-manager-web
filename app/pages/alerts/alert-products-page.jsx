@@ -189,14 +189,14 @@ const AlertProductsPage = () => {
             borderBottom: "1px solid #e5e7eb",
           }}
         >
-          <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280" }}>
+          <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#6b7280" }}>
             Product
           </Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280" }}>
-            Action
+          <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#6b7280" }}>
+            Action Taken
           </Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 600, color: "#6b7280" }}>
-            Preview
+          <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#6b7280" }}>
+            Actions
           </Typography>
         </Box>
 
@@ -231,19 +231,34 @@ const AlertProductsPage = () => {
                   "&:last-child": { borderBottom: "none" },
                 }}
               >
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 500,
-                    color: "#0f1111",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    pr: 2,
+                <Tooltip
+                  title={item.title}
+                  arrow
+                  placement="top-start"
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        lineHeight: 2,
+                        fontSize: "12px",
+                      },
+                    },
                   }}
                 >
-                  {item.title}
-                </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: "#0f1111",
+                      pr: 2,
+                      maxWidth: 200,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {item.title}
+                  </Typography>
+                </Tooltip>
                 <Chip
                   label={actionConfig.label}
                   size="small"
@@ -259,7 +274,18 @@ const AlertProductsPage = () => {
                     px: 0.4,
                   }}
                 />
-                <Tooltip title="Open Preview" arrow>
+                <Tooltip
+                  title="Open Preview"
+                  arrow
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        lineHeight: 2,
+                        fontSize: "12px",
+                      },
+                    },
+                  }}
+                >
                   <IconButton
                     size="small"
                     onClick={() => window.open(previewUrl, "_blank")}
@@ -276,14 +302,14 @@ const AlertProductsPage = () => {
           })}
         </Box>
 
-        {pagination && pagination.total > 0 && (
+        {pagination && pagination.total > 10 && (
           <TablePagination
             page={pagination.page}
             totalPages={pagination.totalPages}
             total={pagination.total}
             limit={pagination.limit}
             onPageChange={setPage}
-            paginationText={"alert details"}
+            paginationText={"products"}
           />
         )}
       </Box>

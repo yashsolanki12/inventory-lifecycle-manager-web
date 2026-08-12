@@ -15,6 +15,10 @@ import useInventorySubmit from "../../hooks/useInventorySubmit";
 import AgingBucketsSkeleton from "../../ui/skeleton-loader/aging-buckets-skeleton";
 import AddBucketDialog from "./add-bucket-dialog";
 import PlanGate from "../../ui/plan-gate";
+import MenuItem from "@mui/material/MenuItem";
+import ConfirmDialog from "../../ui/confirmation-dialog";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 import { useCurrentShopDomain } from "../../utils/helper";
 import {
@@ -22,15 +26,11 @@ import {
   updateAgingBuckets,
   resetAgingBuckets,
 } from "../../api/aging-buckets";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import {
   AGING_OPTIONS,
   FRESH_OPTIONS,
   MILD_OPTIONS,
 } from "../../utils/config/constants";
-import MenuItem from "@mui/material/MenuItem";
-import ConfirmDialog from "../../ui/confirmation-dialog";
 import { getPlanFromBackend } from "../../api/plan";
 
 const AgingBucketsPage = () => {
@@ -58,7 +58,6 @@ const AgingBucketsPage = () => {
     { enabled: !!shopDomain },
   );
 
-  console.log("err", isAgingListError?.response);
   const { data: planData } = useInventoryData(
     ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
@@ -206,7 +205,7 @@ const AgingBucketsPage = () => {
             variant="h3"
             sx={{ fontWeight: 700, color: "#202223", fontSize: 24 }}
           >
-            Aging Bucket
+            Aging Buckets
           </Typography>
         </Box>
         {isAgingListError ? (

@@ -117,7 +117,7 @@ const RuleFormPage = () => {
         maxWidth: 1450,
         mx: "auto",
         px: { xs: 2, sm: 3 },
-        py: 3,
+        // py: 3,
         boxSizing: "border-box",
       }}
     >

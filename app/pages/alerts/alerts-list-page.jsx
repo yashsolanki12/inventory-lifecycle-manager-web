@@ -46,7 +46,6 @@ const AlertsListPage = () => {
     severity: "success",
   });
 
-
   const tableRef = React.useRef(null);
 
   const {
@@ -115,11 +114,16 @@ const AlertsListPage = () => {
   }
 
   return (
-      <Box
-        sx={{
+    <Box
+      sx={{
         width: "100%",
         maxWidth: 1450,
         mx: "auto",
+        px: { xs: 1, sm: 2 },
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
       }}
     >
       <Box
@@ -234,6 +238,12 @@ const AlertsListPage = () => {
               maxHeight: "calc(100vh - 282px)",
               overflowY: "auto",
               px: 2,
+              "&::-webkit-scrollbar": { width: 6 },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#d1d5db",
+                borderRadius: 3,
+              },
+              "&::-webkit-scrollbar-track": { backgroundColor: "#f9fafb" },
             }}
           >
             {alerts.map((alert) => {

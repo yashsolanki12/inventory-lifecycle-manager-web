@@ -153,11 +153,10 @@ const RuleMatchPage = () => {
         fetchFn={fetchMatchData}
         queryKey={["rule-match", selectedRuleIds]}
         columns={MATCH_COLUMNS}
-        sortOptions={[]}
-        defaultSort=""
         defaultLimit={10}
         paginationText="products"
         hideSearch={true}
+        maxHeight="calc(100vh - 450px)"
       />
 
       <Box

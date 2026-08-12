@@ -127,8 +127,8 @@ export const ARCHIVE_HISTORY_SORT_OPTIONS = [
   { value: "-productTitle", label: "Product Z-A" },
   { value: "-createdAt", label: "Newest First" },
   { value: "createdAt", label: "Oldest First" },
-  { value: "ruleName", label: "Reason A-Z" },
-  { value: "-ruleName", label: "Reason Z-A" },
+  { value: "reason", label: "Reason A-Z" },
+  { value: "-reason", label: "Reason Z-A" },
   { value: "actionTaken", label: "Action A-Z" },
   { value: "-actionTaken", label: "Action Z-A" },
 ];
@@ -172,6 +172,21 @@ export const ALERT_ACTION_CONFIG = {
     color: "#6b7280",
     bg: "#f3f4f6",
     label: "Not Tracked",
+  },
+  inventory_age: {
+    color: "#d97706",
+    bg: "#fffbeb",
+    label: "Aging",
+  },
+  dead_stock: {
+    color: "#dc2626",
+    bg: "#fef2f2",
+    label: "Dead Stock",
+  },
+  low_stock: {
+    color: "#ea580c",
+    bg: "#fff7ed",
+    label: "Low Stock",
   },
 };
 
@@ -457,7 +472,7 @@ export const DASHBOARD_CARDS = [
     key: "healthy",
     label: "Fresh Stock",
     color: "#34d399",
-    getValue: (d) => d.buckets?.fresh ?? 0,
+    getValue: (d) => d.buckets?.fresh,
   },
   {
     key: "mild",
@@ -475,7 +490,7 @@ export const DASHBOARD_CARDS = [
     key: "dead",
     label: "Dead Stock",
     color: "#fb923c",
-    getValue: (d) => d.buckets?.dead ?? 0,
+    getValue: (d) => d.buckets?.dead,
   },
   {
     key: "value",
@@ -484,7 +499,6 @@ export const DASHBOARD_CARDS = [
     getValue: (d) => {
       if (d.totalInventoryValue)
         return formatPrice(d.currency, d.totalInventoryValue);
-      return 0;
     },
   },
   {
@@ -493,7 +507,7 @@ export const DASHBOARD_CARDS = [
     color: "#fb493c",
     getValue: (d) => {
       if (d.deadStockValue) return formatPrice(d.currency, d.deadStockValue);
-      return 0;
+      return;
     },
   },
 ];

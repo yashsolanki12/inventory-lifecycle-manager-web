@@ -21,10 +21,11 @@ const TablePagination = ({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        mt: 3,
-        pt: 2,
-        mb: 2,
-        px: 2,
+        // mt: 3,
+        // pt: 2,
+        // mb: 2,
+        // px: 2,
+        p: 2,
         borderTop: "1px solid #ececec",
       }}
     >

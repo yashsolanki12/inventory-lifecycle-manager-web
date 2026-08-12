@@ -1,4 +1,5 @@
 import React from "react";
+import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -6,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import useAsyncOptions from "../hooks/useAsyncOptions";
@@ -31,6 +33,10 @@ const AsyncMultiSelectTags = ({
       target: { value: newValue },
     } = event;
     onChange(typeof newValue === "string" ? newValue.split(",") : newValue);
+  };
+
+  const handleDelete = (tagToDelete) => {
+    onChange(value.filter((v) => v !== tagToDelete));
   };
 
   const handleOpen = () => {
@@ -136,6 +142,22 @@ const AsyncMultiSelectTags = ({
           );
         })}
       </Select>
+      {value.length > 0 && (
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mt: 1 }}>
+          {value.map((tag) => (
+            <Chip
+              key={tag}
+              label={tag}
+              size="small"
+              onDelete={() => handleDelete(tag)}
+              sx={{
+                borderRadius: "6px",
+                wordBreak: "break-word",
+              }}
+            />
+          ))}
+        </Box>
+      )}
       {helperText && (
         <Typography
           variant="caption"

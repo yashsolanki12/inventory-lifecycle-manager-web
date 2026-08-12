@@ -36,7 +36,7 @@ export const useInventoryData = (
 
   // Show success toast when data is successfully fetched (only if setSnackBar is provided)
   React.useEffect(() => {
-    if (isSuccess && setSnackBar && data?.message) {
+    if (isSuccess && setSnackBar && data?.message && showSuccessToast) {
       // Add small delay to avoid overlapping with mutation toasts
       setTimeout(() => {
         setSnackBar((prev) => {
@@ -50,7 +50,7 @@ export const useInventoryData = (
         });
       }, 500);
     }
-  }, [isSuccess, setSnackBar, data]);
+  }, [isSuccess, setSnackBar, data, showSuccessToast]);
 
   return { error, data, isLoading, isFetching, refetch };
 };

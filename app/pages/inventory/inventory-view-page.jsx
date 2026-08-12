@@ -103,7 +103,7 @@ const InventoryViewPage = () => {
           sx={{
             fontWeight: 600,
             color: "#0f1111",
-            fontSize: { xs: 20, sm: 24 },
+            fontSize: { xs: 18, sm: 24 },
           }}
         >
           {product.title}

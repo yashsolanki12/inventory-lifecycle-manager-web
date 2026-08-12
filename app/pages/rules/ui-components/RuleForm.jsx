@@ -68,26 +68,13 @@ const RuleForm = ({
       fontSize: 14,
     },
     "& .MuiInputLabel-root": {
-      fontSize: 14,
+      fontSize: 16,
     },
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit(handleFormSubmit)}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 3,
-        // maxWidth: 700,
-        mx: "auto",
-        backgroundColor: "white",
-        padding: "20px 30px",
-        borderRadius: 3,
-      }}
-    >
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+    <>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
         <IconButton
           onClick={() => navigate("/app/rules")}
           sx={{ color: "#202223" }}
@@ -98,254 +85,285 @@ const RuleForm = ({
           {isEdit ? "Edit Rule" : "Create Rule"}
         </Typography>
       </Box>
-
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Controller
-          name="rule_name"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Rule Name"
-              error={!!errors.rule_name}
-              helperText={errors.rule_name?.message}
-              fullWidth
-              sx={formFieldSx}
-            />
-          )}
-        />
-
-        <Controller
-          name="rule_condition"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Rule Condition"
-              error={!!errors.rule_condition}
-              helperText={errors.rule_condition?.message}
-              fullWidth
-              sx={formFieldSx}
-            />
-          )}
-        />
-      </Box>
-
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Controller
-          name="daysWithoutSales"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Days Without Sales"
-              type="number"
-              error={!!errors.daysWithoutSales}
-              helperText={errors.daysWithoutSales?.message}
-              fullWidth
-              sx={formFieldSx}
-              onChange={(e) => field.onChange(Number(e.target.value))}
-            />
-          )}
-        />
-
-        <Controller
-          name="daysWithoutSalesOperator"
-          control={control}
-          render={({ field }) => (
-            <FormControl
-              fullWidth
-              error={!!errors.daysWithoutSalesOperator}
-              sx={formFieldSx}
-            >
-              <InputLabel>Operator</InputLabel>
-              <Select {...field} label="Operator">
-                {OPERATOR_OPTIONS.map((opt) => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          )}
-        />
-      </Box>
-
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Controller
-          name="productAgeDays"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Product Age (Days)"
-              type="number"
-              error={!!errors.productAgeDays}
-              helperText={errors.productAgeDays?.message}
-              fullWidth
-              sx={formFieldSx}
-              onChange={(e) => field.onChange(Number(e.target.value))}
-            />
-          )}
-        />
-
-        <Controller
-          name="stockThreshold"
-          control={control}
-          render={({ field }) => (
-            <TextField
-              {...field}
-              label="Stock Threshold"
-              type="number"
-              error={!!errors.stockThreshold}
-              helperText={errors.stockThreshold?.message}
-              fullWidth
-              sx={formFieldSx}
-              onChange={(e) => field.onChange(Number(e.target.value))}
-            />
-          )}
-        />
-      </Box>
-
-      <Box sx={{ display: "flex", gap: 2, "& > *": { flex: 1 } }}>
-        <Controller
-          name="productType"
-          control={control}
-          render={({ field }) => (
-            <AsyncAutocomplete
-              label="Product Type"
-              value={field.value}
-              onChange={field.onChange}
-              fetchFn={getProductTypes}
-              error={!!errors.productType}
-              helperText={errors.productType?.message}
-            />
-          )}
-        />
-        <Controller
-          name="vendor"
-          control={control}
-          render={({ field }) => (
-            <AsyncAutocomplete
-              label="Vendor"
-              value={field.value}
-              onChange={field.onChange}
-              fetchFn={getProductVendors}
-              error={!!errors.vendor}
-              helperText={errors.vendor?.message}
-            />
-          )}
-        />
-      </Box>
-
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <Controller
-          name="excludedTags"
-          control={control}
-          render={({ field }) => (
-            <AsyncMultiSelectTags
-              label="Excluded Tags"
-              value={field.value}
-              onChange={field.onChange}
-              fetchFn={getProductTags}
-              error={!!errors.excludedTags}
-              helperText={errors.excludedTags?.message}
-            />
-          )}
-        />
-
-        <Controller
-          name="actionType"
-          control={control}
-          render={({ field }) => (
-            <FormControl fullWidth error={!!errors.actionType} sx={formFieldSx}>
-              <InputLabel shrink>Action Type</InputLabel>
-              <Select
+      <Box
+        component="form"
+        onSubmit={handleSubmit(handleFormSubmit)}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+          // maxWidth: 700,
+          mx: "auto",
+          backgroundColor: "white",
+          padding: "30px",
+          borderRadius: 3,
+        }}
+      >
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Controller
+            name="rule_name"
+            control={control}
+            render={({ field }) => (
+              <TextField
                 {...field}
-                label="Action Type"
-                displayEmpty
-                labelId="actionType-label"
+                label="Rule Name"
+                error={!!errors.rule_name}
+                helperText={errors.rule_name?.message}
+                fullWidth
+                sx={formFieldSx}
+              />
+            )}
+          />
+
+          <Controller
+            name="rule_condition"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Rule Condition"
+                error={!!errors.rule_condition}
+                helperText={errors.rule_condition?.message}
+                fullWidth
+                sx={formFieldSx}
+              />
+            )}
+          />
+        </Box>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Controller
+            name="daysWithoutSales"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Days Without Sales"
+                type="number"
+                error={!!errors.daysWithoutSales}
+                helperText={errors.daysWithoutSales?.message}
+                fullWidth
+                sx={formFieldSx}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              />
+            )}
+          />
+
+          <Controller
+            name="daysWithoutSalesOperator"
+            control={control}
+            render={({ field }) => (
+              <FormControl
+                fullWidth
+                error={!!errors.daysWithoutSalesOperator}
+                sx={formFieldSx}
               >
-                <MenuItem value="" disabled>
-                  <Typography sx={{ fontSize: 14, color: "#00040a" }}>
-                    All type
-                  </Typography>
-                </MenuItem>
-                {ACTION_TYPE_OPTIONS.map((opt) => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {opt.label}
+                <InputLabel>Operator</InputLabel>
+                <Select {...field} label="Operator">
+                  {OPERATOR_OPTIONS.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+        </Box>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Controller
+            name="productAgeDays"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Product Age (Days)"
+                type="number"
+                error={!!errors.productAgeDays}
+                helperText={errors.productAgeDays?.message}
+                fullWidth
+                sx={formFieldSx}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              />
+            )}
+          />
+
+          <Controller
+            name="stockThreshold"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Stock Threshold"
+                type="number"
+                error={!!errors.stockThreshold}
+                helperText={errors.stockThreshold?.message}
+                fullWidth
+                sx={formFieldSx}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+              />
+            )}
+          />
+        </Box>
+
+        <Box sx={{ display: "flex", gap: 2, "& > *": { flex: 1 } }}>
+          <Controller
+            name="productType"
+            control={control}
+            render={({ field }) => (
+              <AsyncAutocomplete
+                label="Product Type"
+                value={field.value}
+                onChange={field.onChange}
+                fetchFn={getProductTypes}
+                error={!!errors.productType}
+                helperText={errors.productType?.message}
+              />
+            )}
+          />
+          <Controller
+            name="vendor"
+            control={control}
+            render={({ field }) => (
+              <AsyncAutocomplete
+                label="Vendor"
+                value={field.value}
+                onChange={field.onChange}
+                fetchFn={getProductVendors}
+                error={!!errors.vendor}
+                helperText={errors.vendor?.message}
+              />
+            )}
+          />
+        </Box>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Controller
+            name="excludedTags"
+            control={control}
+            render={({ field }) => (
+              <AsyncMultiSelectTags
+                label="Excluded Tags"
+                value={field.value}
+                onChange={field.onChange}
+                fetchFn={getProductTags}
+                error={!!errors.excludedTags}
+                helperText={errors.excludedTags?.message}
+              />
+            )}
+          />
+
+          <Controller
+            name="actionType"
+            control={control}
+            render={({ field }) => (
+              <FormControl
+                fullWidth
+                error={!!errors.actionType}
+                sx={formFieldSx}
+              >
+                <InputLabel shrink>Action Type</InputLabel>
+                <Select
+                  {...field}
+                  label="Action Type"
+                  displayEmpty
+                  labelId="actionType-label"
+                >
+                  <MenuItem value="" disabled>
+                    <Typography sx={{ fontSize: 14, color: "#00040a" }}>
+                      All type
+                    </Typography>
                   </MenuItem>
-                ))}
-              </Select>
-              {errors.actionType && (
-                <FormHelperText>{errors.actionType.message}</FormHelperText>
-              )}
-            </FormControl>
+                  {ACTION_TYPE_OPTIONS.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.actionType && (
+                  <FormHelperText>{errors.actionType.message}</FormHelperText>
+                )}
+              </FormControl>
+            )}
+          />
+        </Box>
+
+        <Controller
+          name="stockZero"
+          control={control}
+          render={({ field }) => (
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={field.value}
+                  onChange={(e) => field.onChange(e.target.checked)}
+                  color="primary"
+                  sx={{ pointerEvents: "auto" }}
+                />
+              }
+              label="Only match products with zero stock"
+              sx={{
+                ml: 0,
+                pointerEvents: "none",
+                "& .MuiFormControlLabel-label": {
+                  cursor: "default",
+                },
+              }}
+
+              onClick={(e) => {
+                if (e.target.tagName !== "INPUT") {
+                  e.preventDefault();
+                }
+              }}
+            />
           )}
         />
-      </Box>
 
-      <Controller
-        name="stockZero"
-        control={control}
-        render={({ field }) => (
-          <FormControlLabel
-            control={
-              <Switch
-                checked={field.value}
-                onChange={(e) => field.onChange(e.target.checked)}
-                color="primary"
-              />
-            }
-            label="Only match products with zero stock"
-            sx={{ ml: 0 }}
-          />
-        )}
-      />
-
-      <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: 2 }}>
-        <Button
-          type="button"
-          variant="outlined"
-          onClick={() => navigate("/app/rules")}
-          disabled={isSubmitting}
-          sx={{
-            borderColor: "#cad0d6",
-            color: "#374151",
-            textTransform: "none",
-            borderRadius: "8px",
-            fontWeight: 600,
-            fontSize: "13px",
-            px: 2,
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={isSubmitting}
-          sx={{
-            bgcolor: "#202223",
-            color: "white",
-            textTransform: "none",
-            padding: "4px 20px",
-            "&.Mui-disabled": {
+        <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
+          <Button
+            type="button"
+            variant="outlined"
+            onClick={() => navigate("/app/rules")}
+            disabled={isSubmitting}
+            sx={{
+              borderColor: "#cad0d6",
+              color: "#374151",
+              textTransform: "none",
+              borderRadius: "8px",
+              fontWeight: 600,
+              fontSize: "13px",
+              px: 2,
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={isSubmitting}
+            sx={{
               bgcolor: "#202223",
               color: "white",
-            },
-          }}
-        >
-          {isSubmitting ? (
-            <CircularProgress size={20} color="inherit" />
-          ) : isEdit ? (
-            "Save"
-          ) : (
-            "Create"
-          )}
-        </Button>
+              textTransform: "none",
+              padding: "4px 20px",
+              "&.Mui-disabled": {
+                bgcolor: "#202223",
+                color: "white",
+              },
+            }}
+          >
+            {isSubmitting ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : isEdit ? (
+              "Save"
+            ) : (
+              "Create"
+            )}
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
