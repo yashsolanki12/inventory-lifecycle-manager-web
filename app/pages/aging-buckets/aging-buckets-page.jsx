@@ -308,6 +308,7 @@ const AgingBucketsPage = () => {
                       </Typography>
                       <FormControl size="small" sx={{ minWidth: 120 }}>
                         <Select
+                          disabled={planName}
                           value={buckets.freshMax}
                           onChange={(e) =>
                             setBuckets((prev) => ({
@@ -380,6 +381,7 @@ const AgingBucketsPage = () => {
                         </Typography>
                         <FormControl size="small" sx={{ minWidth: 120 }}>
                           <Select
+                            disabled={planName}
                             value={buckets.mildMax}
                             onChange={(e) =>
                               setBuckets((prev) => ({
@@ -398,13 +400,17 @@ const AgingBucketsPage = () => {
                             ))}
                           </Select>
                         </FormControl>
-                        <IconButton
-                          onClick={handleDeleteMild}
-                          sx={{ color: "#ef4444" }}
-                          title="Remove Mild bucket"
-                        >
-                          <DeleteIcon sx={{ fontSize: 18 }} />
-                        </IconButton>
+                        {planName ? (
+                          <></>
+                        ) : (
+                          <IconButton
+                            onClick={handleDeleteMild}
+                            sx={{ color: "#ef4444" }}
+                            title="Remove Mild bucket"
+                          >
+                            <DeleteIcon sx={{ fontSize: 18 }} />
+                          </IconButton>
+                        )}
                       </Box>
                     </Box>
                   )}
@@ -464,6 +470,7 @@ const AgingBucketsPage = () => {
                         </Typography>
                         <FormControl size="small" sx={{ minWidth: 120 }}>
                           <Select
+                            disabled={planName}
                             value={buckets.agingMax}
                             onChange={(e) =>
                               setBuckets((prev) => ({
@@ -486,13 +493,17 @@ const AgingBucketsPage = () => {
                             ))}
                           </Select>
                         </FormControl>
-                        <IconButton
-                          onClick={handleDeleteAging}
-                          sx={{ color: "#ef4444" }}
-                          title="Remove Aging bucket"
-                        >
-                          <DeleteIcon sx={{ fontSize: 18 }} />
-                        </IconButton>
+                        {planName ? (
+                          <></>
+                        ) : (
+                          <IconButton
+                            onClick={handleDeleteAging}
+                            sx={{ color: "#ef4444" }}
+                            title="Remove Aging bucket"
+                          >
+                            <DeleteIcon sx={{ fontSize: 18 }} />
+                          </IconButton>
+                        )}
                       </Box>
                     </Box>
                   )}
@@ -563,66 +574,66 @@ const AgingBucketsPage = () => {
                   </Box>
                 </Box>
 
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    mt: 4,
-                    pt: 3,
-                    borderTop: "1px solid #ececec",
-                  }}
-                >
-                  <Box sx={{ display: "flex", gap: 1 }}>
-                    {!hasMild && (
-                      <Button
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                        onClick={() => handleOpenAddDialog("mild")}
-                        sx={{
-                          borderColor: "#cad0d6",
-                          color: "#374151",
-                          textTransform: "none",
-                          borderRadius: "8px",
-                          fontWeight: 600,
-                          fontSize: "13px",
-                          px: 3,
-                          "&:hover": {
-                            borderColor: "#9ca3af",
-                            backgroundColor: "#f9fafb",
-                          },
-                        }}
-                      >
-                        Add Mild
-                      </Button>
-                    )}
-                    {hasMild && !hasAging && (
-                      <Button
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                        onClick={() => handleOpenAddDialog("aging")}
-                        sx={{
-                          borderColor: "#cad0d6",
-                          color: "#374151",
-                          textTransform: "none",
-                          borderRadius: "8px",
-                          fontWeight: 600,
-                          fontSize: "13px",
-                          px: 3,
-                          "&:hover": {
-                            borderColor: "#9ca3af",
-                            backgroundColor: "#f9fafb",
-                          },
-                        }}
-                      >
-                        Add Aging
-                      </Button>
-                    )}
-                  </Box>
+                {planName ? (
+                  <></>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mt: 4,
+                      pt: 3,
+                      borderTop: "1px solid #ececec",
+                    }}
+                  >
+                    <Box sx={{ display: "flex", gap: 1 }}>
+                      {!hasMild && (
+                        <Button
+                          variant="outlined"
+                          startIcon={<AddIcon />}
+                          onClick={() => handleOpenAddDialog("mild")}
+                          sx={{
+                            borderColor: "#cad0d6",
+                            color: "#374151",
+                            textTransform: "none",
+                            borderRadius: "8px",
+                            fontWeight: 600,
+                            fontSize: "13px",
+                            px: 3,
+                            "&:hover": {
+                              borderColor: "#9ca3af",
+                              backgroundColor: "#f9fafb",
+                            },
+                          }}
+                        >
+                          Add Mild
+                        </Button>
+                      )}
+                      {hasMild && !hasAging && (
+                        <Button
+                          variant="outlined"
+                          startIcon={<AddIcon />}
+                          onClick={() => handleOpenAddDialog("aging")}
+                          sx={{
+                            borderColor: "#cad0d6",
+                            color: "#374151",
+                            textTransform: "none",
+                            borderRadius: "8px",
+                            fontWeight: 600,
+                            fontSize: "13px",
+                            px: 3,
+                            "&:hover": {
+                              borderColor: "#9ca3af",
+                              backgroundColor: "#f9fafb",
+                            },
+                          }}
+                        >
+                          Add Aging
+                        </Button>
+                      )}
+                    </Box>
 
-                  <Box sx={{ display: "flex", gap: 1.5 }}>
-                    {planName ? (
-                      <></>
-                    ) : (
+                    <Box sx={{ display: "flex", gap: 1.5 }}>
                       <Button
                         variant="outlined"
                         onClick={handleOpenResetAgingBucket}
@@ -647,31 +658,31 @@ const AgingBucketsPage = () => {
                           "Reset to Default"
                         )}
                       </Button>
-                    )}
 
-                    <Button
-                      variant="contained"
-                      onClick={handleSave}
-                      disabled={updateMutation.isPending}
-                      sx={{
-                        backgroundColor: "#000000",
-                        color: "#ffffff",
-                        textTransform: "none",
-                        borderRadius: "8px",
-                        fontWeight: 600,
-                        fontSize: "13px",
-                        px: 3,
-                        "&:hover": { backgroundColor: "#1a1a1a" },
-                      }}
-                    >
-                      {updateMutation.isPending ? (
-                        <CircularProgress size={18} sx={{ color: "white" }} />
-                      ) : (
-                        "Save Configuration"
-                      )}
-                    </Button>
+                      <Button
+                        variant="contained"
+                        onClick={handleSave}
+                        disabled={updateMutation.isPending}
+                        sx={{
+                          backgroundColor: "#000000",
+                          color: "#ffffff",
+                          textTransform: "none",
+                          borderRadius: "8px",
+                          fontWeight: 600,
+                          fontSize: "13px",
+                          px: 3,
+                          "&:hover": { backgroundColor: "#1a1a1a" },
+                        }}
+                      >
+                        {updateMutation.isPending ? (
+                          <CircularProgress size={18} sx={{ color: "white" }} />
+                        ) : (
+                          "Save Configuration"
+                        )}
+                      </Button>
+                    </Box>
                   </Box>
-                </Box>
+                )}
               </CardContent>
             </Card>
 
