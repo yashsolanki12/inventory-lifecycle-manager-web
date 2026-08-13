@@ -15,7 +15,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CircularProgress from "@mui/material/CircularProgress";
 import AsyncAutocomplete from "../../../components/AsyncAutocomplete";
 import AsyncMultiSelectTags from "../../../components/AsyncMultiSelectTags";
-
+import Tooltip from "@mui/material/Tooltip";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,7 +33,6 @@ import {
   OPERATOR_OPTIONS,
 } from "../../../utils/config/constants";
 import { buildConditionPreview } from "../../../utils/helper";
-import Tooltip from "@mui/material/Tooltip";
 
 const RuleForm = ({
   initialData,

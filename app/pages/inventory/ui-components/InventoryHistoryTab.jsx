@@ -6,10 +6,9 @@ import useInventoryData from "../../../hooks/useInventoryData";
 import TablePagination from "../../../components/TablePagination";
 import ErrorCard from "../../../components/error-card";
 import CloseIcon from "@mui/icons-material/Close";
-
+import IconButton from "@mui/material/IconButton";
 import { formatDate, useCurrentShopDomain } from "../../../utils/helper";
 import { getMovements } from "../../../api/movements";
-import IconButton from "@mui/material/IconButton";
 import {
   INVENTORY_HISTORY_HEADER,
   MOVEMENT_CONFIG,

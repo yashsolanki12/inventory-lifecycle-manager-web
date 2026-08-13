@@ -20,7 +20,6 @@ import TablePagination from "../../components/TablePagination";
 import ConfirmDialog from "../../ui/confirmation-dialog";
 import EmptyAlertsCard from "./ui-components/empty-alerts-card";
 import AlertsSkeleton from "../../ui/skeleton-loader/alerts-skeleton";
-
 import { useNavigate } from "react-router";
 import { useCurrentShopDomain, formatDate } from "../../utils/helper";
 import { ALERT_TYPE_CONFIG } from "../../utils/config/constants";

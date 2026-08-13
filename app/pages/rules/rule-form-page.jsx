@@ -3,6 +3,9 @@ import Box from "@mui/material/Box";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import RuleFormSkeleton from "../../ui/skeleton-loader/rule-form-skeleton";
+import useInventoryData from "../../hooks/useInventoryData";
+import useInventorySubmit from "../../hooks/useInventorySubmit";
+import RuleForm from "./ui-components/RuleForm";
 import { useParams, useNavigate } from "react-router";
 import { useCurrentShopDomain } from "../../utils/helper";
 import {
@@ -10,9 +13,6 @@ import {
   createArchiveRule,
   updateArchiveRule,
 } from "../../api/archive-rules";
-import useInventoryData from "../../hooks/useInventoryData";
-import useInventorySubmit from "../../hooks/useInventorySubmit";
-import RuleForm from "./ui-components/RuleForm";
 
 const RuleFormPage = () => {
   const { id } = useParams();

@@ -9,7 +9,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import AlertDetailSkeleton from "../../ui/skeleton-loader/alert-detail-skeleton";
 import TablePagination from "../../components/TablePagination";
-
 import { useCurrentShopDomain, formatDate } from "../../utils/helper";
 import { useParams, useNavigate } from "react-router";
 import { ALERT_ACTION_CONFIG } from "../../utils/config/constants";

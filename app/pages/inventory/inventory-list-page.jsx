@@ -5,7 +5,9 @@ import Typography from "@mui/material/Typography";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ReusableList from "../../components/reusable-list";
 import ConfirmDialog from "../../ui/confirmation-dialog";
-
+import useInventorySubmit from "../../hooks/useInventorySubmit";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 import { generateProductCsv } from "../../api/generate-csv";
 import { useCurrentShopDomain } from "../../utils/helper";
 import { listLocalDbProducts } from "../../api/products";
@@ -17,9 +19,6 @@ import {
   INVENTORY_SORT_OPTIONS,
   INVENTORY_FILTER_OPTIONS,
 } from "../../utils/config/constants";
-import useInventorySubmit from "../../hooks/useInventorySubmit";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router";
 
 const InventoryListPage = () => {

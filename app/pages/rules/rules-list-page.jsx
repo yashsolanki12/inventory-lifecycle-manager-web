@@ -9,7 +9,6 @@ import ConfirmDialog from "../../ui/confirmation-dialog";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
 import useInventoryData from "../../hooks/useInventoryData";
 import ReusableList from "../../components/reusable-list";
-
 import { useCurrentShopDomain } from "../../utils/helper";
 import {
   deleteArchiveRule,

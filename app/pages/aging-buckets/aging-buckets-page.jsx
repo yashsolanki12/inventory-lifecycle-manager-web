@@ -19,7 +19,6 @@ import MenuItem from "@mui/material/MenuItem";
 import ConfirmDialog from "../../ui/confirmation-dialog";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
 import { useCurrentShopDomain } from "../../utils/helper";
 import {
   getAgingBuckets,

@@ -7,7 +7,6 @@ import TablePagination from "../../../components/TablePagination";
 import ErrorCard from "../../../components/error-card";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-
 import { formatDate, useCurrentShopDomain } from "../../../utils/helper";
 import { getMovements } from "../../../api/movements";
 import {

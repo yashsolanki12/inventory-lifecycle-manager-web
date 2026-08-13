@@ -10,6 +10,12 @@ import Tab from "@mui/material/Tab";
 import InventoryViewSkeleton from "../../ui/skeleton-loader/inventory-view-skeleton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useInventoryData from "../../hooks/useInventoryData";
+import ProductImageZoom from "../../components/product-image-zoom";
+import TabPanel from "./ui-components/TabPanel";
+import OverviewTab from "./ui-components/OverviewTab";
+import InventoryHistoryTab from "./ui-components/InventoryHistoryTab";
+import SalesHistoryTab from "./ui-components/SalesHistoryTab";
+import VariantsTab from "./ui-components/VariantsTab";
 import { getSingleProduct } from "../../api/products";
 import {
   formatDate,
@@ -20,13 +26,6 @@ import {
   INVENTORY_STATUS_CONFIG,
   STOCK_STATUS_CONFIG,
 } from "../../utils/config/constants";
-import ProductImageZoom from "../../components/product-image-zoom";
-import TabPanel from "./ui-components/TabPanel";
-import OverviewTab from "./ui-components/OverviewTab";
-import InventoryHistoryTab from "./ui-components/InventoryHistoryTab";
-import SalesHistoryTab from "./ui-components/SalesHistoryTab";
-import VariantsTab from "./ui-components/VariantsTab";
-import Button from "@mui/material/Button";
 
 const FALLBACK_IMAGE = "/fallback-image.jpg";
 

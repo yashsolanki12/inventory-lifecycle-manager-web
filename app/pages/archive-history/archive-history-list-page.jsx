@@ -9,7 +9,6 @@ import ConfirmDialog from "../../ui/confirmation-dialog";
 import ReusableList from "../../components/reusable-list";
 import Button from "@mui/material/Button";
 import useInventoryData from "../../hooks/useInventoryData";
-
 import {
   ARCHIVE_HISTORY_COLUMN,
   archiveHistoryRenderActions,

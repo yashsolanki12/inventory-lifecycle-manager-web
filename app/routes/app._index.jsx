@@ -1,10 +1,10 @@
 import React from "react";
 // import SuspenseFallback from "../components/suspense-fallback";
+import DashboardSkeleton from "../ui/skeleton-loader/dashboard-skeleton";
+import SyncProductSkeleton from "../ui/skeleton-loader/sync-product-skeleton";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 import { useLoaderData } from "react-router";
-import DashboardSkeleton from "../ui/skeleton-loader/dashboard-skeleton";
-import SyncProductSkeleton from "../ui/skeleton-loader/sync-product-skeleton";
 
 const DashboardPage = React.lazy(
   () => import("../pages/dashboard/dashboard-page"),

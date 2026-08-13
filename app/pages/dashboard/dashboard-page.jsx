@@ -14,7 +14,6 @@ import WelcomeCard from "./ui-components/welcome-card";
 import UpgradePrompt from "./ui-components/upgrade-prompt";
 import useInventoryData from "../../hooks/useInventoryData";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
-
 import { useCurrentShopDomain } from "../../utils/helper";
 import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
