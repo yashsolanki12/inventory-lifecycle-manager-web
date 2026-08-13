@@ -202,7 +202,7 @@ const AlertProductsPage = () => {
         <Box
           ref={tableRef}
           sx={{
-            maxHeight: "calc(100vh - 440px)",
+            maxHeight: "calc(100vh - 480px)",
             overflowY: "auto",
             "&::-webkit-scrollbar": { width: 6 },
             "&::-webkit-scrollbar-thumb": {
