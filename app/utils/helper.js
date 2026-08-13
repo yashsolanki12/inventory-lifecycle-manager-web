@@ -87,3 +87,24 @@ export const formatPrice = (currency, price) => {
     currency: currency || "USD",
   }).format(price);
 };
+
+export function buildConditionPreview(v) {
+  if (!v) return "";
+  const opMap = {
+    lt: "<",
+    lte: "<=",
+    gt: ">",
+    gte: ">=",
+  };
+  const clauses = [
+    `no sale ${opMap[v.daysWithoutSalesOperator] || "at least"} ${v.daysWithoutSales ?? 0} days`,
+  ];
+  if (v.productAgeDays > 0) clauses.push(`product age ≥ ${v.productAgeDays} days`);
+  if (v.stockZero) clauses.push("out of stock");
+  else if (v.stockThreshold > 0) clauses.push(`stock ≥ ${v.stockThreshold}`);
+  if (v.productType) clauses.push(`product type is "${v.productType}"`);
+  if (v.vendor) clauses.push(`vendor is "${v.vendor}"`);
+  if (Array.isArray(v.excludedTags) && v.excludedTags.length)
+    clauses.push(`exclude tags: ${v.excludedTags.join(", ")}`);
+  return `${v.rule_name || "Untitled rule"}: ${clauses.join(" AND ")} → action: ${v.actionType || "—"}`;
+}

@@ -32,6 +32,8 @@ import {
   ACTION_TYPE_OPTIONS,
   OPERATOR_OPTIONS,
 } from "../../../utils/config/constants";
+import { buildConditionPreview } from "../../../utils/helper";
+import Tooltip from "@mui/material/Tooltip";
 
 const RuleForm = ({
   initialData,
@@ -44,6 +46,8 @@ const RuleForm = ({
   const {
     control,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
     reset,
   } = useForm({
@@ -58,6 +62,13 @@ const RuleForm = ({
     }
   }, [initialData, reset]);
 
+  const watched = watch();
+  const preview = buildConditionPreview(watched);
+
+  React.useEffect(() => {
+    setValue("rule_condition", preview, { shouldValidate: true });
+  }, [preview, setValue]);
+
   const handleFormSubmit = async (data) => {
     await onSubmit(data);
   };
@@ -65,6 +76,9 @@ const RuleForm = ({
   const formFieldSx = {
     "& .MuiOutlinedInput-root": {
       borderRadius: "8px",
+      fontSize: 16,
+    },
+    "& .MuiOutlinedInput-input": {
       fontSize: 14,
     },
     "& .MuiInputLabel-root": {
@@ -118,16 +132,41 @@ const RuleForm = ({
           <Controller
             name="rule_condition"
             control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Rule Condition"
-                error={!!errors.rule_condition}
-                helperText={errors.rule_condition?.message}
-                fullWidth
-                sx={formFieldSx}
-              />
-            )}
+            render={({ field }) => {
+              return (
+                <Tooltip
+                  title={field.value}
+                  arrow
+                  placement="top"
+                  slotProps={{
+                    tooltip: {
+                      sx: {
+                        lineHeight: 1.5,
+                        fontSize: "11.5px",
+                      },
+                    },
+                  }}
+                >
+                  <TextField
+                    {...field}
+                    label="Rule Condition"
+                    disabled
+                    helperText="Auto-generated from the given fields"
+                    fullWidth
+                    title={field.value || ""}
+                    sx={{
+                      ...formFieldSx,
+                      "& .MuiOutlinedInput-input": {
+                        fontSize: 14,
+                        overflow: "hidden",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                      },
+                    }}
+                  />
+                </Tooltip>
+              );
+            }}
           />
         </Box>
 
