@@ -121,8 +121,12 @@ const RuleForm = ({
                 {...field}
                 label="Rule Name"
                 error={!!errors.rule_name}
-                helperText={errors.rule_name?.message}
+                helperText={
+                  errors.rule_name?.message ??
+                  `${(field.value ?? "").length}/100 characters`
+                }
                 fullWidth
+                slotProps={{ htmlInput: { maxLength: 100 } }}
                 sx={formFieldSx}
               />
             )}
@@ -149,8 +153,12 @@ const RuleForm = ({
                   <TextField
                     {...field}
                     label="Rule Condition"
-                    disabled
-                    helperText="Auto-generated from the given fields"
+                    error={!!errors.rule_condition}
+                    helperText={
+                      errors.rule_condition?.message ??
+                      "Auto-generated from the given fields"
+                    }
+                    slotProps={{ htmlInput: { readOnly: true } }}
                     fullWidth
                     title={field.value || ""}
                     sx={{
@@ -179,10 +187,20 @@ const RuleForm = ({
                 label="Days Without Sales"
                 type="number"
                 error={!!errors.daysWithoutSales}
-                helperText={errors.daysWithoutSales?.message}
+                helperText={
+                  errors.daysWithoutSales?.message ??
+                  `Allowed range: 0-999 (${field.value == null || field.value === "" ? 0 : String(field.value).length}/3 digits)`
+                }
                 fullWidth
                 sx={formFieldSx}
-                onChange={(e) => field.onChange(Number(e.target.value))}
+                slotProps={{ htmlInput: { maxLength: 3 } }}
+
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  if (raw === "") return field.onChange(0);
+                  if (!/^\d{1,3}$/.test(raw) || Number(raw) > 999) return;
+                  field.onChange(Number(raw));
+                }}
               />
             )}
           />
@@ -219,10 +237,19 @@ const RuleForm = ({
                 label="Product Age (Days)"
                 type="number"
                 error={!!errors.productAgeDays}
-                helperText={errors.productAgeDays?.message}
-                fullWidth
                 sx={formFieldSx}
-                onChange={(e) => field.onChange(Number(e.target.value))}
+                helperText={
+                  errors.productAgeDays?.message ??
+                  `Allowed range: 0-999 (${field.value == null || field.value === "" ? 0 : String(field.value).length}/3 digits)`
+                }
+                fullWidth
+                slotProps={{ htmlInput: { maxLength: 3 } }}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  if (raw === "") return field.onChange(0);
+                  if (!/^\d{1,3}$/.test(raw) || Number(raw) > 999) return;
+                  field.onChange(Number(raw));
+                }}
               />
             )}
           />
@@ -236,10 +263,19 @@ const RuleForm = ({
                 label="Stock Threshold"
                 type="number"
                 error={!!errors.stockThreshold}
-                helperText={errors.stockThreshold?.message}
-                fullWidth
                 sx={formFieldSx}
-                onChange={(e) => field.onChange(Number(e.target.value))}
+                helperText={
+                  errors.stockThreshold?.message ??
+                  `Allowed range: 0-999 (${field.value == null || field.value === "" ? 0 : String(field.value).length}/3 digits)`
+                }
+                fullWidth
+                slotProps={{ htmlInput: { maxLength: 3 } }}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  if (raw === "") return field.onChange(0);
+                  if (!/^\d{1,3}$/.test(raw) || Number(raw) > 999) return;
+                  field.onChange(Number(raw));
+                }}
               />
             )}
           />
