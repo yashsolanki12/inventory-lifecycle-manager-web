@@ -112,46 +112,52 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
           </Box>
         </Box>
         <Box sx={{ mt: 2 }}>
-          {chartData.map((item, i) => (
-            <Box
-              key={i}
-              sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
-            >
-              <Box
-                sx={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  backgroundColor: item.color,
-                  flexShrink: 0,
-                }}
-              />
-              <Typography
-                sx={{ fontSize: { xs: 12, sm: 14 }, color: "#374151" }}
-              >
-                {item.name}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: { xs: 11, sm: 13 },
-                  color: item.color,
-                  fontWeight: 600,
-                  ml: 0.5,
-                }}
-              >
-                {item.percentage}%
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: { xs: 12, sm: 14 },
-                  color: "#6b7280",
-                  ml: "auto",
-                }}
-              >
-                {formatPrice(currency, item.valueFormatted)}
-              </Typography>
-            </Box>
-          ))}
+          {chartData
+            .filter(
+              (ele) => Number(ele.percentage) > 0 && Number(ele.value) > 0,
+            )
+            .map((item, i) => {
+              return (
+                <Box
+                  key={i}
+                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
+                >
+                  <Box
+                    sx={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: "50%",
+                      backgroundColor: item.color,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    sx={{ fontSize: { xs: 12, sm: 14 }, color: "#374151" }}
+                  >
+                    {item.name}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: 11, sm: 13 },
+                      color: item.color,
+                      fontWeight: 600,
+                      ml: 0.5,
+                    }}
+                  >
+                    {item.percentage}%
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: 12, sm: 14 },
+                      color: "#6b7280",
+                      ml: "auto",
+                    }}
+                  >
+                    {formatPrice(currency, item.valueFormatted)}
+                  </Typography>
+                </Box>
+              );
+            })}
         </Box>
       </CardContent>
     </Card>
