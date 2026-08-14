@@ -7,7 +7,12 @@ export const useInventoryData = (
   setSnackBar,
   options = {},
 ) => {
-  const { enabled = true, staleTime, showSuccessToast = false } = options;
+  const {
+    enabled = true,
+    staleTime,
+    showSuccessToast = false,
+    retry = false,
+  } = options;
 
   // Call useQuery at the top level
   const { error, data, isLoading, isFetching, refetch, isSuccess } = useQuery({
@@ -16,7 +21,7 @@ export const useInventoryData = (
     enabled: enabled,
     staleTime: staleTime,
     refetchOnMount: true,
-    retry: false,
+    retry: retry,
   });
 
   const errorMessage = error?.message;
