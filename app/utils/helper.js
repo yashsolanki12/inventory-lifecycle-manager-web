@@ -13,6 +13,7 @@ export const APP_HANDLE =
 
 export const useCurrentShopDomain = () => {
   const app = useAppBridge();
+  if (typeof window === "undefined") return "";
   return app.config.shop;
 };
 
