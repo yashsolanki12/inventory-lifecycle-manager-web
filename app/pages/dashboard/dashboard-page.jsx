@@ -14,7 +14,6 @@ import WelcomeCard from "./ui-components/welcome-card";
 import UpgradePrompt from "./ui-components/upgrade-prompt";
 import useInventoryData from "../../hooks/useInventoryData";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
-
 import { useCurrentShopDomain } from "../../utils/helper";
 import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
@@ -133,20 +132,24 @@ const DashboardPage = () => {
   } else if (isSyncing && !hasDashboardData) {
     content = <SyncProductSkeleton />;
   } else if (isResyncing) {
-    content = <DashboardSkeleton />;
+    content = <DashboardSkeleton dashboardData={dashboardData} />;
   } else if (hasDashboardData) {
     content = (
       <Box
         sx={{
-          width: "100%",
+          width: "95%",
           maxWidth: 1450,
           mx: "auto",
+          my: 0,
           px: { xs: 2, sm: 3 },
           py: 3,
           mb: 5,
           boxSizing: "border-box",
           background: "#f5f7fb",
           borderRadius: "12px",
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
         }}
       >
         <DashboardHeader onSync={() => handleSync(true)} />

@@ -27,7 +27,18 @@ export const createRenderActions =
   ({ onView, onPreviewUrl }) =>
   (item) => (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
-      <Tooltip title="View Details" arrow>
+      <Tooltip
+        title="View Details"
+        arrow
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "12px",
+            },
+          },
+        }}
+      >
         <IconButton
           size="small"
           onClick={() => onView(item)}
@@ -42,7 +53,18 @@ export const createRenderActions =
           <VisibilityIcon sx={{ fontSize: 18 }} />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Open Preview" arrow>
+      <Tooltip
+        title="Open Preview"
+        arrow
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "12px",
+            },
+          },
+        }}
+      >
         <IconButton
           size="small"
           onClick={() => onPreviewUrl(item)}
@@ -68,25 +90,49 @@ export const INVENTORY_COLUMNS = [
     sortable: true,
     skeletonWidth: 180,
     render: (item) => (
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-        <Box
-          sx={{
-            width: 46,
-            height: 46,
-            borderRadius: "6px",
-            overflow: "hidden",
-            flexShrink: 0,
-            backgroundColor: "#f3f4f6",
-            backgroundImage: `url(${item.image?.url || "/fallback-image.jpg"})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
-        />
-        <Typography sx={{ fontSize: 15, fontWeight: 500, lineHeight: 1.3 }}>
-          {item.title ?? "Untitled"}
-        </Typography>
-      </Box>
+      <Tooltip
+        title={item.title}
+        arrow
+        placement="top"
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "13px",
+            },
+          },
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <Box
+            sx={{
+              width: 46,
+              height: 46,
+              borderRadius: "6px",
+              overflow: "hidden",
+              flexShrink: 0,
+              backgroundColor: "#f3f4f6",
+              backgroundImage: `url(${item.image?.url || "/fallback-image.jpg"})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+            }}
+          />
+          <Typography
+            sx={{
+              fontSize: 15,
+              fontWeight: 500,
+              lineHeight: 1.3,
+              maxWidth: 200,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {item.title ?? "Untitled"}
+          </Typography>
+        </Box>
+      </Tooltip>
     ),
   },
 
@@ -165,7 +211,32 @@ export const INVENTORY_COLUMNS = [
     render: (item) => {
       const sku = item.variants?.[0]?.sku ?? "—";
       return (
-        <Typography sx={{ fontSize: 14, color: "#6b7280" }}>{sku}</Typography>
+        <Tooltip
+          title={sku === "—" ? "" : sku}
+          arrow
+          placement="top-start"
+          slotProps={{
+            tooltip: {
+              sx: {
+                lineHeight: 2,
+                fontSize: "13px",
+              },
+            },
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 14,
+              color: "#6b7280",
+              maxWidth: 120,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {sku}
+          </Typography>
+        </Tooltip>
       );
     },
   },
@@ -313,7 +384,18 @@ export const ordersRenderActions =
   ({ onPreviewUrl }) =>
   (item) => (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
-      <Tooltip title="Open Preview" arrow>
+      <Tooltip
+        title="Open Preview"
+        arrow
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "12px",
+            },
+          },
+        }}
+      >
         <IconButton
           size="small"
           onClick={() => onPreviewUrl(item)}
@@ -362,7 +444,10 @@ export const ORDERS_COLUMNS = [
     label: "Total",
     skeletonWidth: 80,
     render: (item) => {
-      const currencyCodeAndPrice = formatPrice(item.currencyCode, item.totalPrice);
+      const currencyCodeAndPrice = formatPrice(
+        item.currencyCode,
+        item.totalPrice,
+      );
       const financialStatus = item.financialStatus;
 
       return (
@@ -554,7 +639,18 @@ export const rulesRenderActions =
   (item) => (
     <Box sx={{ display: "flex", flexDirection: "row", gap: 1 }}>
       {/* Edit Action */}
-      <Tooltip title="Edit" arrow>
+      <Tooltip
+        title="Edit"
+        arrow
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "12px",
+            },
+          },
+        }}
+      >
         <IconButton
           size="small"
           onClick={() => onEdit(item)}
@@ -571,7 +667,18 @@ export const rulesRenderActions =
       </Tooltip>
 
       {/* Delete Action */}
-      <Tooltip title="Delete" arrow>
+      <Tooltip
+        title="Delete"
+        arrow
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "12px",
+            },
+          },
+        }}
+      >
         <IconButton
           size="small"
           onClick={() => onDelete(item)}
@@ -729,9 +836,33 @@ export const MATCH_COLUMNS = [
     label: "Product",
     skeletonWidth: 120,
     render: (item) => (
-      <Typography sx={{ fontSize: 14, fontWeight: 500, color: "#374151" }}>
-        {item.title}
-      </Typography>
+      <Tooltip
+        title={item.title}
+        arrow
+        placement="top-start"
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "13px",
+            },
+          },
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: 500,
+            color: "#374151",
+            maxWidth: 200,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {item.title}
+        </Typography>
+      </Tooltip>
     ),
   },
   {
@@ -741,7 +872,32 @@ export const MATCH_COLUMNS = [
     render: (item) => {
       const sku = item.variants?.[0]?.sku || "—";
       return (
-        <Typography sx={{ fontSize: 14, color: "#6B7280" }}>{sku}</Typography>
+        <Tooltip
+          title={sku === "—" ? "" : sku}
+          arrow
+          placement="top-start"
+          slotProps={{
+            tooltip: {
+              sx: {
+                lineHeight: 2,
+                fontSize: "13px",
+              },
+            },
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 14,
+              color: "#6B7280",
+              maxWidth: 200,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {sku}
+          </Typography>
+        </Tooltip>
       );
     },
   },
@@ -750,9 +906,32 @@ export const MATCH_COLUMNS = [
     label: "Reason",
     skeletonWidth: 100,
     render: (item) => (
-      <Typography sx={{ fontSize: 14, color: "#6B7280", maxWidth: 250 }}>
-        {item.reason || "—"}
-      </Typography>
+      <Tooltip
+        title={item.reason}
+        arrow
+        placement="top-start"
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "13px",
+            },
+          },
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: 14,
+            color: "#6B7280",
+            maxWidth: 200,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {item.reason || "—"}
+        </Typography>
+      </Tooltip>
     ),
   },
   {
@@ -778,7 +957,7 @@ export const MATCH_COLUMNS = [
 
   {
     key: "actionType",
-    label: "Action",
+    label: "Action Taken",
     skeletonWidth: 80,
     render: (item) => {
       const statusKey = item.actionType.toUpperCase();
@@ -829,7 +1008,18 @@ export const archiveHistoryRenderActions =
   ({ onPreviewUrl }) =>
   (item) => (
     <Box>
-      <Tooltip title="Open Preview" arrow>
+      <Tooltip
+        title="Open Preview"
+        arrow
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "12px",
+            },
+          },
+        }}
+      >
         <IconButton
           size="small"
           onClick={() => onPreviewUrl(item)}
@@ -855,9 +1045,33 @@ export const ARCHIVE_HISTORY_COLUMN = [
     sortable: true,
     skeletonWidth: 120,
     render: (item) => (
-      <Typography sx={{ fontSize: 14, fontWeight: 500, color: "#374151" }}>
-        {item.productTitle ?? "—"}
-      </Typography>
+      <Tooltip
+        title={item.productTitle}
+        arrow
+        placement="top-start"
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "13px",
+            },
+          },
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: 500,
+            color: "#374151",
+            maxWidth: 200,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {item.productTitle ?? "—"}
+        </Typography>
+      </Tooltip>
     ),
   },
 
@@ -868,19 +1082,67 @@ export const ARCHIVE_HISTORY_COLUMN = [
     render: (item) => {
       const sku = item.sku ?? "—";
       return (
-        <Typography sx={{ fontSize: 14, color: "#6B7280" }}>{sku}</Typography>
+        <Tooltip
+          title={sku === "—" ? "" : sku}
+          arrow
+          placement="top-start"
+          slotProps={{
+            tooltip: {
+              sx: {
+                lineHeight: 2,
+                fontSize: "13px",
+              },
+            },
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 14,
+              color: "#6B7280",
+              maxWidth: 200,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {sku}
+          </Typography>
+        </Tooltip>
       );
     },
   },
   {
-    key: "ruleName",
+    key: "reason",
     label: "Reason",
     sortable: true,
     skeletonWidth: 100,
     render: (item) => (
-      <Typography sx={{ fontSize: 14, color: "#6B7280", maxWidth: 250 }}>
-        {item.ruleName ?? "—"}
-      </Typography>
+      <Tooltip
+        title={item.reason}
+        arrow
+        placement="top-start"
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "13px",
+            },
+          },
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: 14,
+            color: "#6B7280",
+            maxWidth: 200,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {item.reason ?? "—"}
+        </Typography>
+      </Tooltip>
     ),
   },
 
@@ -897,7 +1159,7 @@ export const ARCHIVE_HISTORY_COLUMN = [
 
   {
     key: "actionTaken",
-    label: "Action",
+    label: "Action Taken",
     sortable: true,
     skeletonWidth: 80,
     render: (item) => {

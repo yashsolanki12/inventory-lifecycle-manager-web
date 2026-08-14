@@ -8,8 +8,8 @@ export const ruleFormSchema = z.object({
 
   rule_condition: z
     .string()
-    .min(1, "Rule condition is required")
-    .max(255, "Rule condition must be 255 characters or less"),
+    .min(1, "Rule condition is required"),
+    // .max(255, "Rule condition must be 255 characters or less"),
 
   daysWithoutSales: z
     .number()

@@ -22,7 +22,7 @@ import {
   ReusableListSkeleton,
   PaginationSkeleton,
 } from "../ui/skeleton-loader/reusable-list-skeleton";
-import { MIN_SEARCH_CHARS } from "../utils/helper";
+import { MIN_SEARCH_CHARS } from "../utils/config/constants";
 
 const ReusableList = ({
   fetchFn,
@@ -41,6 +41,7 @@ const ReusableList = ({
   onToggleSelect,
   onToggleSelectAll,
   hideSearch = false,
+  maxHeight = "calc(100vh - 300px)",
 }) => {
   const allColumns = actions
     ? [
@@ -175,7 +176,7 @@ const ReusableList = ({
       sx={{
         flex: 1,
         minHeight: 0,
-        maxHeight: "calc(100vh - 300px)",
+        maxHeight: maxHeight,
         overflowY: "auto",
         borderRadius: "8px",
         "&::-webkit-scrollbar": { width: 6 },

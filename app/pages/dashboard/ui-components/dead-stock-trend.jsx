@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import useInventoryData from "../../../hooks/useInventoryData";
 import {
   ComposedChart,
   Line,
@@ -13,7 +14,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import useInventoryData from "../../../hooks/useInventoryData";
 import { formatPrice, useCurrentShopDomain } from "../../../utils/helper";
 import { getDeadStockTrend } from "../../../api/dead-stock-trend";
 

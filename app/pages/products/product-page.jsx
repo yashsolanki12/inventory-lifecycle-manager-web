@@ -3,7 +3,6 @@ import useInventoryData from "../../hooks/useInventoryData";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-
 import { syncProduct } from "../../api/products";
 import { useCurrentShopDomain } from "../../utils/helper";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";

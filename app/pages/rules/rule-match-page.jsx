@@ -10,12 +10,11 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import ReusableList from "../../components/reusable-list";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
-
+import ConfirmDialog from "../../ui/confirmation-dialog";
 import { useNavigate, useLocation } from "react-router";
 import { useCurrentShopDomain } from "../../utils/helper";
 import { ruleMatch, runRule } from "../../api/archive-rules";
 import { MATCH_COLUMNS } from "../../utils/config/columns";
-import ConfirmDialog from "../../ui/confirmation-dialog";
 
 const RuleMatchPage = () => {
   const navigate = useNavigate();
@@ -153,11 +152,10 @@ const RuleMatchPage = () => {
         fetchFn={fetchMatchData}
         queryKey={["rule-match", selectedRuleIds]}
         columns={MATCH_COLUMNS}
-        sortOptions={[]}
-        defaultSort=""
         defaultLimit={10}
         paginationText="products"
         hideSearch={true}
+        maxHeight="calc(100vh - 450px)"
       />
 
       <Box
