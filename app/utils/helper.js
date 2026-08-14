@@ -34,20 +34,36 @@ export const usePricingRedirect = () => {
 
   return React.useCallback(async () => {
     try {
-      // Prefer the shop from the route loader — reliable in every environment
-      // (app.config.shop is often empty on production / new embedded auth).
-      const shop = routeData?.shop || app?.config?.shop;
-      if (!shop) return;
+      const urlShop = new URLSearchParams(window.location.search).get("shop");
+      const appConfigShop = app?.config?.shop;
+      const routeShop = routeData?.shop;
+
+      console.log("[PricingRedirect] Debug:", {
+        routeShop,
+        appConfigShop,
+        urlShop,
+        appReady: !!app,
+      });
+
+      const shop = routeShop || appConfigShop || urlShop;
+
+      if (!shop) {
+        console.warn("[PricingRedirect] No shop domain available from any source");
+        return;
+      }
+
       const storeHandle = shop.split(".").at(0);
       const appHandle = await getAppHandle();
       const path = `/store/${storeHandle}/charges/${appHandle}/pricing_plans`;
+      console.log("[PricingRedirect] Navigating to:", `https://admin.shopify.com${path}`);
+
       if (app?.redirect?.dispatch) {
         app.redirect.dispatch("ADMIN_PATH", path);
       } else {
         window.top.location.href = `https://admin.shopify.com${path}`;
       }
-    } catch {
-      // SSR or App Bridge not ready
+    } catch (err) {
+      console.error("[PricingRedirect] Failed:", err);
     }
   }, [app, routeData]);
 };
