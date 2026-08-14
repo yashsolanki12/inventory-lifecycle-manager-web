@@ -14,7 +14,11 @@ export const APP_HANDLE =
 export const useCurrentShopDomain = () => {
   const app = useAppBridge();
   if (typeof window === "undefined") return "";
-  return app.config.shop;
+  return (
+    app.config.shop ||
+    new URLSearchParams(window.location.search).get("shop") ||
+    ""
+  );
 };
 
 // Open an external billing URL in the admin TOP frame (_top). Tries App Bridge
