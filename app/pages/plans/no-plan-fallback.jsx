@@ -71,6 +71,23 @@ function NoPlanFallback({
           >
             Select Plan
           </Button>
+          {billingUrl ? (
+            <Typography
+              variant="caption"
+              sx={{ display: "block", mt: 2, color: "#6d7175", wordBreak: "break-all" }}
+            >
+              billingUrl: {billingUrl}
+            </Typography>
+          ) : (
+            <Typography variant="caption" sx={{ display: "block", mt: 2, color: "#d72c0d" }}>
+              billingUrl is EMPTY
+            </Typography>
+          )}
+          {status && (
+            <Typography variant="caption" sx={{ display: "block", mt: 1, color: "#036906" }}>
+              {status}
+            </Typography>
+          )}
         </CardContent>
       </Card>
     </Box>
