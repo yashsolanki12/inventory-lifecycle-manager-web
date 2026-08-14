@@ -2,9 +2,9 @@ import axios from "axios";
 
 const getBaseURL = () => {
   const backendDomain =
-    import.meta.env.VITE_BACKEND_API_URL ??
     "https://inventory-lifecycle-manager-backend.onrender.com";
-  console.log("VITE:", import.meta.env.VITE_BACKEND_API_URL);
+  // import.meta.env.VITE_BACKEND_API_URL ?? "https://inventory-lifecycle-manager-backend.onrender.com";
+
   return `${backendDomain}/api/`;
 };
 
@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {  
+  (error) => {
     // console.error("❌ API Error:", {
     //   status: error.response?.status,
     //   statusText: error.response?.statusText,
