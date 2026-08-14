@@ -18,30 +18,56 @@ export const useCurrentShopDomain = () => {
 
 // Open an external billing URL in the admin TOP frame (_top). Tries App Bridge
 // redirect.dispatch first (the sanctioned _top navigation via Shopify's
-// postMessage — works in local dev), then window.top.location.href, then the
-// iframe itself as a last resort. No _blank / new-tab behavior.
+// postMessage), then window.top.location.href, then the iframe itself as a last
+// resort. No _blank / new-tab behavior. Returns a diagnostic object describing
+// exactly what happened so failures are visible on-screen.
 export const openBillingUrl = (url, app) => {
-  if (!url) return "empty";
+  const log = [];
+  if (!url) {
+    return { method: "empty", log: ["billingUrl is EMPTY"] };
+  }
+  log.push("url:" + url);
+
+  log.push("hasApp:" + Boolean(app));
+  log.push(
+    "hasAppRedirect:" +
+      Boolean(app && app.redirect && typeof app.redirect.dispatch === "function"),
+  );
+
   // 1) App Bridge dispatch to the admin path (top frame — correct context).
   try {
     if (app?.redirect?.dispatch) {
       const path = new URL(url).pathname; // /store/<store>/charges/<handle>/pricing_plans
       app.redirect.dispatch("ADMIN_PATH", path);
-      return "appbridge";
+      log.push("appbridge:dispatched");
+    } else {
+      log.push("appbridge:unavailable");
     }
-  } catch {
-    // fall through
+  } catch (e) {
+    log.push("appbridge:threw:" + e.message);
   }
-  // 2) Top-frame navigation (_top).
+  // 2) Top-frame navigation (_top) — does not throw when blocked, so we always
+  //    continue to the iframe fallback regardless of the outcome.
   try {
     window.top.location.href = url;
-    return "top";
-  } catch {
-    // fall through
+    log.push("top:set");
+  } catch (e) {
+    log.push("top:threw:" + e.message);
   }
   // 3) Last resort: navigate the iframe itself.
-  window.location.href = url;
-  return "iframe";
+  try {
+    window.location.href = url;
+    log.push("iframe:set");
+  } catch (e) {
+    log.push("iframe:threw:" + e.message);
+  }
+
+  const method = log.includes("appbridge:dispatched")
+    ? "appbridge"
+    : log.includes("top:set")
+      ? "top"
+      : "iframe";
+  return { method, log };
 };
 
 export const usePricingRedirect = () => {

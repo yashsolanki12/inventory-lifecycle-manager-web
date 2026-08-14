@@ -137,6 +137,10 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
             >
               <Button
                 variant="contained"
+                component="a"
+                href={billingUrl || "#"}
+                target="_top"
+                rel="noopener noreferrer"
                 onClick={handleChangePlan}
                 sx={{
                   backgroundColor: "#000000",
@@ -195,6 +199,10 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
 
             <Button
               variant="contained"
+              component="a"
+              href={billingUrl || "#"}
+              target="_top"
+              rel="noopener noreferrer"
               onClick={handleViewPlan}
               sx={{
                 backgroundColor: "#202223",

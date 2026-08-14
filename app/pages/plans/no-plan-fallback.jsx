@@ -1,3 +1,4 @@
+import React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -13,9 +14,11 @@ function NoPlanFallback({
   billingUrl,
 }) {
   const app = useAppBridge();
+  const [diag, setDiag] = React.useState(null);
 
   const handleSelectPlan = () => {
-    openBillingUrl(billingUrl, app);
+    const result = openBillingUrl(billingUrl, app);
+    setDiag(result);
   };
 
   return (
@@ -52,6 +55,10 @@ function NoPlanFallback({
           </Typography>
           <Button
             variant="contained"
+            component="a"
+            href={billingUrl || "#"}
+            target="_top"
+            rel="noopener noreferrer"
             onClick={handleSelectPlan}
             sx={{
               backgroundColor: "#202223",
@@ -65,6 +72,23 @@ function NoPlanFallback({
           >
             Select Plan
           </Button>
+          {diag && (
+            <Typography
+              variant="caption"
+              sx={{
+                display: "block",
+                mt: 2,
+                color: "#6d7175",
+                wordBreak: "break-all",
+                fontFamily: "monospace",
+                textAlign: "left",
+              }}
+            >
+              method: {diag.method}
+              <br />
+              {diag.log.join(" | ")}
+            </Typography>
+          )}
           {billingUrl ? (
             <Typography
               variant="caption"
