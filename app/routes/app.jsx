@@ -57,6 +57,16 @@ export const loader = async ({ request }) => {
   let activeSubscription = null;
   try {
     const { appSubscriptions } = await billing.check();
+    console.log(
+      "[App] billing.check result:",
+      JSON.stringify(
+        (appSubscriptions || []).map((s) => ({
+          name: s.name,
+          status: s.status,
+          id: s.id,
+        })),
+      ),
+    );
     if (appSubscriptions && appSubscriptions.length > 0) {
       activeSubscription = appSubscriptions.find(
         (sub) => sub.status.toUpperCase() === "ACTIVE",
@@ -66,6 +76,12 @@ export const loader = async ({ request }) => {
   } catch (err) {
     console.error("[App] Billing check failed:", err.message);
   }
+  console.log(
+    "[App] shop=",
+    session?.shop,
+    "| hasActivePlan=",
+    hasActivePlan,
+  );
 
   if (session && hasActivePlan && activeSubscription) {
     syncPlanToBackend(
@@ -80,7 +96,10 @@ export const loader = async ({ request }) => {
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
+    // eslint-disable-next-line no-undef
     shop: session?.shop || "",
+    // eslint-disable-next-line no-undef
+    appName: process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager",
     hasActivePlan,
   };
 };
