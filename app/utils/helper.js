@@ -20,8 +20,20 @@ export const usePricingRedirect = () => {
 
   return React.useCallback(() => {
     try {
-      const shop = app?.config?.shop;
-      if (!shop) return;
+      // App Bridge redirect.dispatch is the correct embedded navigation (it moves
+      // the admin top frame to the billing page). The shop is taken from the
+      // ?shop= URL param (always present in the admin iframe) because
+      // app.config.shop is often empty in production — which is why the button
+      // did nothing on Render. This matches the local-working behavior exactly.
+      const urlShop =
+        typeof window !== "undefined"
+          ? new URLSearchParams(window.location.search).get("shop")
+          : null;
+      const shop = urlShop || app?.config?.shop;
+      if (!shop) {
+        console.warn("[PricingRedirect] No shop resolved — aborting");
+        return;
+      }
       const storeHandle = shop.split(".").at(0);
       const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
       if (app?.redirect?.dispatch) {
@@ -29,8 +41,8 @@ export const usePricingRedirect = () => {
       } else {
         window.top.location.href = `https://admin.shopify.com${path}`;
       }
-    } catch {
-      // SSR or App Bridge not ready
+    } catch (err) {
+      console.error("[PricingRedirect] error:", err);
     }
   }, [app]);
 };
