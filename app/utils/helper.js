@@ -1,10 +1,22 @@
 import React from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useRouteLoaderData } from "react-router";
+import axiosInstance from "../api/axios-instance";
 import { COLOR_MAP, ITEM_HEIGHT, ITEM_PADDING_TOP, PAPER_ID } from "./config/constants";
 
-export const APP_HANDLE =
-  import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
+export const APP_HANDLE_FALLBACK = "inventory-lifecycle-manager";
+
+// App handle must match the production app, so fetch it from the backend
+// (which reads APP_NAME server-side) instead of a Vite-unexposed env var.
+let appNamePromise = null;
+const getAppHandle = async () => {
+  if (appNamePromise) return appNamePromise;
+  appNamePromise = axiosInstance
+    .get("/config")
+    .then((res) => res?.data?.data?.appName || APP_HANDLE_FALLBACK)
+    .catch(() => APP_HANDLE_FALLBACK);
+  return appNamePromise;
+};
 
 export const useCurrentShopDomain = () => {
   const routeData = useRouteLoaderData("routes/app");
@@ -13,13 +25,17 @@ export const useCurrentShopDomain = () => {
 
 export const usePricingRedirect = () => {
   const app = useAppBridge();
+  const routeData = useRouteLoaderData("routes/app");
 
-  return React.useCallback(() => {
+  return React.useCallback(async () => {
     try {
-      const shop = app?.config?.shop;
+      // Prefer the shop from the route loader — reliable in every environment
+      // (app.config.shop is often empty on production / new embedded auth).
+      const shop = routeData?.shop || app?.config?.shop;
       if (!shop) return;
       const storeHandle = shop.split(".").at(0);
-      const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
+      const appHandle = await getAppHandle();
+      const path = `/store/${storeHandle}/charges/${appHandle}/pricing_plans`;
       if (app?.redirect?.dispatch) {
         app.redirect.dispatch("ADMIN_PATH", path);
       } else {
@@ -28,7 +44,7 @@ export const usePricingRedirect = () => {
     } catch {
       // SSR or App Bridge not ready
     }
-  }, [app]);
+  }, [app, routeData]);
 };
 
 export const getColorHex = (colorName) => {
