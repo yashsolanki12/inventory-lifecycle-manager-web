@@ -1,22 +1,9 @@
 import React from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useRouteLoaderData } from "react-router";
-import axiosInstance from "../api/axios-instance";
 import { COLOR_MAP, ITEM_HEIGHT, ITEM_PADDING_TOP, PAPER_ID } from "./config/constants";
 
 export const APP_HANDLE_FALLBACK = "inventory-lifecycle-manager";
-
-// App handle must match the production app, so fetch it from the backend
-// (which reads APP_NAME server-side) instead of a Vite-unexposed env var.
-let appNamePromise = null;
-const getAppHandle = async () => {
-  if (appNamePromise) return appNamePromise;
-  appNamePromise = axiosInstance
-    .get("/config")
-    .then((res) => res?.data?.data?.appName || APP_HANDLE_FALLBACK)
-    .catch(() => APP_HANDLE_FALLBACK);
-  return appNamePromise;
-};
 
 export const useCurrentShopDomain = () => {
   const routeData = useRouteLoaderData("routes/app");
@@ -27,22 +14,40 @@ export const usePricingRedirect = () => {
   const app = useAppBridge();
   const routeData = useRouteLoaderData("routes/app");
 
-  return React.useCallback(async () => {
+  return React.useCallback(() => {
     try {
-      // Prefer the shop from the route loader — reliable in every environment
-      // (app.config.shop is often empty on production / new embedded auth).
+      // Prefer values from the route loader — reliable in every environment
+      // and avoids any async/network dependency (which silently fails on
+      // some deployments). app.config.* is used only as a fallback.
       const shop = routeData?.shop || app?.config?.shop;
-      if (!shop) return;
+      const appHandle = routeData?.appName || APP_HANDLE_FALLBACK;
+      console.log(
+        "[PricingRedirect] shop=",
+        shop,
+        "| routeShop=",
+        routeData?.shop,
+        "| appShop=",
+        app?.config?.shop,
+        "| appHandle=",
+        appHandle,
+        "| hasDispatch=",
+        !!app?.redirect?.dispatch,
+      );
+      if (!shop) {
+        console.warn("[PricingRedirect] No shop resolved — aborting redirect");
+        return;
+      }
       const storeHandle = shop.split(".").at(0);
-      const appHandle = await getAppHandle();
       const path = `/store/${storeHandle}/charges/${appHandle}/pricing_plans`;
+      console.log("[PricingRedirect] redirecting ->", `https://admin.shopify.com${path}`);
       if (app?.redirect?.dispatch) {
         app.redirect.dispatch("ADMIN_PATH", path);
       } else {
         window.top.location.href = `https://admin.shopify.com${path}`;
       }
-    } catch {
-      // SSR or App Bridge not ready
+      console.log("[PricingRedirect] redirect dispatched");
+    } catch (err) {
+      console.error("[PricingRedirect] error:", err);
     }
   }, [app, routeData]);
 };
