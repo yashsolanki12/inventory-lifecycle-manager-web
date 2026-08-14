@@ -16,10 +16,10 @@ export const useCurrentShopDomain = () => {
   return app.config.shop;
 };
 
-// Open an external billing URL in the admin TOP frame (_top). Prefers App Bridge
-// redirect.dispatch (the sanctioned top-frame navigation — this is what works in
-// local dev, and now uses the correct path). Falls back to a new tab (which at
-// least navigates), then window.top, then the iframe itself.
+// Open an external billing URL in the admin TOP frame (_top). Tries App Bridge
+// redirect.dispatch first (the sanctioned _top navigation via Shopify's
+// postMessage — works in local dev), then window.top.location.href, then the
+// iframe itself as a last resort. No _blank / new-tab behavior.
 export const openBillingUrl = (url, app) => {
   if (!url) return "empty";
   // 1) App Bridge dispatch to the admin path (top frame — correct context).
@@ -32,22 +32,14 @@ export const openBillingUrl = (url, app) => {
   } catch {
     // fall through
   }
-  // 2) New tab (this at least navigates — confirmed working, even if it lands in
-  // the iframe when popups are sandboxed).
-  try {
-    const popped = window.open(url, "_top", "noopener,noreferrer");
-    if (popped) return "newtab";
-  } catch {
-    // fall through
-  }
-  // 3) Top-frame navigation (may be silently blocked by sandbox).
+  // 2) Top-frame navigation (_top).
   try {
     window.top.location.href = url;
     return "top";
   } catch {
     // fall through
   }
-  // 4) Navigate the iframe itself.
+  // 3) Last resort: navigate the iframe itself.
   window.location.href = url;
   return "iframe";
 };
@@ -58,25 +50,16 @@ export const usePricingRedirect = () => {
 
   return React.useCallback(() => {
     try {
-      // Primary path: use the billing URL computed SERVER-SIDE in the app
-      // loader (it reads process.env.SHOPIFY_APP_NAME, which is available on the
-      // server but NOT in the browser bundle). Opening it with window.open(...,
-      // "_blank") always launches the billing page — no App Bridge, no React
-      // Router loader interception, no cross-origin top-navigation block.
+      // Prefer the billing URL computed SERVER-SIDE in the app loader (reads
+      // process.env.SHOPIFY_APP_NAME, available on the server but not the
+      // browser bundle). openBillingUrl navigates the admin TOP frame (_top).
       const billingUrl = routeData?.billingUrl;
       if (billingUrl) {
-        const popped = window.open(billingUrl, "_top");
-        // If the popup is blocked by the iframe sandbox, navigate the iframe
-        // itself to the billing page as a guaranteed fallback.
-        if (!popped) {
-          window.location.href = billingUrl;
-        }
+        openBillingUrl(billingUrl, app);
         return;
       }
 
-      // Fallback (e.g. billingUrl missing): App Bridge dispatch, deriving the
-      // shop from the ?shop= URL param since app.config.shop can be empty in
-      // production.
+      // Fallback (e.g. billingUrl missing): build from the shop and use _top nav.
       const urlShop =
         typeof window !== "undefined"
           ? new URLSearchParams(window.location.search).get("shop")
@@ -88,11 +71,7 @@ export const usePricingRedirect = () => {
       }
       const storeHandle = shop.split(".").at(0);
       const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
-      if (app?.redirect?.dispatch) {
-        app.redirect.dispatch("ADMIN_PATH", path);
-      } else {
-        window.top.location.href = `https://admin.shopify.com${path}`;
-      }
+      openBillingUrl(`https://admin.shopify.com${path}`, app);
     } catch (err) {
       console.error("[PricingRedirect] error:", err);
     }
