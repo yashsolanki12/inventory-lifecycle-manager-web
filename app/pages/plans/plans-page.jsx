@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useAppBridge } from "@shopify/app-bridge-react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -16,6 +17,7 @@ import { openBillingUrl } from "../../utils/helper";
 import { syncPlanToBackend, resetPlanOnBackend } from "../../api/plan";
 
 const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
+  const app = useAppBridge();
   const [snackbar, setSnackbar] = React.useState({
     open: false,
     message: "",
@@ -28,11 +30,11 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
   };
 
   const handleViewPlan = () => {
-    openBillingUrl(billingUrl);
+    openBillingUrl(billingUrl, app);
   };
 
   const handleChangePlan = () => {
-    openBillingUrl(billingUrl);
+    openBillingUrl(billingUrl, app);
   };
 
   const createSyncPlanToBackendMutation = useInventorySubmit(

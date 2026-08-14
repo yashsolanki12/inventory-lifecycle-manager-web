@@ -1,4 +1,3 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -14,14 +13,9 @@ function NoPlanFallback({
   billingUrl,
 }) {
   const app = useAppBridge();
-  const [status, setStatus] = React.useState("");
 
   const handleSelectPlan = () => {
-    // TEMP diagnostic
-    const method = openBillingUrl(billingUrl, app);
-    setStatus(
-      `method: ${method} | app.redirect: ${app?.redirect ? "yes" : "no"}`,
-    );
+    openBillingUrl(billingUrl, app);
   };
 
   return (
@@ -81,11 +75,6 @@ function NoPlanFallback({
           ) : (
             <Typography variant="caption" sx={{ display: "block", mt: 2, color: "#d72c0d" }}>
               billingUrl is EMPTY
-            </Typography>
-          )}
-          {status && (
-            <Typography variant="caption" sx={{ display: "block", mt: 1, color: "#036906" }}>
-              {status}
             </Typography>
           )}
         </CardContent>
