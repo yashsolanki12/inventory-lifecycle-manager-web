@@ -1,5 +1,6 @@
 import React from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
+import { useRouteLoaderData } from "react-router";
 import {
   COLOR_MAP,
   ITEM_HEIGHT,
@@ -17,14 +18,29 @@ export const useCurrentShopDomain = () => {
 
 export const usePricingRedirect = () => {
   const app = useAppBridge();
+  const routeData = useRouteLoaderData("routes/app");
 
   return React.useCallback(() => {
     try {
-      // App Bridge redirect.dispatch is the correct embedded navigation (it moves
-      // the admin top frame to the billing page). The shop is taken from the
-      // ?shop= URL param (always present in the admin iframe) because
-      // app.config.shop is often empty in production — which is why the button
-      // did nothing on Render. This matches the local-working behavior exactly.
+      // Primary path: use the billing URL computed SERVER-SIDE in the app
+      // loader (it reads process.env.SHOPIFY_APP_NAME, which is available on the
+      // server but NOT in the browser bundle). Opening it with window.open(...,
+      // "_blank") always launches the billing page — no App Bridge, no React
+      // Router loader interception, no cross-origin top-navigation block.
+      const billingUrl = routeData?.billingUrl;
+      if (billingUrl) {
+        const popped = window.open(billingUrl, "_top");
+        // If the popup is blocked by the iframe sandbox, navigate the iframe
+        // itself to the billing page as a guaranteed fallback.
+        if (!popped) {
+          window.location.href = billingUrl;
+        }
+        return;
+      }
+
+      // Fallback (e.g. billingUrl missing): App Bridge dispatch, deriving the
+      // shop from the ?shop= URL param since app.config.shop can be empty in
+      // production.
       const urlShop =
         typeof window !== "undefined"
           ? new URLSearchParams(window.location.search).get("shop")
@@ -44,7 +60,7 @@ export const usePricingRedirect = () => {
     } catch (err) {
       console.error("[PricingRedirect] error:", err);
     }
-  }, [app]);
+  }, [app, routeData]);
 };
 
 export const getColorHex = (colorName) => {
