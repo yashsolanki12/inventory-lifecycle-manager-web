@@ -6,21 +6,21 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PropTypes from "prop-types";
+import { useAppBridge } from "@shopify/app-bridge-react";
 import { openBillingUrl } from "../../utils/helper";
 
 function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
   billingUrl,
 }) {
+  const app = useAppBridge();
   const [status, setStatus] = React.useState("");
 
   const handleSelectPlan = () => {
     // TEMP diagnostic
-    const ok = openBillingUrl(billingUrl);
+    const method = openBillingUrl(billingUrl, app);
     setStatus(
-      ok
-        ? `opened: ${billingUrl}`
-        : `FAILED — billingUrl empty? (${JSON.stringify(billingUrl)})`,
+      `method: ${method} | app.redirect: ${app?.redirect ? "yes" : "no"}`,
     );
   };
 
@@ -71,23 +71,6 @@ function NoPlanFallback({
           >
             Select Plan
           </Button>
-          {billingUrl ? (
-            <Typography
-              variant="caption"
-              sx={{ display: "block", mt: 2, color: "#6d7175", wordBreak: "break-all" }}
-            >
-              billingUrl: {billingUrl}
-            </Typography>
-          ) : (
-            <Typography variant="caption" sx={{ display: "block", mt: 2, color: "#d72c0d" }}>
-              billingUrl is EMPTY
-            </Typography>
-          )}
-          {status && (
-            <Typography variant="caption" sx={{ display: "block", mt: 1, color: "#036906" }}>
-              {status}
-            </Typography>
-          )}
         </CardContent>
       </Card>
     </Box>
