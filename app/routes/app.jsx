@@ -100,7 +100,7 @@ export const loader = async ({ request }) => {
 };
 
 export default function App() {
-  const { apiKey, hasActivePlan, shop } = useLoaderData();
+  const { apiKey, hasActivePlan, shop, billingUrl } = useLoaderData();
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
 
@@ -143,7 +143,9 @@ export default function App() {
           {/* 💳  */}
         </s-app-nav>
         {(hasActivePlan || isPlansRoute) && <Outlet />}
-        {!hasActivePlan && !isPlansRoute && <NoPlanFallback />}
+        {!hasActivePlan && !isPlansRoute && (
+          <NoPlanFallback billingUrl={billingUrl} />
+        )}
       </AppProvider>
     </QueryClientProvider>
   );

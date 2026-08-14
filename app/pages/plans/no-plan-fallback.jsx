@@ -5,15 +5,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PropTypes from "prop-types";
-import { usePricingRedirect } from "../../utils/helper";
+import { openBillingUrl } from "../../utils/helper";
 
 function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
+  billingUrl,
 }) {
-  const redirectToPricing = usePricingRedirect();
-
-  const handleClick = () => {
-    redirectToPricing();
+  const handleSelectPlan = () => {
+    openBillingUrl(billingUrl);
   };
 
   return (
@@ -50,7 +49,7 @@ function NoPlanFallback({
           </Typography>
           <Button
             variant="contained"
-            onClick={handleClick}
+            onClick={handleSelectPlan}
             sx={{
               backgroundColor: "#202223",
               textTransform: "none",
@@ -71,6 +70,7 @@ function NoPlanFallback({
 
 NoPlanFallback.propTypes = {
   message: PropTypes.string,
+  billingUrl: PropTypes.string,
 };
 
 export default NoPlanFallback;
