@@ -16,20 +16,13 @@ export const useCurrentShopDomain = () => {
   return app.config.shop;
 };
 
-// Open an external billing URL in the admin TOP frame (_top). Both the Shopify
-// admin and the billing URL live on admin.shopify.com, so window.top navigation
-// is same-origin and always permitted (no sandbox/popup restriction). App Bridge
-// dispatch is the sanctioned fallback; iframe nav is the last resort.
+// Open an external billing URL in the admin TOP frame (_top). Prefers App Bridge
+// redirect.dispatch (the sanctioned top-frame navigation — this is what works in
+// local dev, and now uses the correct path). Falls back to a new tab (which at
+// least navigates), then window.top, then the iframe itself.
 export const openBillingUrl = (url, app) => {
   if (!url) return "empty";
-  // 1) Top-frame navigation (same-origin: admin.shopify.com → admin.shopify.com).
-  try {
-    window.top.location.href = url;
-    return "top";
-  } catch {
-    // fall through (e.g. cross-origin top-nav blocked)
-  }
-  // 2) App Bridge dispatch to the admin path (top frame).
+  // 1) App Bridge dispatch to the admin path (top frame — correct context).
   try {
     if (app?.redirect?.dispatch) {
       const path = new URL(url).pathname; // /store/<store>/charges/<handle>/pricing_plans
@@ -39,7 +32,22 @@ export const openBillingUrl = (url, app) => {
   } catch {
     // fall through
   }
-  // 3) Navigate the iframe itself.
+  // 2) New tab (this at least navigates — confirmed working, even if it lands in
+  // the iframe when popups are sandboxed).
+  try {
+    const popped = window.open(url, "_top", "noopener,noreferrer");
+    if (popped) return "newtab";
+  } catch {
+    // fall through
+  }
+  // 3) Top-frame navigation (may be silently blocked by sandbox).
+  try {
+    window.top.location.href = url;
+    return "top";
+  } catch {
+    // fall through
+  }
+  // 4) Navigate the iframe itself.
   window.location.href = url;
   return "iframe";
 };
