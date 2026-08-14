@@ -93,13 +93,31 @@ export const loader = async ({ request }) => {
     );
   }
 
+  // Resolve the app handle from the backend's authoritative APP_NAME so the
+  // hosted billing URL always targets the correct production app. The web env
+  // SHOPIFY_APP_NAME is only a fallback.
+  // eslint-disable-next-line no-undef
+  let appName = process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
+  try {
+    // eslint-disable-next-line no-undef
+    const backendBase = process.env.VITE_BACKEND_API_URL || "https://inventory-lifecycle-manager-backend.onrender.com";
+    const cfgRes = await fetch(`${backendBase}/api/config`);
+    if (cfgRes.ok) {
+      const cfg = await cfgRes.json();
+      if (cfg?.data?.appName) appName = cfg.data.appName;
+    }
+  } catch (err) {
+    console.error("[App] Failed to fetch appName from backend:", err.message);
+  }
+  console.log("[App] resolved appName=", appName);
+
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
     // eslint-disable-next-line no-undef
     shop: session?.shop || "",
     // eslint-disable-next-line no-undef
-    appName: process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager",
+    appName,
     hasActivePlan,
   };
 };
