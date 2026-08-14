@@ -1,7 +1,6 @@
 import React from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useRouteLoaderData } from "react-router";
-import axiosInstance from "../api/axios-instance";
 import {
   COLOR_MAP,
   ITEM_HEIGHT,
@@ -9,19 +8,8 @@ import {
   PAPER_ID,
 } from "./config/constants";
 
-export const APP_HANDLE_FALLBACK = "inventory-lifecycle-manager";
-
-// App handle must match the production app, so fetch it from the backend
-// (which reads APP_NAME server-side) instead of a Vite-unexposed env var.
-let appNamePromise = null;
-const getAppHandle = async () => {
-  if (appNamePromise) return appNamePromise;
-  appNamePromise = axiosInstance
-    .get("/config")
-    .then((res) => res?.data?.data?.appName || APP_HANDLE_FALLBACK)
-    .catch(() => APP_HANDLE_FALLBACK);
-  return appNamePromise;
-};
+export const APP_HANDLE =
+  import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
 
 export const useCurrentShopDomain = () => {
   const routeData = useRouteLoaderData("routes/app");
@@ -30,42 +18,22 @@ export const useCurrentShopDomain = () => {
 
 export const usePricingRedirect = () => {
   const app = useAppBridge();
-  const routeData = useRouteLoaderData("routes/app");
 
-  return React.useCallback(async () => {
+  return React.useCallback(() => {
     try {
-      const urlShop = new URLSearchParams(window.location.search).get("shop");
-      const appConfigShop = app?.config?.shop;
-      const routeShop = routeData?.shop;
-
-      console.log("[PricingRedirect] Debug:", {
-        routeShop,
-        appConfigShop,
-        urlShop,
-        appReady: !!app,
-      });
-
-      const shop = routeShop || appConfigShop || urlShop;
-
-      if (!shop) {
-        console.warn("[PricingRedirect] No shop domain available from any source");
-        return;
-      }
-
+      const shop = app?.config?.shop;
+      if (!shop) return;
       const storeHandle = shop.split(".").at(0);
-      const appHandle = await getAppHandle();
-      const path = `/store/${storeHandle}/charges/${appHandle}/pricing_plans`;
-      console.log("[PricingRedirect] Navigating to:", `https://admin.shopify.com${path}`);
-
+      const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
       if (app?.redirect?.dispatch) {
         app.redirect.dispatch("ADMIN_PATH", path);
       } else {
         window.top.location.href = `https://admin.shopify.com${path}`;
       }
-    } catch (err) {
-      console.error("[PricingRedirect] Failed:", err);
+    } catch {
+      // SSR or App Bridge not ready
     }
-  }, [app, routeData]);
+  }, [app]);
 };
 
 export const getColorHex = (colorName) => {
