@@ -16,6 +16,24 @@ export const useCurrentShopDomain = () => {
   return app.config.shop;
 };
 
+// Open an external billing URL. Tries a new tab first; if the iframe sandbox
+// blocks popups (window.open returns null), fall back to navigating the iframe
+// itself — a same-frame navigation is always permitted, so something always
+// happens. Used by the plan-selection buttons.
+export const openBillingUrl = (url) => {
+  if (!url) return false;
+  try {
+    const popped = window.open(url, "_top");
+    if (!popped) {
+      window.location.href = url;
+    }
+    return true;
+  } catch {
+    window.location.href = url;
+    return true;
+  }
+};
+
 export const usePricingRedirect = () => {
   const app = useAppBridge();
   const routeData = useRouteLoaderData("routes/app");
