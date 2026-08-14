@@ -10,6 +10,12 @@ import Tab from "@mui/material/Tab";
 import InventoryViewSkeleton from "../../ui/skeleton-loader/inventory-view-skeleton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import useInventoryData from "../../hooks/useInventoryData";
+import ProductImageZoom from "../../components/product-image-zoom";
+import TabPanel from "./ui-components/TabPanel";
+import OverviewTab from "./ui-components/OverviewTab";
+import InventoryHistoryTab from "./ui-components/InventoryHistoryTab";
+import SalesHistoryTab from "./ui-components/SalesHistoryTab";
+import VariantsTab from "./ui-components/VariantsTab";
 import { getSingleProduct } from "../../api/products";
 import {
   formatDate,
@@ -20,13 +26,6 @@ import {
   INVENTORY_STATUS_CONFIG,
   STOCK_STATUS_CONFIG,
 } from "../../utils/config/constants";
-import ProductImageZoom from "../../components/product-image-zoom";
-import TabPanel from "./ui-components/TabPanel";
-import OverviewTab from "./ui-components/OverviewTab";
-import InventoryHistoryTab from "./ui-components/InventoryHistoryTab";
-import SalesHistoryTab from "./ui-components/SalesHistoryTab";
-import VariantsTab from "./ui-components/VariantsTab";
-import Button from "@mui/material/Button";
 
 const FALLBACK_IMAGE = "/fallback-image.jpg";
 
@@ -70,9 +69,9 @@ const InventoryViewPage = () => {
 
   const sku = product.variants?.[0]?.sku || "—";
   const inventoryValue =
-    product.inventoryValue > 0
-      ? formatPrice(product.currencyCode, product.inventoryValue)
-      : product.inventoryValue;
+    product.inventoryValue === 0
+      ? product.inventoryValue
+      : formatPrice(product.currencyCode, product.inventoryValue);
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
@@ -103,7 +102,7 @@ const InventoryViewPage = () => {
           sx={{
             fontWeight: 600,
             color: "#0f1111",
-            fontSize: { xs: 20, sm: 24 },
+            fontSize: { xs: 18, sm: 24 },
           }}
         >
           {product.title}

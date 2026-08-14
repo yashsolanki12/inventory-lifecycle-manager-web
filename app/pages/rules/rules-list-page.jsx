@@ -7,8 +7,8 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import ConfirmDialog from "../../ui/confirmation-dialog";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
+import useInventoryData from "../../hooks/useInventoryData";
 import ReusableList from "../../components/reusable-list";
-
 import { useCurrentShopDomain } from "../../utils/helper";
 import {
   deleteArchiveRule,
@@ -34,6 +34,14 @@ const RulesListPage = () => {
     id: "",
   });
   const [selectedIds, setSelectedIds] = React.useState([]);
+
+  const { data: rulesCountData } = useInventoryData(
+    ["rules-list-count"],
+    () => getAllArchiveList(shopDomain, { page: 1, limit: 1 }),
+    null,
+    { enabled: !!shopDomain },
+  );
+  const hasRules = (rulesCountData?.data?.pagination?.total ?? 0) > 0;
 
   const handleEdit = (item) => {
     const id = item.id;
@@ -100,14 +108,17 @@ const RulesListPage = () => {
   );
 
   const handleMatchRule = () => {
-    if (selectedIds.length === 0) {
+    if (!shopDomain) return;
+
+    if (hasRules && selectedIds.length === 0) {
       setSnackbar({
         open: true,
         message: "Please select at least one rule to match.",
         severity: "warning",
       });
+      return;
     }
-    if (!shopDomain) return;
+
     matchRuleMutation.mutate({ shop: shopDomain, ruleIds: selectedIds });
   };
 
@@ -134,7 +145,7 @@ const RulesListPage = () => {
     if (matchRuleMutation.error) {
       setSnackbar({
         open: true,
-        message: matchRuleMutation.error.response.data.message,
+        message: matchRuleMutation.error.response?.data?.message,
         severity: "warning",
       });
     }
@@ -190,7 +201,7 @@ const RulesListPage = () => {
             </Button>
           )}
           <Button
-            variant="outlined"
+            variant="contained"
             onClick={handleMatchRule}
             disabled={matchRuleMutation.isPending}
             sx={{
@@ -247,7 +258,7 @@ const RulesListPage = () => {
       <ConfirmDialog
         open={openDeleteDialog}
         title="Delete Rule"
-        message={`Are you sure you want to delete this '${ruleData.rule_name}'`}
+        message={`Are you sure you want to delete this '${ruleData.rule_name}'?`}
         onConfirm={handleConfirmDeleteRule}
         onClose={handleConfirmClose}
       />

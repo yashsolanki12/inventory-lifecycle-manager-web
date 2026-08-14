@@ -91,7 +91,7 @@ const PlansPage = ({ shop, subscription, submit, actionData }) => {
           sx={{
             fontWeight: 700,
             color: "#202223",
-            fontSize: { xs: 18, sm: 20 },
+            fontSize: { xs: 18, sm: 24 },
           }}
         >
           Plans

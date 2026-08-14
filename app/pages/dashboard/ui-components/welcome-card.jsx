@@ -5,11 +5,8 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import SyncIcon from "@mui/icons-material/Sync";
-import {
-  FEATURES,
-  PLAN_SKU_TEXT,
-  usePricingRedirect,
-} from "../../../utils/helper";
+import { usePricingRedirect } from "../../../utils/helper";
+import { FEATURES, PLAN_SKU_TEXT } from "../../../utils/config/constants";
 
 const WelcomeCard = ({ onSync, plan }) => {
   const planName = plan?.plan || "free";

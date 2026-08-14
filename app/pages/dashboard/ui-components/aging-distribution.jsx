@@ -13,11 +13,11 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { COLORS } from "../../../utils/helper";
+import { COLORS } from "../../../utils/config/constants";
 
 const CustomXAxisTick = ({ x, y, payload, chartData }) => {
-  const index = chartData.findIndex((d) => d.name === payload.value);
-  const color = index >= 0 ? COLORS[index] : "#6b7280";
+  const originalIndex = chartData.findIndex((d) => d.name === payload.value);
+  const color = originalIndex >= 0 ? COLORS[originalIndex] : "#6b7280";
   return (
     <text
       x={x}
@@ -40,14 +40,33 @@ const AgingDistributionChart = ({ agingData }) => {
       (buckets?.aging ?? 0) +
       (buckets?.dead ?? 0) || 1;
 
-  const formatNumber = (n) =>
-    (n ?? 0).toLocaleString("en-IN");
+  const formatNumber = (n) => (n ?? 0).toLocaleString("en-IN");
 
   const chartData = [
-    { name: "Fresh", value: buckets?.fresh ?? 0, displayValue: formatNumber(buckets?.fresh), pct: Math.round(((buckets?.fresh ?? 0) / total) * 100) },
-    { name: "Mild", value: buckets?.mild ?? 0, displayValue: formatNumber(buckets?.mild), pct: Math.round(((buckets?.mild ?? 0) / total) * 100) },
-    { name: "Aging", value: buckets?.aging ?? 0, displayValue: formatNumber(buckets?.aging), pct: Math.round(((buckets?.aging ?? 0) / total) * 100) },
-    { name: "Dead", value: buckets?.dead ?? 0, displayValue: formatNumber(buckets?.dead), pct: Math.round(((buckets?.dead ?? 0) / total) * 100) },
+    {
+      name: "Fresh",
+      value: buckets?.fresh,
+      displayValue: formatNumber(buckets?.fresh),
+      pct: Math.round((buckets?.fresh / total) * 100),
+    },
+    {
+      name: "Mild",
+      value: buckets?.mild,
+      displayValue: formatNumber(buckets?.mild),
+      pct: Math.round((buckets?.mild / total) * 100),
+    },
+    {
+      name: "Aging",
+      value: buckets?.aging,
+      displayValue: formatNumber(buckets?.aging),
+      pct: Math.round((buckets?.aging / total) * 100),
+    },
+    {
+      name: "Dead",
+      value: buckets?.dead,
+      displayValue: formatNumber(buckets?.dead),
+      pct: Math.round((buckets?.dead / total) * 100),
+    },
   ];
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -76,6 +95,12 @@ const AgingDistributionChart = ({ agingData }) => {
     );
   };
 
+  const filterNullData = chartData.filter(
+    (item) =>
+      item.value !== undefined &&
+      item.value !== null &&
+      item.displayValue !== "0",
+  );
   return (
     <Card
       sx={{
@@ -112,7 +137,7 @@ const AgingDistributionChart = ({ agingData }) => {
         >
           <ResponsiveContainer width="100%" height="100%" minHeight={280}>
             <BarChart
-              data={chartData}
+              data={filterNullData}
               margin={{ top: 5, right: 20, bottom: 10, left: -10 }}
             >
               <CartesianGrid
@@ -138,9 +163,17 @@ const AgingDistributionChart = ({ agingData }) => {
                 cursor={{ fill: "rgba(0,0,0,0.04)" }}
               />
               <Bar dataKey="value" radius={[8, 8, 0, 0]} maxBarSize={60}>
-                {chartData.map((_, index) => (
-                  <Cell key={index} fill={COLORS[index]} />
-                ))}
+                {filterNullData.map((item, index) => {
+                  const colorIndex = chartData.findIndex(
+                    (d) => d.name === item.name,
+                  );
+                  return (
+                    <Cell
+                      key={index}
+                      fill={COLORS[colorIndex >= 0 ? colorIndex : index]}
+                    />
+                  );
+                })}
               </Bar>
             </BarChart>
           </ResponsiveContainer>

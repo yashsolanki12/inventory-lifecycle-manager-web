@@ -14,6 +14,7 @@ const AsyncAutocomplete = ({
   multiple = false,
   error,
   helperText,
+  maxHeight = 250,
 }) => {
   const { options, loading, hasMore, loadMore } = useAsyncOptions(fetchFn);
   const [inputValue, setInputValue] = React.useState("");
@@ -50,7 +51,10 @@ const AsyncAutocomplete = ({
 
       const handleScroll = () => {
         const { scrollTop, scrollHeight, clientHeight } = listbox;
-        if (scrollHeight - scrollTop - clientHeight < 30 && hasMoreRef.current) {
+        if (
+          scrollHeight - scrollTop - clientHeight < 30 &&
+          hasMoreRef.current
+        ) {
           loadMoreRef.current();
         }
       };
@@ -84,6 +88,14 @@ const AsyncAutocomplete = ({
       onChange={handleChange}
       onOpen={handleOpen}
       onClose={handleClose}
+      slotProps={{
+        listbox: {
+          sx: {
+            maxHeight: maxHeight,
+            overflowY: "auto",
+          },
+        },
+      }}
       renderTags={
         multiple
           ? (tagValue, getTagProps) =>

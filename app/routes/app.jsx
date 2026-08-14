@@ -1,4 +1,5 @@
 import React from "react";
+import NoPlanFallback from "../pages/plans/no-plan-fallback";
 import {
   Outlet,
   useLoaderData,
@@ -11,7 +12,6 @@ import { authenticate, sessionStorage } from "../shopify.server";
 import { authPostSync } from "../api/auth";
 import { syncPlanToBackend } from "../api/plan";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import NoPlanFallback from "../pages/plans/no-plan-fallback";
 
 export const loader = async ({ request }) => {
   const { session, billing } = await authenticate.admin(request);
@@ -122,6 +122,7 @@ export default function App() {
           <s-link href="/app/rules">Rules</s-link>
           <s-link href="/app/archive-history">Archive History</s-link>
           <s-link href="/app/alerts">Alerts</s-link>
+          <s-link href="/app/aging-buckets">Aging Buckets</s-link>
           {/* <s-link href="/app/orders">Orders</s-link> */}
           {/* 🛍️  */}
           <s-link href="/app/plans">Plans</s-link>

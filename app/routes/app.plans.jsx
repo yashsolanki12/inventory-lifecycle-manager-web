@@ -1,7 +1,7 @@
 import React from "react";
+import PlansShimmer from "../ui/plans-shimmer";
 import { authenticate } from "../shopify.server";
 import { useLoaderData, useSubmit, useActionData } from "react-router";
-import PlansShimmer from "../ui/plans-shimmer";
 
 const PlansPageView = React.lazy(() => import("../pages/plans/plans-page"));
 

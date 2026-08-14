@@ -4,19 +4,19 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { COLORS, formatPrice } from "../../../utils/helper";
+import { formatPrice } from "../../../utils/helper";
+import { BUCKET_COLOR_MAP, COLORS } from "../../../utils/config/constants";
 
 const InventoryValueChart = ({ dashboardData, agingData }) => {
   const inventoryByAge = dashboardData?.data?.inventoryValueByAge ?? [];
   const currency = dashboardData?.data?.currency;
   const totalValue = dashboardData?.data?.totalInventoryValue ?? "0";
-
-  const chartData = inventoryByAge.map((item, i) => ({
+  const chartData = inventoryByAge.map((item) => ({
     name: item.label,
     value: item.value,
     valueFormatted: item.valueFormatted,
     percentage: item.percentage,
-    color: COLORS[i],
+    color: BUCKET_COLOR_MAP[item.bucket] ?? COLORS[4],
   }));
 
   const CustomTooltip = ({ active, payload }) => {
@@ -112,46 +112,52 @@ const InventoryValueChart = ({ dashboardData, agingData }) => {
           </Box>
         </Box>
         <Box sx={{ mt: 2 }}>
-          {chartData.map((item, i) => (
-            <Box
-              key={i}
-              sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
-            >
-              <Box
-                sx={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: "50%",
-                  backgroundColor: item.color,
-                  flexShrink: 0,
-                }}
-              />
-              <Typography
-                sx={{ fontSize: { xs: 12, sm: 14 }, color: "#374151" }}
-              >
-                {item.name}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: { xs: 11, sm: 13 },
-                  color: item.color,
-                  fontWeight: 600,
-                  ml: 0.5,
-                }}
-              >
-                {item.percentage}%
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: { xs: 12, sm: 14 },
-                  color: "#6b7280",
-                  ml: "auto",
-                }}
-              >
-                {formatPrice(currency, item.valueFormatted)}
-              </Typography>
-            </Box>
-          ))}
+          {chartData
+            .filter(
+              (ele) => Number(ele.percentage) > 0 && Number(ele.value) > 0,
+            )
+            .map((item, i) => {
+              return (
+                <Box
+                  key={i}
+                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
+                >
+                  <Box
+                    sx={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: "50%",
+                      backgroundColor: item.color,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    sx={{ fontSize: { xs: 12, sm: 14 }, color: "#374151" }}
+                  >
+                    {item.name}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: 11, sm: 13 },
+                      color: item.color,
+                      fontWeight: 600,
+                      ml: 0.5,
+                    }}
+                  >
+                    {item.percentage}%
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: 12, sm: 14 },
+                      color: "#6b7280",
+                      ml: "auto",
+                    }}
+                  >
+                    {formatPrice(currency, item.valueFormatted)}
+                  </Typography>
+                </Box>
+              );
+            })}
         </Box>
       </CardContent>
     </Card>

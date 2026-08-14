@@ -3,7 +3,12 @@ import useInventorySubmit from "../../hooks/useInventorySubmit";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import ConfirmDialog from "../../ui/confirmation-dialog";
+import ReusableList from "../../components/reusable-list";
+import Button from "@mui/material/Button";
+import useInventoryData from "../../hooks/useInventoryData";
 import {
   ARCHIVE_HISTORY_COLUMN,
   archiveHistoryRenderActions,
@@ -13,12 +18,7 @@ import {
   archiveHistory,
   generateArchiveHistoryCsv,
 } from "../../api/archive-rules";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import ConfirmDialog from "../../ui/confirmation-dialog";
-import ReusableList from "../../components/reusable-list";
 import { ARCHIVE_HISTORY_SORT_OPTIONS } from "../../utils/config/constants";
-import Button from "@mui/material/Button";
 
 const ArchiveHistoryListPage = () => {
   const shopDomain = useCurrentShopDomain();
@@ -29,6 +29,13 @@ const ArchiveHistoryListPage = () => {
     severity: "success",
   });
   const fetchArchiveHistory = (params) => archiveHistory(shopDomain, params);
+
+  const { data: archiveHistoryData } = useInventoryData(
+    ["archive-history"],
+    () => archiveHistory(shopDomain),
+    null,
+  );
+
   const handleProductPreview = (item) => {
     if (item.previewUrl) window.open(item.previewUrl, "_blank");
   };
@@ -42,13 +49,13 @@ const ArchiveHistoryListPage = () => {
     setSnackbar,
     {
       onSuccess: (data) => {
-        if (data.data.totalRecords === 0) {
-          setSnackbar({
-            open: true,
-            message: "No archive history found to export.",
-            severity: "warning",
-          });
-        }
+        // if (data.data.totalRecords === 0) {
+        //   setSnackbar({
+        //     open: true,
+        //     message: "No archive history found to export.",
+        //     severity: "warning",
+        //   });
+        // }
 
         if (
           data.data.totalRecords > 0 &&
@@ -66,9 +73,20 @@ const ArchiveHistoryListPage = () => {
   };
 
   const handleDialogConfirm = () => {
+    if (archiveHistoryData?.data.items.length === 0) {
+      setSnackbar({
+        open: true,
+        message: "No archive history found.",
+        severity: "warning",
+      });
+      setOpenDialog(false);
+      return;
+    }
     if (!shopDomain) return;
-    setOpenDialog(false);
-    archiveHistoryCsvMutation.mutate(shopDomain);
+    if (archiveHistoryData?.data.items.length > 0) {
+      archiveHistoryCsvMutation.mutate(shopDomain);
+      setOpenDialog(false);
+    }
   };
 
   const handleDialogOpen = () => {
@@ -136,7 +154,7 @@ const ArchiveHistoryListPage = () => {
         searchPlaceholder="Search by product, reason..."
         sortOptions={ARCHIVE_HISTORY_SORT_OPTIONS}
         defaultSort="-createdAt"
-        paginationText="history"
+        paginationText="archive history"
         defaultLimit={10}
       />
 
