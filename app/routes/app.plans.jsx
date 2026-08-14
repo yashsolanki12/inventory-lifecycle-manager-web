@@ -18,9 +18,18 @@ export const loader = async ({ request }) => {
     console.error("Billing check failed:", err.message);
   }
 
+  // eslint-disable-next-line no-undef
+  const billingHandle = process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
+  const billingUrl = session?.shop
+    ? `https://admin.shopify.com/store/${session.shop
+        .split(".")
+        .at(0)}/charges/${billingHandle}/pricing_plans`
+    : "";
+
   return {
     shop: session?.shop,
     subscription,
+    billingUrl,
   };
 };
 
@@ -48,6 +57,7 @@ export default function PlansPage() {
       <PlansPageView
         shop={data.shop}
         subscription={data.subscription}
+        billingUrl={data.billingUrl}
         submit={submit}
         actionData={actionData}
       />
