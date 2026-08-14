@@ -77,10 +77,24 @@ export const loader = async ({ request }) => {
     );
   }
 
+  // Build the billing URL server-side (respects SHOPIFY_APP_NAME env on Render,
+  // which the browser bundle cannot read). Opened via a real <a target="_blank">
+  // so no App Bridge / RR-loader / cross-origin navigation is involved.
+  // eslint-disable-next-line no-undef
+  let billingUrl = "";
+  if (session?.shop) {
+    // eslint-disable-next-line no-undef
+    const billingHandle = process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
+    billingUrl = `https://admin.shopify.com/store/${session.shop
+      .split(".")
+      .at(0)}/charges/${billingHandle}/pricing_plans`;
+  }
+
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
     shop: session?.shop || "",
+    billingUrl,
     hasActivePlan,
   };
 };
