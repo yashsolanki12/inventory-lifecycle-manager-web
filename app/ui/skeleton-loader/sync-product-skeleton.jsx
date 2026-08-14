@@ -1,4 +1,3 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 
@@ -26,7 +25,8 @@ const SyncProductSkeleton = () => {
         {/* Green header with skeleton */}
         <Box
           sx={{
-            background: "linear-gradient(135deg, #008060 0%, #006F60 50%, #004C3F 100%)",
+            background:
+              "linear-gradient(135deg, #008060 0%, #006F60 50%, #004C3F 100%)",
             px: 4,
             py: 5,
             textAlign: "center",
@@ -55,7 +55,10 @@ const SyncProductSkeleton = () => {
         {/* Feature rows skeleton */}
         <Box sx={{ px: 4, pt: 3, pb: 1 }}>
           {[1, 2, 3].map((i) => (
-            <Box key={i} sx={{ display: "flex", alignItems: "center", gap: 1.5, py: 1 }}>
+            <Box
+              key={i}
+              sx={{ display: "flex", alignItems: "center", gap: 1.5, py: 1 }}
+            >
               <Skeleton
                 variant="rounded"
                 width={36}
