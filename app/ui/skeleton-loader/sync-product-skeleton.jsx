@@ -1,6 +1,6 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
+import Typography from "@mui/material/Typography";
 
 const SyncProductSkeleton = () => {
   return (
@@ -65,6 +65,16 @@ const SyncProductSkeleton = () => {
               <Skeleton variant="text" width={`${55 - i * 10}%`} height={18} />
             </Box>
           ))}
+        </Box>
+
+        {/* Status message */}
+        <Box sx={{ px: 4, pb: 1 }}>
+          <Typography
+            variant="body2"
+            sx={{ color: "#008060", fontWeight: 600, textAlign: "center" }}
+          >
+            Syncing your products… this can take up to a minute.
+          </Typography>
         </Box>
 
         {/* Button skeleton */}
