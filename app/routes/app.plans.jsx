@@ -11,16 +11,6 @@ export const loader = async ({ request }) => {
   let subscription = null;
   try {
     const { appSubscriptions } = await billing.check();
-    console.log(
-      "[Plans] billing.check result:",
-      JSON.stringify(
-        (appSubscriptions || []).map((s) => ({
-          name: s.name,
-          status: s.status,
-          id: s.id,
-        })),
-      ),
-    );
     if (appSubscriptions && appSubscriptions.length > 0) {
       subscription = appSubscriptions[0];
     }

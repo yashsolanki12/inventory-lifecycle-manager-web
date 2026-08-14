@@ -1,9 +1,27 @@
 import React from "react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useRouteLoaderData } from "react-router";
-import { COLOR_MAP, ITEM_HEIGHT, ITEM_PADDING_TOP, PAPER_ID } from "./config/constants";
+import axiosInstance from "../api/axios-instance";
+import {
+  COLOR_MAP,
+  ITEM_HEIGHT,
+  ITEM_PADDING_TOP,
+  PAPER_ID,
+} from "./config/constants";
 
 export const APP_HANDLE_FALLBACK = "inventory-lifecycle-manager";
+
+// App handle must match the production app, so fetch it from the backend
+// (which reads APP_NAME server-side) instead of a Vite-unexposed env var.
+let appNamePromise = null;
+const getAppHandle = async () => {
+  if (appNamePromise) return appNamePromise;
+  appNamePromise = axiosInstance
+    .get("/config")
+    .then((res) => res?.data?.data?.appName || APP_HANDLE_FALLBACK)
+    .catch(() => APP_HANDLE_FALLBACK);
+  return appNamePromise;
+};
 
 export const useCurrentShopDomain = () => {
   const routeData = useRouteLoaderData("routes/app");
@@ -14,49 +32,22 @@ export const usePricingRedirect = () => {
   const app = useAppBridge();
   const routeData = useRouteLoaderData("routes/app");
 
-  return React.useCallback(() => {
+  return React.useCallback(async () => {
     try {
-      // Resolve the shop from the most reliable sources. The Shopify admin URL
-      // always carries ?shop=..., so it's the ultimate fallback when loader /
-      // App Bridge context is missing (common in some embedded deployments).
-      const urlShop =
-        typeof window !== "undefined"
-          ? new URLSearchParams(window.location.search).get("shop")
-          : null;
-      const shop =
-        routeData?.shop || app?.config?.shop || urlShop || "";
-      const appHandle = routeData?.appName || APP_HANDLE_FALLBACK;
-      console.log(
-        "[PricingRedirect] shop=",
-        shop,
-        "| routeShop=",
-        routeData?.shop,
-        "| appShop=",
-        app?.config?.shop,
-        "| urlShop=",
-        urlShop,
-        "| appHandle=",
-        appHandle,
-        "| hasDispatch=",
-        !!app?.redirect?.dispatch,
-      );
-      if (!shop) {
-        console.warn("[PricingRedirect] No shop resolved — aborting redirect");
-        return;
-      }
+      // Prefer the shop from the route loader — reliable in every environment
+      // (app.config.shop is often empty on production / new embedded auth).
+      const shop = routeData?.shop || app?.config?.shop;
+      if (!shop) return;
       const storeHandle = shop.split(".").at(0);
+      const appHandle = await getAppHandle();
       const path = `/store/${storeHandle}/charges/${appHandle}/pricing_plans`;
-      console.log("[PricingRedirect] redirecting ->", `https://admin.shopify.com${path}`);
       if (app?.redirect?.dispatch) {
         app.redirect.dispatch("ADMIN_PATH", path);
       } else {
-        // Embedded apps must navigate the top frame via App Bridge; this branch
-        // only applies to non-embedded contexts.
         window.top.location.href = `https://admin.shopify.com${path}`;
       }
-      console.log("[PricingRedirect] redirect dispatched");
-    } catch (err) {
-      console.error("[PricingRedirect] error:", err);
+    } catch {
+      // SSR or App Bridge not ready
     }
   }, [app, routeData]);
 };
@@ -129,7 +120,8 @@ export function buildConditionPreview(v) {
   const clauses = [
     `no sale ${opMap[v.daysWithoutSalesOperator] || "at least"} ${v.daysWithoutSales ?? 0} days`,
   ];
-  if (v.productAgeDays > 0) clauses.push(`product age ≥ ${v.productAgeDays} days`);
+  if (v.productAgeDays > 0)
+    clauses.push(`product age ≥ ${v.productAgeDays} days`);
   if (v.stockZero) clauses.push("out of stock");
   else if (v.stockThreshold > 0) clauses.push(`stock ≥ ${v.stockThreshold}`);
   if (v.productType) clauses.push(`product type is "${v.productType}"`);
