@@ -1,3 +1,4 @@
+import React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -11,8 +12,16 @@ function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
   billingUrl,
 }) {
+  const [status, setStatus] = React.useState("");
+
   const handleSelectPlan = () => {
-    openBillingUrl(billingUrl);
+    // TEMP diagnostic
+    const ok = openBillingUrl(billingUrl);
+    setStatus(
+      ok
+        ? `opened: ${billingUrl}`
+        : `FAILED — billingUrl empty? (${JSON.stringify(billingUrl)})`,
+    );
   };
 
   return (
@@ -62,6 +71,23 @@ function NoPlanFallback({
           >
             Select Plan
           </Button>
+          {billingUrl ? (
+            <Typography
+              variant="caption"
+              sx={{ display: "block", mt: 2, color: "#6d7175", wordBreak: "break-all" }}
+            >
+              billingUrl: {billingUrl}
+            </Typography>
+          ) : (
+            <Typography variant="caption" sx={{ display: "block", mt: 2, color: "#d72c0d" }}>
+              billingUrl is EMPTY
+            </Typography>
+          )}
+          {status && (
+            <Typography variant="caption" sx={{ display: "block", mt: 1, color: "#036906" }}>
+              {status}
+            </Typography>
+          )}
         </CardContent>
       </Card>
     </Box>
