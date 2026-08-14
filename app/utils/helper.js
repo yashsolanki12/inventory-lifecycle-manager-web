@@ -16,10 +16,15 @@ export const usePricingRedirect = () => {
 
   return React.useCallback(() => {
     try {
-      // Prefer values from the route loader — reliable in every environment
-      // and avoids any async/network dependency (which silently fails on
-      // some deployments). app.config.* is used only as a fallback.
-      const shop = routeData?.shop || app?.config?.shop;
+      // Resolve the shop from the most reliable sources. The Shopify admin URL
+      // always carries ?shop=..., so it's the ultimate fallback when loader /
+      // App Bridge context is missing (common in some embedded deployments).
+      const urlShop =
+        typeof window !== "undefined"
+          ? new URLSearchParams(window.location.search).get("shop")
+          : null;
+      const shop =
+        routeData?.shop || app?.config?.shop || urlShop || "";
       const appHandle = routeData?.appName || APP_HANDLE_FALLBACK;
       console.log(
         "[PricingRedirect] shop=",
@@ -28,6 +33,8 @@ export const usePricingRedirect = () => {
         routeData?.shop,
         "| appShop=",
         app?.config?.shop,
+        "| urlShop=",
+        urlShop,
         "| appHandle=",
         appHandle,
         "| hasDispatch=",
@@ -43,6 +50,8 @@ export const usePricingRedirect = () => {
       if (app?.redirect?.dispatch) {
         app.redirect.dispatch("ADMIN_PATH", path);
       } else {
+        // Embedded apps must navigate the top frame via App Bridge; this branch
+        // only applies to non-embedded contexts.
         window.top.location.href = `https://admin.shopify.com${path}`;
       }
       console.log("[PricingRedirect] redirect dispatched");
