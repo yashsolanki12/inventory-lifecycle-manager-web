@@ -16,22 +16,32 @@ export const useCurrentShopDomain = () => {
   return app.config.shop;
 };
 
-// Open an external billing URL. Tries a new tab first; if the iframe sandbox
-// blocks popups (window.open returns null), fall back to navigating the iframe
-// itself — a same-frame navigation is always permitted, so something always
-// happens. Used by the plan-selection buttons.
-export const openBillingUrl = (url) => {
-  if (!url) return false;
+// Open an external billing URL in the admin TOP frame (_top). Both the Shopify
+// admin and the billing URL live on admin.shopify.com, so window.top navigation
+// is same-origin and always permitted (no sandbox/popup restriction). App Bridge
+// dispatch is the sanctioned fallback; iframe nav is the last resort.
+export const openBillingUrl = (url, app) => {
+  if (!url) return "empty";
+  // 1) Top-frame navigation (same-origin: admin.shopify.com → admin.shopify.com).
   try {
-    const popped = window.open(url, "_top");
-    if (!popped) {
-      window.location.href = url;
-    }
-    return true;
+    window.top.location.href = url;
+    return "top";
   } catch {
-    window.location.href = url;
-    return true;
+    // fall through (e.g. cross-origin top-nav blocked)
   }
+  // 2) App Bridge dispatch to the admin path (top frame).
+  try {
+    if (app?.redirect?.dispatch) {
+      const path = new URL(url).pathname; // /store/<store>/charges/<handle>/pricing_plans
+      app.redirect.dispatch("ADMIN_PATH", path);
+      return "appbridge";
+    }
+  } catch {
+    // fall through
+  }
+  // 3) Navigate the iframe itself.
+  window.location.href = url;
+  return "iframe";
 };
 
 export const usePricingRedirect = () => {
