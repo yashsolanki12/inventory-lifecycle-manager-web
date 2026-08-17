@@ -9,6 +9,7 @@ import { usePricingRedirect } from "../../../utils/helper";
 import { FEATURES, PLAN_SKU_TEXT } from "../../../utils/config/constants";
 
 const WelcomeCard = ({ onSync, plan }) => {
+  console.log('plan',plan)
   const planName = plan?.plan || "free";
   const skuLabel = PLAN_SKU_TEXT[planName] || PLAN_SKU_TEXT.free;
   const redirectToPricing = usePricingRedirect();
@@ -102,7 +103,7 @@ const WelcomeCard = ({ onSync, plan }) => {
         <Box sx={{ px: { xs: 2.5, sm: 4 }, pt: 3, pb: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.5 }}>
             <Chip
-              label={`'${plan?.planName}' plan.` || "Free"}
+              label={`'${plan?.planName ?? "Free"}' plan.`}
               size="small"
               sx={{
                 backgroundColor: "#ecfdf5",

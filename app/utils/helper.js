@@ -13,8 +13,10 @@ export const APP_HANDLE =
 
 export const useCurrentShopDomain = () => {
   const app = useAppBridge();
+  const routeData = useRouteLoaderData("routes/app");
   if (typeof window === "undefined") return "";
   return (
+    routeData?.shop ||
     app.config.shop ||
     new URLSearchParams(window.location.search).get("shop") ||
     ""
