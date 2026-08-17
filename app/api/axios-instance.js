@@ -1,16 +1,10 @@
 import axios from "axios";
 
 const getBaseURL = () => {
-  // Server-side (SSR loaders): use full backend URL directly
-  if (import.meta.env.SSR) {
-    const backendDomain =
-      import.meta.env.VITE_BACKEND_API_URL ||
-      "https://inventory-lifecycle-manager-backend.onrender.com";
-    return `${backendDomain}/api/`;
-  }
-  // Client-side: use relative URL so requests go through the server proxy
-  // (avoids CORS/CSP issues in Shopify embedded iframe on Render)
-  return "/api/";
+  const backendDomain =
+    import.meta.env.VITE_BACKEND_API_URL ||
+    "https://inventory-lifecycle-manager-backend.onrender.com";
+  return `${backendDomain}/api/`;
 };
 
 const axiosInstance = axios.create({
