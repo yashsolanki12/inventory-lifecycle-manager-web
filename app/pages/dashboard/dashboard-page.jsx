@@ -19,12 +19,10 @@ import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
 import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
 import { useSearchParams } from "react-router";
-import { getPlanFromBackend } from "../../api/plan";
 
-const DashboardPage = ({ shop: shopFromLoader }) => {
+const DashboardPage = ({ shop: shopFromLoader, planFromLoader }) => {
   const hookShopDomain = useCurrentShopDomain();
   const shopDomain = shopFromLoader || hookShopDomain;
-  console.log("SHop domain", shopDomain);
 
   const [hasSynced, setHasSynced] = React.useState(() => {
     if (typeof window === "undefined" || !shopDomain) return false;
@@ -41,17 +39,11 @@ const DashboardPage = ({ shop: shopFromLoader }) => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
 
-  const { data: planData } = useInventoryData(
-    ["plan-usage"],
-    () => getPlanFromBackend(shopDomain),
-    null,
-    { enabled: !!shopDomain }, // retry: 2
-  );
+  const plan = planFromLoader;
 
-  const plan = planData?.data;
+  console.log("dashboard", plan);
 
   const features = plan?.features || {};
-  console.log("dashboard plan", plan);
 
   const hasFullDashboard = features.dashboardAnalytics === "full";
   const hasFullAging = features.inventoryAging === "full";
