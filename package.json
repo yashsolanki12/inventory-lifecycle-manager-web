@@ -20,8 +20,8 @@
     "typecheck": "react-router typegen && tsc --noEmit"
   },
   "type": "module",
-  "engines": {
-    "node": ">=20.19 <22 || >=22.12"
+   "engines": {
+    "node": ">=22.12"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
