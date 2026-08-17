@@ -43,7 +43,7 @@ const DashboardPage = () => {
     ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
-    { enabled: !!shopDomain, retry: 2 },
+    { enabled: !!shopDomain }, // retry: 2
   );
 
   const plan = planData?.data;
