@@ -41,14 +41,19 @@ const DashboardPage = ({ shop: shopFromLoader }) => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
 
-  const { data: planData } = useInventoryData(
-    ["plan-usage"],
-    () => getPlanFromBackend(shopDomain),
-    null,
-    { enabled: !!shopDomain }, // retry: 2
-  );
+  const [plan, setPlan] = React.useState(null);
 
-  const plan = planData?.data;
+  React.useEffect(() => {
+    if (!shopDomain) return;
+    let cancelled = false;
+    getPlanFromBackend(shopDomain).then((data) => {
+      if (!cancelled && data?.data) setPlan(data.data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [shopDomain]);
+
   const features = plan?.features || {};
   console.log("dashboard plan", plan);
 
