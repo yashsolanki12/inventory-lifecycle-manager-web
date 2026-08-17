@@ -2,16 +2,16 @@ import axios from "axios";
 
 const getBaseURL = () => {
   // console.log("URL", import.meta.env.VITE_BACKEND_API_URL);
-  // const backendLocalDomain =
-  //   import.meta.env.VITE_BACKEND_API_URL ??
-  //   "https://inventory-lifecycle-manager-backend.onrender.com"; //  http://localhost:3001;
-  // return `${backendLocalDomain}/api/`;
+  const backendLocalDomain =
+    import.meta.env.VITE_BACKEND_API_URL ??
+    "https://inventory-lifecycle-manager-backend.onrender.com"; //  http://localhost:3001;
+  return `${backendLocalDomain}/api/`;
 
-  const backendDomain =
-    "https://inventory-lifecycle-manager-backend.onrender.com";
-  console.log("backend", backendDomain);
+  // const backendDomain =
+  //   "https://inventory-lifecycle-manager-backend.onrender.com";
+  // console.log("backend", backendDomain);
 
-  return `${backendDomain}/api/`;
+  // return `${backendDomain}/api/`;
 };
 
 const axiosInstance = axios.create({

@@ -21,8 +21,10 @@ import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
 import { useSearchParams } from "react-router";
 import { getPlanFromBackend } from "../../api/plan";
 
-const DashboardPage = () => {
-  const shopDomain = useCurrentShopDomain();
+const DashboardPage = ({ shop: shopFromLoader }) => {
+  const hookShopDomain = useCurrentShopDomain();
+  const shopDomain = shopFromLoader || hookShopDomain;
+  console.log("SHop domain", shopDomain);
 
   const [hasSynced, setHasSynced] = React.useState(() => {
     if (typeof window === "undefined" || !shopDomain) return false;
