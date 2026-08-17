@@ -1,3 +1,4 @@
+import https from "https";
 import compression from "compression";
 import express from "express";
 import morgan from "morgan";
@@ -27,6 +28,40 @@ app.use((req, res, next) => {
 });
 
 app.use(morgan("tiny"));
+
+// ─── API PROXY ─────────────────────────────────────────────────────────────
+// All /api/* requests from the browser are forwarded to the backend.
+// This avoids CORS / CSP issues when the app runs inside Shopify's embedded
+// iframe on Render (different origin than the backend).
+const BACKEND_HOST = "inventory-lifecycle-manager-backend.onrender.com";
+
+app.all("/api/*", (req, res) => {
+  const options = {
+    hostname: BACKEND_HOST,
+    port: 443,
+    path: req.originalUrl,
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: BACKEND_HOST,
+    },
+  };
+
+  const proxyReq = https.request(options, (proxyRes) => {
+    res.writeHead(proxyRes.statusCode, proxyRes.headers);
+    proxyRes.pipe(res);
+  });
+
+  proxyReq.on("error", (err) => {
+    console.error("[Proxy] Error:", err.message);
+    if (!res.headersSent) {
+      res.status(502).json({ error: "Backend proxy error", message: err.message });
+    }
+  });
+
+  req.pipe(proxyReq);
+});
+// ─── END API PROXY ─────────────────────────────────────────────────────────
 
 const build = await import("./build/server/index.js");
 const requestHandler = createRequestHandler({
