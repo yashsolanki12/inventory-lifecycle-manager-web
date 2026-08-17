@@ -48,6 +48,7 @@ const DashboardPage = () => {
 
   const plan = planData?.data;
   const features = plan?.features || {};
+  console.log("dashboard plan", plan);
 
   const hasFullDashboard = features.dashboardAnalytics === "full";
   const hasFullAging = features.inventoryAging === "full";
