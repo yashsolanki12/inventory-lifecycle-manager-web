@@ -25,15 +25,11 @@ export const resetPlanOnBackend = async (shop) => {
 };
 
 export const getPlanFromBackend = async (shop) => {
-  console.log("[Plan] GET /rules/plan shop=", shop, "baseURL=", axiosInstance.defaults.baseURL);
   return axiosInstance
     .get("/rules/plan", { params: { shop } })
-    .then((res) => {
-      console.log("[Plan] GET success", res.status, res.data);
-      return res.data;
-    })
+    .then((res) => res.data)
     .catch((err) => {
-      console.error("[Plan] GET failed:", err.message, err.code, err.response?.status, err.response?.data);
+      console.error("[Plan] Backend fetch failed:", err.message);
       return null;
     });
 };

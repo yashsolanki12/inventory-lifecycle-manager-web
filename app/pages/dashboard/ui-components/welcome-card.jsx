@@ -9,11 +9,10 @@ import { usePricingRedirect } from "../../../utils/helper";
 import { FEATURES, PLAN_SKU_TEXT } from "../../../utils/config/constants";
 
 const WelcomeCard = ({ onSync, plan }) => {
-  console.log("plan", plan);
   const planName = plan?.plan || "free";
   const skuLabel = PLAN_SKU_TEXT[planName] || PLAN_SKU_TEXT.free;
   const redirectToPricing = usePricingRedirect();
-
+  console.log('welcome card',plan)
   const handleUpgrade = () => {
     redirectToPricing();
   };
