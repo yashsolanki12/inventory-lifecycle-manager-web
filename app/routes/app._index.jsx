@@ -26,9 +26,9 @@ export default function Index() {
   const showFallback =
     hasSynced() === true ? <DashboardSkeleton /> : <SyncProductSkeleton />;
   return (
-    <React.Suspense fallback={showFallback}>
-      <DashboardPage />
-    </React.Suspense>
+      <React.Suspense fallback={showFallback}>
+        <DashboardPage shop={shop} />
+      </React.Suspense>
   );
 }
 
