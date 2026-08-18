@@ -16,22 +16,25 @@ const BACKEND_URL =
 
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
+  console.log("[IndexLoader] session.shop=", session?.shop, "session.id=", session?.id);
 
   let planUsage = null;
   try {
     const res = await fetch(
       `${BACKEND_URL}/api/rules/plan?shop=${session.shop}`,
     );
+    console.log("[IndexLoader] plan API status=", res.status);
     if (res.ok) {
       const json = await res.json();
+      console.log("[IndexLoader] plan API json=", JSON.stringify(json));
       if (json.success) planUsage = json.data;
     }
   } catch (err) {
-    console.error("[Index] Plan fetch failed:", err.message);
+    console.error("[IndexLoader] Plan fetch failed:", err.message);
   }
 
   return {
-    shop: session.shop ?? "No shop found",
+    shop: session?.shop ?? "No shop found",
     planUsage,
   };
 };
