@@ -36,10 +36,17 @@ export const useCurrentShopDomain = () => {
     const app = useAppBridge();
     const bridgeShop = app?.config?.shop || "";
     if (bridgeShop && !_cachedShopDomain) _cachedShopDomain = bridgeShop;
-    return bridgeShop || _cachedShopDomain || "";
+    if (bridgeShop) return bridgeShop;
   } catch (_) {
-    return _cachedShopDomain || "";
+    // App Bridge not available yet
   }
+
+  if (!_cachedShopDomain && typeof window !== "undefined") {
+    const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
+    if (urlShop) _cachedShopDomain = urlShop;
+  }
+
+  return _cachedShopDomain || "";
 };
 // export const useCurrentShopDomain = () => {
 //   const app = useAppBridge();
