@@ -5,6 +5,7 @@ import SyncProductSkeleton from "../ui/skeleton-loader/sync-product-skeleton";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 import { useLoaderData } from "react-router";
+import { syncPlanToBackend } from "../api/plan";
 
 const DashboardPage = React.lazy(
   () => import("../pages/dashboard/dashboard-page"),
@@ -17,6 +18,24 @@ const BACKEND_URL =
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   console.log("[IndexLoader] session.shop=", session?.shop, "session.id=", session?.id);
+
+  const url = new URL(request.url);
+  const chargeId = url.searchParams.get("charge_id");
+  const planHandle = url.searchParams.get("plan_handle");
+
+  if (chargeId && planHandle && session?.shop) {
+    try {
+      console.log("[IndexLoader] Syncing plan before fetch:", planHandle, chargeId);
+      await syncPlanToBackend(
+        session.shop,
+        planHandle.toLowerCase(),
+        chargeId,
+      );
+      console.log("[IndexLoader] Plan sync completed");
+    } catch (err) {
+      console.error("[IndexLoader] Plan sync failed:", err.message);
+    }
+  }
 
   let planUsage = null;
   try {
