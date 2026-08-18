@@ -76,7 +76,7 @@ export const loader = async ({ request }) => {
     const planHandle = url.searchParams.get("plan_handle");
 
     if (hasActivePlan && activeSubscription) {
-      syncPlanToBackend(
+      await syncPlanToBackend(
         session.shop,
         activeSubscription.name.toLowerCase(),
         activeSubscription.id,
@@ -84,7 +84,7 @@ export const loader = async ({ request }) => {
         console.error("[App] Plan sync to backend failed:", err.message),
       );
     } else if (chargeId && planHandle) {
-      syncPlanToBackend(
+      await syncPlanToBackend(
         session.shop,
         planHandle.toLowerCase(),
         chargeId,
