@@ -34,6 +34,7 @@ const ArchiveHistoryListPage = () => {
     ["archive-history"],
     () => archiveHistory(shopDomain),
     null,
+    { enabled: !!shopDomain },
   );
 
   const handleProductPreview = (item) => {
@@ -156,6 +157,7 @@ const ArchiveHistoryListPage = () => {
         defaultSort="-createdAt"
         paginationText="archive history"
         defaultLimit={10}
+        enabled={!!shopDomain}
       />
 
       <ConfirmDialog

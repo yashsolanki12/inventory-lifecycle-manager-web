@@ -21,7 +21,7 @@ export const syncProduct = async (shop) => {
       //   "API Error while sync product",
       //   error.response.data.message,
       // );
-      throw error.response.data.message;
+      throw error?.response?.data?.message || error?.message || "An error occurred";
     });
 };
 

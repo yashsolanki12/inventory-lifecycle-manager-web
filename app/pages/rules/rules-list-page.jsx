@@ -249,6 +249,7 @@ const RulesListPage = () => {
         defaultSort="-createdAt"
         defaultLimit={10}
         paginationText="rules"
+        enabled={!!shopDomain}
         selectable
         selectedIds={selectedIds}
         onToggleSelect={handleToggleSelect}

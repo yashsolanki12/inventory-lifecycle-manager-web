@@ -42,6 +42,7 @@ const ReusableList = ({
   onToggleSelectAll,
   hideSearch = false,
   maxHeight = "calc(100vh - 300px)",
+  enabled = true,
 }) => {
   const allColumns = actions
     ? [
@@ -111,7 +112,7 @@ const ReusableList = ({
     [queryKey, page, debouncedSearch, sort, filterKey],
     () => fetchFn(params),
     null,
-    { enabled: true },
+    { enabled: enabled },
   );
 
   const items = responseData?.data?.items ?? [];

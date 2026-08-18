@@ -14,6 +14,19 @@ export default async function handleRequest(
   reactRouterContext,
 ) {
   addDocumentResponseHeaders(request, responseHeaders);
+
+  const backendUrl =
+    process.env.VITE_BACKEND_API_URL ||
+    "https://inventory-lifecycle-manager-backend.onrender.com";
+  const csp = responseHeaders.get("Content-Security-Policy");
+  if (csp) {
+    const updatedCsp = csp.replace(
+      /connect-src /g,
+      `connect-src ${backendUrl} `
+    );
+    responseHeaders.set("Content-Security-Policy", updatedCsp);
+  }
+
   const userAgent = request.headers.get("user-agent");
   const callbackName = isbot(userAgent ?? "") ? "onAllReady" : "onShellReady";
 
