@@ -22,8 +22,13 @@ export function setShopDomain(domain) {
 export const ShopDomainContext = React.createContext("");
 
 export const useCurrentShopDomain = () => {
+  const routeData = useRouteLoaderData("routes/app");
+  const routeShop = routeData?.shop || "";
+
   const ctxShop = React.useContext(ShopDomainContext);
   if (ctxShop) return ctxShop;
+
+  if (routeShop) return routeShop;
 
   if (typeof window === "undefined") return _cachedShopDomain || "";
 
