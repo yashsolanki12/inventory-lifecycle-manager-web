@@ -11,16 +11,39 @@ import {
 export const APP_HANDLE =
   import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
 
+let _cachedShopDomain = "";
+
+export function setShopDomain(domain) {
+  if (domain && !_cachedShopDomain) {
+    _cachedShopDomain = domain;
+  }
+}
+
 export const useCurrentShopDomain = () => {
   const app = useAppBridge();
   const routeData = useRouteLoaderData("routes/app");
-  if (typeof window === "undefined") return "";
-  return (
-    routeData?.shop ||
-    app.config.shop ||
-    new URLSearchParams(window.location.search).get("shop") ||
-    ""
-  );
+  if (typeof window === "undefined") return _cachedShopDomain;
+
+  const routeShop = routeData?.shop || "";
+  const bridgeShop = app?.config?.shop || "";
+  const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
+
+  const shop = routeShop || bridgeShop || urlShop || _cachedShopDomain;
+
+  if (shop && !_cachedShopDomain) {
+    _cachedShopDomain = shop;
+  }
+
+  if (!shop) {
+    console.warn(
+      "[useCurrentShopDomain] No shop found — routeData:",
+      routeData,
+      "appBridge:",
+      app?.config,
+    );
+  }
+
+  return shop || "";
 };
 
 // Open an external billing URL in the admin TOP frame (_top). Tries App Bridge
@@ -38,7 +61,9 @@ export const openBillingUrl = (url, app) => {
   log.push("hasApp:" + Boolean(app));
   log.push(
     "hasAppRedirect:" +
-      Boolean(app && app.redirect && typeof app.redirect.dispatch === "function"),
+      Boolean(
+        app && app.redirect && typeof app.redirect.dispatch === "function",
+      ),
   );
 
   // 1) App Bridge dispatch to the admin path (top frame — correct context).

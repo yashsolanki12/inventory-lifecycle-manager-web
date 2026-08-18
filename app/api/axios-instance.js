@@ -1,7 +1,10 @@
 import axios from "axios";
 
 const getBaseURL = () => {
-  return "/api/";
+  const backendDomain =
+    import.meta.env.VITE_BACKEND_API_URL ||
+    "https://inventory-lifecycle-manager-backend.onrender.com";
+  return `${backendDomain}/api/`;
 };
 
 const axiosInstance = axios.create({

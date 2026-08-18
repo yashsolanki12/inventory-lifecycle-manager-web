@@ -10,6 +10,7 @@ import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate, sessionStorage } from "../shopify.server";
 import { authPostSync } from "../api/auth";
+import { setShopDomain } from "../utils/helper";
 import { syncPlanToBackend } from "../api/plan";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -103,6 +104,8 @@ export default function App() {
   const { apiKey, hasActivePlan, shop, billingUrl } = useLoaderData();
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
+
+  if (shop) setShopDomain(shop);
 
   const queryClient = React.useMemo(
     () =>
