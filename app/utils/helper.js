@@ -14,7 +14,7 @@ export const APP_HANDLE =
 let _cachedShopDomain = "";
 
 export function setShopDomain(domain) {
-  if (domain && !_cachedShopDomain) {
+  if (domain) {
     _cachedShopDomain = domain;
   }
 }
@@ -26,24 +26,23 @@ export const useCurrentShopDomain = () => {
   const routeShop = routeData?.shop || "";
 
   const ctxShop = React.useContext(ShopDomainContext);
-  if (ctxShop) return ctxShop;
 
+  const app = useAppBridge();
+  const bridgeShop = app?.config?.shop || "";
+
+  if (ctxShop) return ctxShop;
   if (routeShop) return routeShop;
+  if (bridgeShop) {
+    _cachedShopDomain = bridgeShop;
+    return bridgeShop;
+  }
 
   if (typeof window === "undefined") return _cachedShopDomain || "";
 
-  try {
-    const app = useAppBridge();
-    const bridgeShop = app?.config?.shop || "";
-    if (bridgeShop && !_cachedShopDomain) _cachedShopDomain = bridgeShop;
-    if (bridgeShop) return bridgeShop;
-  } catch (_) {
-    // App Bridge not available yet
-  }
-
-  if (!_cachedShopDomain && typeof window !== "undefined") {
-    const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
-    if (urlShop) _cachedShopDomain = urlShop;
+  const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
+  if (urlShop) {
+    _cachedShopDomain = urlShop;
+    return urlShop;
   }
 
   return _cachedShopDomain || "";

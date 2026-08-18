@@ -42,7 +42,7 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
       syncPlanToBackend(payload.shop, payload.plan, payload.chargeId),
     null,
     {
-      invalidateKeys: [["sync-plan-to-backend"]],
+      invalidateKeys: [["plan-usage"]],
     },
   );
   const payload = {
