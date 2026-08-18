@@ -70,14 +70,28 @@ export const loader = async ({ request }) => {
     console.error("[App] Billing check failed:", err.message);
   }
 
-  if (session && hasActivePlan && activeSubscription) {
-    syncPlanToBackend(
-      session.shop,
-      activeSubscription.name.toLowerCase(),
-      activeSubscription.id,
-    ).catch((err) =>
-      console.error("[App] Plan sync to backend failed:", err.message),
-    );
+  if (session) {
+    const url = new URL(request.url);
+    const chargeId = url.searchParams.get("charge_id");
+    const planHandle = url.searchParams.get("plan_handle");
+
+    if (hasActivePlan && activeSubscription) {
+      syncPlanToBackend(
+        session.shop,
+        activeSubscription.name.toLowerCase(),
+        activeSubscription.id,
+      ).catch((err) =>
+        console.error("[App] Plan sync to backend failed:", err.message),
+      );
+    } else if (chargeId && planHandle) {
+      syncPlanToBackend(
+        session.shop,
+        planHandle.toLowerCase(),
+        chargeId,
+      ).catch((err) =>
+        console.error("[App] Plan sync after charge failed:", err.message),
+      );
+    }
   }
 
   // Build the billing URL server-side (respects SHOPIFY_APP_NAME env on Render,
