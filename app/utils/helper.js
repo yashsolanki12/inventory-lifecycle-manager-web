@@ -31,6 +31,12 @@ export const useCurrentShopDomain = () => {
 
   if (typeof window === "undefined") return _cachedShopDomain || "";
 
+  // In App Bridge v4, the shop domain is always available globally
+  if (window.shopify?.config?.shop) {
+    _cachedShopDomain = window.shopify.config.shop;
+    return _cachedShopDomain;
+  }
+
   const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
   if (urlShop) {
     _cachedShopDomain = urlShop;
@@ -78,48 +84,20 @@ export const openBillingUrl = (url, app) => {
   }
   log.push("url:" + url);
 
-  log.push("hasApp:" + Boolean(app));
-  log.push(
-    "hasAppRedirect:" +
-      Boolean(
-        app && app.redirect && typeof app.redirect.dispatch === "function",
-      ),
-  );
-
-  // 1) App Bridge dispatch to the admin path (top frame — correct context).
   try {
-    if (app?.redirect?.dispatch) {
-      const path = new URL(url).pathname; // /store/<store>/charges/<handle>/pricing_plans
-      app.redirect.dispatch("ADMIN_PATH", path);
-      log.push("appbridge:dispatched");
+    // In App Bridge v4, open with _top is automatically intercepted and handled securely
+    if (typeof open !== 'undefined') {
+      open(url, '_top');
+      log.push("window.open(_top)");
     } else {
-      log.push("appbridge:unavailable");
+      window.top.location.href = url;
+      log.push("top:set");
     }
   } catch (e) {
-    log.push("appbridge:threw:" + e.message);
-  }
-  // 2) Top-frame navigation (_top) — does not throw when blocked, so we always
-  //    continue to the iframe fallback regardless of the outcome.
-  try {
-    window.top.location.href = url;
-    log.push("top:set");
-  } catch (e) {
-    log.push("top:threw:" + e.message);
-  }
-  // 3) Last resort: navigate the iframe itself.
-  try {
-    window.location.href = url;
-    log.push("iframe:set");
-  } catch (e) {
-    log.push("iframe:threw:" + e.message);
+    log.push("error:" + e.message);
   }
 
-  const method = log.includes("appbridge:dispatched")
-    ? "appbridge"
-    : log.includes("top:set")
-      ? "top"
-      : "iframe";
-  return { method, log };
+  return { method: "appbridge_v4", log };
 };
 
 export const usePricingRedirect = () => {
@@ -128,7 +106,12 @@ export const usePricingRedirect = () => {
   return React.useCallback(() => {
     const billingUrl = routeData?.billingUrl;
     if (billingUrl) {
-      openBillingUrl(billingUrl, null);
+      // In Shopify App Bridge v4 with embedded apps, we can just use the global shopify object
+      if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
+        openBillingUrl(billingUrl, window.shopify);
+      } else {
+        openBillingUrl(billingUrl, null);
+      }
       return;
     }
 
@@ -144,7 +127,12 @@ export const usePricingRedirect = () => {
     }
     const storeHandle = urlShop.split(".").at(0);
     const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
-    openBillingUrl(`https://admin.shopify.com${path}`, null);
+    
+    if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
+      openBillingUrl(`https://admin.shopify.com${path}`, window.shopify);
+    } else {
+      openBillingUrl(`https://admin.shopify.com${path}`, null);
+    }
   }, [routeData]);
 };
 
