@@ -11,6 +11,7 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="emotion-insertion-point" content="" suppressHydrationWarning />
+        <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
         <Meta />
         <Links />
       </head>
