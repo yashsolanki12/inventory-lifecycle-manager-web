@@ -253,10 +253,10 @@ const InventoryViewPage = () => {
                 )}
 
                 {/* Inventory Value */}
-                {product.inventoryValue && (
+                {product.inventoryValue != null && (
                   <InfoRow label="Inventory Value" value={inventoryValue} />
                 )}
-
+                
                 {/* Status */}
                 {statusConfig && (
                   <Box

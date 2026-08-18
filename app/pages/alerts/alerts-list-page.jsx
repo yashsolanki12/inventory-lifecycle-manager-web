@@ -25,6 +25,7 @@ import { useCurrentShopDomain, formatDate } from "../../utils/helper";
 import { ALERT_TYPE_CONFIG } from "../../utils/config/constants";
 import { getAlerts, markAlertsRead, markAllAlertsRead } from "../../api/alerts";
 import { useInventoryData } from "../../hooks/useInventoryData";
+import Tooltip from "@mui/material/Tooltip";
 
 const ALERT_ICON_MAP = {
   dead_stock: InventoryIcon,
@@ -336,38 +337,62 @@ const AlertsListPage = () => {
                     }}
                   >
                     {alert.metadata?.productIds?.length > 0 && (
-                      <IconButton
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleView(alert);
-                        }}
-                        title="View details"
-                        sx={{
-                          color: "#005ea2",
-                          "&:hover": {
-                            backgroundColor: "#e6f0fa",
+                      <Tooltip
+                        title={"View details"}
+                        arrow
+                        slotProps={{
+                          tooltip: {
+                            sx: {
+                              lineHeight: 2,
+                              fontSize: "12px",
+                            },
                           },
                         }}
                       >
-                        <OpenInNewIcon sx={{ fontSize: 18 }} />
-                      </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleView(alert);
+                          }}
+                          sx={{
+                            color: "#005ea2",
+                            "&:hover": {
+                              backgroundColor: "#e6f0fa",
+                            },
+                          }}
+                        >
+                          <OpenInNewIcon sx={{ fontSize: 18 }} />
+                        </IconButton>
+                      </Tooltip>
                     )}
                     {isUnread && (
-                      <IconButton
-                        size="small"
-                        onClick={(e) => handleMarkRead(e, alert)}
-                        disabled={markReadMutation.isPending}
-                        title="Mark as read"
-                        sx={{
-                          color: "#005ea2",
-                          "&:hover": {
-                            backgroundColor: "#e6f0fa",
+                      <Tooltip
+                        title={"Mark as read"}
+                        arrow
+                        slotProps={{
+                          tooltip: {
+                            sx: {
+                              lineHeight: 2,
+                              fontSize: "12px",
+                            },
                           },
                         }}
                       >
-                        <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
-                      </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={(e) => handleMarkRead(e, alert)}
+                          disabled={markReadMutation.isPending}
+                          sx={{
+                            color: "#005ea2",
+                            "&:hover": {
+                              backgroundColor: "#e6f0fa",
+                            },
+                          }}
+                        >
+                          <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </Box>
                 </Box>
