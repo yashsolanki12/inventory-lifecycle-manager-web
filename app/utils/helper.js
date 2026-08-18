@@ -21,30 +21,34 @@ export function setShopDomain(domain) {
 
 export const useCurrentShopDomain = () => {
   const app = useAppBridge();
-  const routeData = useRouteLoaderData("routes/app");
-  if (typeof window === "undefined") return _cachedShopDomain;
-
-  const routeShop = routeData?.shop || "";
-  const bridgeShop = app?.config?.shop || "";
-  const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
-
-  const shop = routeShop || bridgeShop || urlShop || _cachedShopDomain;
-
-  if (shop && !_cachedShopDomain) {
-    _cachedShopDomain = shop;
-  }
-
-  if (!shop) {
-    console.warn(
-      "[useCurrentShopDomain] No shop found — routeData:",
-      routeData,
-      "appBridge:",
-      app?.config,
-    );
-  }
-
-  return shop || "";
+  return app.config.shop;
 };
+// export const useCurrentShopDomain = () => {
+//   const app = useAppBridge();
+//   const routeData = useRouteLoaderData("routes/app");
+//   if (typeof window === "undefined") return _cachedShopDomain;
+
+//   const routeShop = routeData?.shop || "";
+//   const bridgeShop = app?.config?.shop || "";
+//   const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
+
+//   const shop = routeShop || bridgeShop || urlShop || _cachedShopDomain;
+
+//   if (shop && !_cachedShopDomain) {
+//     _cachedShopDomain = shop;
+//   }
+
+//   if (!shop) {
+//     console.warn(
+//       "[useCurrentShopDomain] No shop found — routeData:",
+//       routeData,
+//       "appBridge:",
+//       app?.config,
+//     );
+//   }
+
+//   return shop || "";
+// };
 
 // Open an external billing URL in the admin TOP frame (_top). Tries App Bridge
 // redirect.dispatch first (the sanctioned _top navigation via Shopify's
