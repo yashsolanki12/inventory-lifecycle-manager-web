@@ -11,7 +11,6 @@ import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate, sessionStorage } from "../shopify.server";
 import { authPostSync } from "../api/auth";
 import { setShopDomain, ShopDomainContext } from "../utils/helper";
-import { syncPlanToBackend } from "../api/plan";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const loader = async ({ request }) => {
@@ -68,30 +67,6 @@ export const loader = async ({ request }) => {
     }
   } catch (err) {
     console.error("[App] Billing check failed:", err.message);
-  }
-
-  if (session) {
-    const url = new URL(request.url);
-    const chargeId = url.searchParams.get("charge_id");
-    const planHandle = url.searchParams.get("plan_handle");
-
-    if (hasActivePlan && activeSubscription) {
-      await syncPlanToBackend(
-        session.shop,
-        activeSubscription.name.toLowerCase(),
-        activeSubscription.id,
-      ).catch((err) =>
-        console.error("[App] Plan sync to backend failed:", err.message),
-      );
-    } else if (chargeId && planHandle) {
-      await syncPlanToBackend(
-        session.shop,
-        planHandle.toLowerCase(),
-        chargeId,
-      ).catch((err) =>
-        console.error("[App] Plan sync after charge failed:", err.message),
-      );
-    }
   }
 
   // Build the billing URL server-side (respects SHOPIFY_APP_NAME env on Render,
