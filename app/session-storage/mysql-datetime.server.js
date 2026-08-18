@@ -138,8 +138,13 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
         \`updated_at\` = ${this.connection.getArgumentPlaceholder()}
     `;
 
-    await this.connection.query(query, [...values, now, now, now]);
-    // console.log(`[SessionStorage] storeSession: id=${session.id} shop=${session.shop}`);
+    try {
+      await this.connection.query(query, [...values, now, now, now]);
+      console.log(`[SessionStorage] storeSession OK: id=${session.id} shop=${session.shop}`);
+    } catch (err) {
+      console.error(`[SessionStorage] storeSession FAILED: id=${session.id} shop=${session.shop} err=${err.message}`);
+      throw err;
+    }
     return true;
   }
 

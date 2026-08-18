@@ -17,6 +17,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 export const loader = async ({ request }) => {
   const { session, billing } = await authenticate.admin(request);
 
+  console.log("[AppLoader] session.shop=", session?.shop, "session.id=", session?.id, "hasSession=", !!session);
+
   if (session) {
     const hasInfo = await sessionStorage
       .hasShopInfo(session.id)
