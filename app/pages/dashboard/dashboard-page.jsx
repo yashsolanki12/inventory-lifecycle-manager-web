@@ -44,14 +44,20 @@ const DashboardPage = ({ shop: shopFromLoader, planFromLoader }) => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
 
-  const { data: planData } = useInventoryData(
+  const { data: planData, refetch: refetchPlan } = useInventoryData(
     ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
-    { enabled: !!shopDomain }, // retry: 2
+    { enabled: !!shopDomain },
   );
 
-  const plan = planData?.data;
+  const plan = planFromLoader || planData?.data;
+
+  React.useEffect(() => {
+    if (planFromLoader) {
+      refetchPlan();
+    }
+  }, [planFromLoader, refetchPlan]);
 
   console.log("dashboard", plan);
 
