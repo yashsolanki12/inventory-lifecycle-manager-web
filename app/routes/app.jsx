@@ -10,7 +10,7 @@ import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate, sessionStorage } from "../shopify.server";
 import { authPostSync } from "../api/auth";
-import { setShopDomain } from "../utils/helper";
+import { setShopDomain, ShopDomainContext } from "../utils/helper";
 import { syncPlanToBackend } from "../api/plan";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -132,23 +132,25 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider embedded apiKey={apiKey}>
-        <s-app-nav>
-          <s-link href="/app">Dashboard</s-link>
-          {/* 📊 */}
-          <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
-          <s-link href="/app/rules">Rules</s-link>
-          <s-link href="/app/archive-history">Archive History</s-link>
-          <s-link href="/app/alerts">Alerts</s-link>
-          <s-link href="/app/aging-buckets">Aging Buckets</s-link>
-          {/* <s-link href="/app/orders">Orders</s-link> */}
-          {/* 🛍️  */}
-          <s-link href="/app/plans">Plans</s-link>
-          {/* 💳  */}
-        </s-app-nav>
-        {(hasActivePlan || isPlansRoute) && <Outlet />}
-        {!hasActivePlan && !isPlansRoute && (
-          <NoPlanFallback billingUrl={billingUrl} />
-        )}
+        <ShopDomainContext.Provider value={shop}>
+          <s-app-nav>
+            <s-link href="/app">Dashboard</s-link>
+            {/* 📊 */}
+            <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
+            <s-link href="/app/rules">Rules</s-link>
+            <s-link href="/app/archive-history">Archive History</s-link>
+            <s-link href="/app/alerts">Alerts</s-link>
+            <s-link href="/app/aging-buckets">Aging Buckets</s-link>
+            {/* <s-link href="/app/orders">Orders</s-link> */}
+            {/* 🛍️  */}
+            <s-link href="/app/plans">Plans</s-link>
+            {/* 💳  */}
+          </s-app-nav>
+          {(hasActivePlan || isPlansRoute) && <Outlet />}
+          {!hasActivePlan && !isPlansRoute && (
+            <NoPlanFallback billingUrl={billingUrl} />
+          )}
+        </ShopDomainContext.Provider>
       </AppProvider>
     </QueryClientProvider>
   );

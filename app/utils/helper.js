@@ -19,19 +19,22 @@ export function setShopDomain(domain) {
   }
 }
 
+export const ShopDomainContext = React.createContext("");
+
 export const useCurrentShopDomain = () => {
-  let app = null;
+  const ctxShop = React.useContext(ShopDomainContext);
+  if (ctxShop) return ctxShop;
+
+  if (typeof window === "undefined") return _cachedShopDomain || "";
+
   try {
-    app = useAppBridge();
+    const app = useAppBridge();
+    const bridgeShop = app?.config?.shop || "";
+    if (bridgeShop && !_cachedShopDomain) _cachedShopDomain = bridgeShop;
+    return bridgeShop || _cachedShopDomain || "";
   } catch (_) {
-    // useAppBridge throws during SSR — fall back to cached domain
     return _cachedShopDomain || "";
   }
-
-  const bridgeShop = app?.config?.shop || "";
-  if (bridgeShop && !_cachedShopDomain) _cachedShopDomain = bridgeShop;
-
-  return bridgeShop || _cachedShopDomain || "";
 };
 // export const useCurrentShopDomain = () => {
 //   const app = useAppBridge();
