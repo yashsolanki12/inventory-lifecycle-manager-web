@@ -6,6 +6,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 // Replace the HOST env var with SHOPIFY_APP_URL so that it doesn't break the Vite server.
 // The CLI will eventually stop passing in HOST,
 // so we can remove this workaround after the next major release.
+console.log("url:", process.env.VITE_BACKEND_API_URL);
 if (
   process.env.HOST &&
   (!process.env.SHOPIFY_APP_URL ||
@@ -47,12 +48,12 @@ export default defineConfig({
       // See https://vitejs.dev/config/server-options.html#server-fs-allow for more information
       allow: ["app", "node_modules"],
     },
-    proxy: {
-      "/api": {
-        target: process.env.VITE_BACKEND_API_URL,
-        changeOrigin: true,
-      },
-    },
+    // proxy: {
+    //   "/api": {
+    //     target: process.env.VITE_BACKEND_API_URL,
+    //     changeOrigin: true,
+    //   },
+    // },
   },
   plugins: [reactRouter(), tsconfigPaths()],
   build: {
