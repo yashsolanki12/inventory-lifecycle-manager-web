@@ -1,5 +1,4 @@
 import React from "react";
-import { useAppBridge } from "@shopify/app-bridge-react";
 import { useRouteLoaderData } from "react-router";
 import {
   COLOR_MAP,
@@ -27,15 +26,8 @@ export const useCurrentShopDomain = () => {
 
   const ctxShop = React.useContext(ShopDomainContext);
 
-  const app = useAppBridge();
-  const bridgeShop = app?.config?.shop || "";
-
   if (ctxShop) return ctxShop;
   if (routeShop) return routeShop;
-  if (bridgeShop) {
-    _cachedShopDomain = bridgeShop;
-    return bridgeShop;
-  }
 
   if (typeof window === "undefined") return _cachedShopDomain || "";
 
@@ -131,37 +123,29 @@ export const openBillingUrl = (url, app) => {
 };
 
 export const usePricingRedirect = () => {
-  const app = useAppBridge();
   const routeData = useRouteLoaderData("routes/app");
 
   return React.useCallback(() => {
-    try {
-      // Prefer the billing URL computed SERVER-SIDE in the app loader (reads
-      // process.env.SHOPIFY_APP_NAME, available on the server but not the
-      // browser bundle). openBillingUrl navigates the admin TOP frame (_top).
-      const billingUrl = routeData?.billingUrl;
-      if (billingUrl) {
-        openBillingUrl(billingUrl, app);
-        return;
-      }
-
-      // Fallback (e.g. billingUrl missing): build from the shop and use _top nav.
-      const urlShop =
-        typeof window !== "undefined"
-          ? new URLSearchParams(window.location.search).get("shop")
-          : null;
-      const shop = urlShop || app?.config?.shop;
-      if (!shop) {
-        console.warn("[PricingRedirect] No shop resolved — aborting");
-        return;
-      }
-      const storeHandle = shop.split(".").at(0);
-      const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
-      openBillingUrl(`https://admin.shopify.com${path}`, app);
-    } catch (err) {
-      console.error("[PricingRedirect] error:", err);
+    const billingUrl = routeData?.billingUrl;
+    if (billingUrl) {
+      openBillingUrl(billingUrl, null);
+      return;
     }
-  }, [app, routeData]);
+
+    if (typeof window === "undefined") {
+      console.warn("[PricingRedirect] No shop resolved — aborting");
+      return;
+    }
+
+    const urlShop = new URLSearchParams(window.location.search).get("shop");
+    if (!urlShop) {
+      console.warn("[PricingRedirect] No shop resolved — aborting");
+      return;
+    }
+    const storeHandle = urlShop.split(".").at(0);
+    const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
+    openBillingUrl(`https://admin.shopify.com${path}`, null);
+  }, [routeData]);
 };
 
 export const getColorHex = (colorName) => {

@@ -5,17 +5,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PropTypes from "prop-types";
-import { useAppBridge } from "@shopify/app-bridge-react";
 import { openBillingUrl } from "../../utils/helper";
 
 function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
   billingUrl,
 }) {
-  const app = useAppBridge();
-
   const handleSelectPlan = () => {
-    openBillingUrl(billingUrl, app);
+    openBillingUrl(billingUrl, null);
   };
 
   return (
