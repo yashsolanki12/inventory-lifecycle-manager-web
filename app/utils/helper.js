@@ -20,8 +20,18 @@ export function setShopDomain(domain) {
 }
 
 export const useCurrentShopDomain = () => {
-  const app = useAppBridge();
-  return app.config.shop;
+  let app = null;
+  try {
+    app = useAppBridge();
+  } catch (_) {
+    // useAppBridge throws during SSR — fall back to cached domain
+    return _cachedShopDomain || "";
+  }
+
+  const bridgeShop = app?.config?.shop || "";
+  if (bridgeShop && !_cachedShopDomain) _cachedShopDomain = bridgeShop;
+
+  return bridgeShop || _cachedShopDomain || "";
 };
 // export const useCurrentShopDomain = () => {
 //   const app = useAppBridge();
