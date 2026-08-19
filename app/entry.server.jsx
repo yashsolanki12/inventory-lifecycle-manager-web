@@ -15,33 +15,15 @@ export default async function handleRequest(
 ) {
   addDocumentResponseHeaders(request, responseHeaders);
 
+  const backendUrl =
+    process.env.VITE_BACKEND_API_URL ||
+    "https://inventory-lifecycle-manager-backend.onrender.com";
   const csp = responseHeaders.get("Content-Security-Policy");
   if (csp) {
-    let updatedCsp = csp;
-
-    // Remove Shopify's nonce from script-src — React Router's <Scripts />
-    // tags don't carry the nonce so they get silently blocked, killing
-    // client-side hydration entirely.
-    updatedCsp = updatedCsp.replace(/'nonce-[^']+'\s*/g, "");
-
-    // Ensure 'self' + 'unsafe-inline' are present so RR bundles and
-    // inline Emotion styles can execute.
-    if (updatedCsp.includes("script-src")) {
-      updatedCsp = updatedCsp.replace(
-        /script-src\s+/,
-        "script-src 'self' 'unsafe-inline' "
-      );
-    }
-
-    // Ensure 'self' is in connect-src so client-side /api/ calls
-    // (proxied through the same origin) are allowed.
-    if (updatedCsp.includes("connect-src")) {
-      updatedCsp = updatedCsp.replace(
-        /connect-src\s+/,
-        "connect-src 'self' "
-      );
-    }
-
+    const updatedCsp = csp.replace(
+      /connect-src /g,
+      `connect-src ${backendUrl} `,
+    );
     responseHeaders.set("Content-Security-Policy", updatedCsp);
   }
 
