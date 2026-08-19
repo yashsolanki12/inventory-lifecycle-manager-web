@@ -54,10 +54,14 @@ export const useCurrentShopDomain = () => {
 
 export const usePricingRedirect = () => {
   const app = useAppBridge();
+  const routeData = useRouteLoaderData("routes/app");
+  console.log("routeData", routeData);
+  console.log("app", app);
 
   return React.useCallback(() => {
     try {
-      const shop = app?.config?.shop;
+      // const shop = app?.config?.shop;
+      const shop = routeData?.shop;
       if (!shop) return;
       const storeHandle = shop.split(".").at(0);
       const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
