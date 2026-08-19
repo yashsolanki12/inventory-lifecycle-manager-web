@@ -1,20 +1,9 @@
 import axios from "axios";
 
 const getBaseURL = () => {
-  if (typeof window !== "undefined") {
-    const isLocal =
-      window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1";
-    if (!isLocal) {
-      return "/api/";
-    }
-  }
-  // Server-side (SSR / route loaders): use process.env because
-  // import.meta.env.VITE_* is only inlined for client-side Vite builds.
   const backendDomain =
-    // eslint-disable-next-line no-undef
-    (typeof process !== "undefined" && process.env?.VITE_BACKEND_API_URL) ||
-    "http://localhost:3001";
+    import.meta.env.VITE_BACKEND_API_URL ||
+    "https://inventory-lifecycle-manager-backend.onrender.com";
   return `${backendDomain}/api/`;
 };
 

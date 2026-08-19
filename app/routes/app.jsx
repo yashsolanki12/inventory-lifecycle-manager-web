@@ -10,20 +10,11 @@ import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate, sessionStorage } from "../shopify.server";
 import { authPostSync } from "../api/auth";
-import { setShopDomain, ShopDomainContext } from "../utils/helper";
+import { syncPlanToBackend } from "../api/plan";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const loader = async ({ request }) => {
   const { session, billing } = await authenticate.admin(request);
-
-  console.log(
-    "[AppLoader] session.shop=",
-    session?.shop,
-    "session.id=",
-    session?.id,
-    "hasSession=",
-    !!session,
-  );
 
   if (session) {
     const hasInfo = await sessionStorage
@@ -76,35 +67,28 @@ export const loader = async ({ request }) => {
     console.error("[App] Billing check failed:", err.message);
   }
 
-  // Build the billing URL server-side (respects SHOPIFY_APP_NAME env on Render,
-  // which the browser bundle cannot read). Opened via a real <a target="_blank">
-  // so no App Bridge / RR-loader / cross-origin navigation is involved.
-  // eslint-disable-next-line no-undef
-  let billingUrl = "";
-  if (session?.shop) {
-    // eslint-disable-next-line no-undef
-    const billingHandle =
-      process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
-    billingUrl = `https://admin.shopify.com/store/${session.shop
-      .split(".")
-      .at(0)}/charges/${billingHandle}/pricing_plans`;
+  if (session && hasActivePlan && activeSubscription) {
+    syncPlanToBackend(
+      session.shop,
+      activeSubscription.name.toLowerCase(),
+      activeSubscription.id,
+    ).catch((err) =>
+      console.error("[App] Plan sync to backend failed:", err.message),
+    );
   }
 
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
     shop: session?.shop || "",
-    billingUrl,
     hasActivePlan,
   };
 };
 
 export default function App() {
-  const { apiKey, hasActivePlan, shop, billingUrl } = useLoaderData();
+  const { apiKey, hasActivePlan, shop } = useLoaderData();
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
-
-  if (shop) setShopDomain(shop);
 
   const queryClient = React.useMemo(
     () =>
@@ -131,25 +115,21 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider embedded apiKey={apiKey}>
-        <ShopDomainContext.Provider value={shop}>
-          <s-app-nav>
-            <s-link href="/app">Dashboard</s-link>
-            {/* 📊 */}
-            <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
-            <s-link href="/app/rules">Rules</s-link>
-            <s-link href="/app/archive-history">Archive History</s-link>
-            <s-link href="/app/alerts">Alerts</s-link>
-            <s-link href="/app/aging-buckets">Aging Buckets</s-link>
-            {/* <s-link href="/app/orders">Orders</s-link> */}
-            {/* 🛍️  */}
-            <s-link href="/app/plans">Plans</s-link>
-            {/* 💳  */}
-          </s-app-nav>
-          {(hasActivePlan || isPlansRoute) && <Outlet />}
-          {!hasActivePlan && !isPlansRoute && (
-            <NoPlanFallback billingUrl={billingUrl} />
-          )}
-        </ShopDomainContext.Provider>
+        <s-app-nav>
+          <s-link href="/app">Dashboard</s-link>
+          {/* 📊 */}
+          <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
+          <s-link href="/app/rules">Rules</s-link>
+          <s-link href="/app/archive-history">Archive History</s-link>
+          <s-link href="/app/alerts">Alerts</s-link>
+          <s-link href="/app/aging-buckets">Aging Buckets</s-link>
+          {/* <s-link href="/app/orders">Orders</s-link> */}
+          {/* 🛍️  */}
+          <s-link href="/app/plans">Plans</s-link>
+          {/* 💳  */}
+        </s-app-nav>
+        {(hasActivePlan || isPlansRoute) && <Outlet />}
+        {!hasActivePlan && !isPlansRoute && <NoPlanFallback />}
       </AppProvider>
     </QueryClientProvider>
   );
