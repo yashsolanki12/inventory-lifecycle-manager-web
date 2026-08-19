@@ -18,11 +18,13 @@ import { useCurrentShopDomain } from "../../utils/helper";
 import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
 import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
-import { useSearchParams } from "react-router";
+import { useSearchParams, useRouteLoaderData } from "react-router";
 import { getPlanFromBackend } from "../../api/plan";
 
 const DashboardPage = () => {
   const shopDomain = useCurrentShopDomain();
+  const routeData = useRouteLoaderData("routes/app");
+  const hasActivePlan = routeData?.hasActivePlan;
 
   const [hasSynced, setHasSynced] = React.useState(() => {
     if (typeof window === "undefined" || !shopDomain) return false;
@@ -39,7 +41,7 @@ const DashboardPage = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
 
-  const { data: planData } = useInventoryData(
+  const { data: planData, refetch: refetchPlan } = useInventoryData(
     ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
@@ -119,6 +121,18 @@ const DashboardPage = () => {
       setSearchParams(newParams, { replace: true });
     }
   }, [searchParams, setSearchParams]);
+
+  React.useEffect(() => {
+    if (hasActivePlan && shopDomain) {
+      refetchPlan();
+    }
+  }, [hasActivePlan, shopDomain, refetchPlan]);
+
+  React.useEffect(() => {
+    if (searchParams.has("charge_id") || searchParams.has("plan_handle")) {
+      refetchPlan();
+    }
+  }, [searchParams, refetchPlan]);
 
   const isInitialLoading = hasSynced && isDashboardLoading;
   const isSyncing = syncMutation.isPending;
