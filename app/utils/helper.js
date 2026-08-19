@@ -9,7 +9,7 @@ import {
 import { useAppBridge } from "@shopify/app-bridge-react";
 
 export const APP_HANDLE =
-  process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
+  import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
 
 let _cachedShopDomain = "";
 

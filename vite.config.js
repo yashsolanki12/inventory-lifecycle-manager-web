@@ -47,12 +47,12 @@ export default defineConfig({
       // See https://vitejs.dev/config/server-options.html#server-fs-allow for more information
       allow: ["app", "node_modules"],
     },
-    proxy: {
-      "/api": {
-        target: process.env.VITE_BACKEND_API_URL || "http://localhost:3001",
-        changeOrigin: true,
-      },
-    },
+    // proxy: {
+    //   "/api": {
+    //     target: process.env.VITE_BACKEND_API_URL || "http://localhost:3001",
+    //     changeOrigin: true,
+    //   },
+    // },
   },
   plugins: [reactRouter(), tsconfigPaths()],
   build: {
