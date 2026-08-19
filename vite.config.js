@@ -47,12 +47,14 @@ export default defineConfig({
       // See https://vitejs.dev/config/server-options.html#server-fs-allow for more information
       allow: ["app", "node_modules"],
     },
-    // proxy: {
-    //   "/api": {
-    //     target: process.env.VITE_BACKEND_API_URL,
-    //     changeOrigin: true,
-    //   },
-    // },
+    proxy: {
+      "/api": {
+        target:
+          process.env.VITE_BACKEND_API_URL ||
+          "https://inventory-lifecycle-manager-backend.onrender.com",
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [reactRouter(), tsconfigPaths()],
   build: {
@@ -62,3 +64,4 @@ export default defineConfig({
     include: ["@shopify/app-bridge-react"],
   },
 });
+
