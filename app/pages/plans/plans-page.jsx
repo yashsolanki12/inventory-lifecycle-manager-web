@@ -28,11 +28,11 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
   };
 
   const handleViewPlan = () => {
-    openBillingUrl(billingUrl, null);
+    openBillingUrl(billingUrl);
   };
 
   const handleChangePlan = () => {
-    openBillingUrl(billingUrl, null);
+    openBillingUrl(billingUrl);
   };
 
   const createSyncPlanToBackendMutation = useInventorySubmit(
