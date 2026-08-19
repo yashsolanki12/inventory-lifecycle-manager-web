@@ -38,7 +38,7 @@ const RuleMatchPage = () => {
     ({ shop, ruleIds }) => runRule(shop, ruleIds),
     setSnackbar,
     {
-      invalidateKeys: [["plan-usage"]],
+      invalidateKeys: [["plan-usage", shopDomain]],
       onSuccess: (data) => {
         if (data.success === true) {
           navigate("/app/rules");
