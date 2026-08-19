@@ -20,7 +20,7 @@ function NoPlanFallback({
   //   redirectToPricing();
   // }, []);
   const handleSelectPlan = () => {
-    openBillingUrl(billingUrl, null);
+    openBillingUrl(billingUrl);
   };
 
   return (

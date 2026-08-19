@@ -42,11 +42,18 @@ const DashboardPage = () => {
   };
 
   const { data: planData, refetch: refetchPlan } = useInventoryData(
-    ["plan-usage"],
+    ["plan-usage", shopDomain],
     () => getPlanFromBackend(shopDomain),
     null,
     { enabled: !!shopDomain },
   );
+
+  React.useEffect(() => {
+    if (!shopDomain) return;
+    const alreadySynced =
+      sessionStorage.getItem(`inventory_synced_${shopDomain}`) === "true";
+    if (alreadySynced) setHasSynced(true);
+  }, [shopDomain]);
 
   const plan = planData?.data;
   const features = plan?.features || {};
@@ -56,14 +63,14 @@ const DashboardPage = () => {
 
   const { data: dashboardData, isLoading: isDashboardLoading } =
     useInventoryData(
-      ["inventory-dashboard-data"],
+      ["inventory-dashboard-data", shopDomain],
       () => getInventoryDashboard(shopDomain),
       null,
       { enabled: hasSynced && !!shopDomain },
     );
 
   const { data: agingData, isLoading: isAgingLoading } = useInventoryData(
-    ["inventory-aging-data"],
+    ["inventory-aging-data", shopDomain],
     () => getAgingBucket(shopDomain, { page: 1, limit: 10, bucket: "dead" }),
     null,
     { enabled: hasSynced && !!shopDomain && hasFullAging },
@@ -115,24 +122,19 @@ const DashboardPage = () => {
 
   React.useEffect(() => {
     if (searchParams.has("charge_id") || searchParams.has("plan_handle")) {
+      refetchPlan();
       const newParams = new URLSearchParams(searchParams);
       newParams.delete("charge_id");
       newParams.delete("plan_handle");
       setSearchParams(newParams, { replace: true });
     }
-  }, [searchParams, setSearchParams]);
+  }, [searchParams, refetchPlan, setSearchParams]);
 
   React.useEffect(() => {
     if (hasActivePlan && shopDomain) {
       refetchPlan();
     }
   }, [hasActivePlan, shopDomain, refetchPlan]);
-
-  React.useEffect(() => {
-    if (searchParams.has("charge_id") || searchParams.has("plan_handle")) {
-      refetchPlan();
-    }
-  }, [searchParams, refetchPlan]);
 
   const isInitialLoading = hasSynced && isDashboardLoading;
   const isSyncing = syncMutation.isPending;
