@@ -9,8 +9,12 @@ const getBaseURL = () => {
       return "/api/";
     }
   }
+  // Server-side (SSR / route loaders): use process.env because
+  // import.meta.env.VITE_* is only inlined for client-side Vite builds.
   const backendDomain =
-    import.meta.env.VITE_BACKEND_API_URL || "http://localhost:3001";
+    // eslint-disable-next-line no-undef
+    (typeof process !== "undefined" && process.env?.VITE_BACKEND_API_URL) ||
+    "http://localhost:3001";
   return `${backendDomain}/api/`;
 };
 
