@@ -52,33 +52,34 @@ export const useCurrentShopDomain = () => {
   return routeData?.shop || null;
 };
 
-export const usePricingRedirect = () => {
-  const app = useAppBridge();
-  const routeData = useRouteLoaderData("routes/app");
-  console.log("routeData", routeData);
-  console.log("app", app);
+// export const usePricingRedirect = () => {
+//   const app = useAppBridge();
+//   const routeData = useRouteLoaderData("routes/app");
+//   console.log("routeData", routeData);
+//   console.log("app", app);
 
-  return React.useCallback(() => {
-    try {
-      // const shop = app?.config?.shop;
-      const shop = routeData?.shop;
-      if (!shop) return;
-      const storeHandle = shop.split(".").at(0);
-      const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
-      console.log("path", path);
-      if (path) {
-        window.top.location.href = `https://admin.shopify.com${path}`;
-      }
-      // if (app?.redirect?.dispatch) {
-      //   app.redirect.dispatch("ADMIN_PATH", path);
-      // } else {
-      //   window.top.location.href = `https://admin.shopify.com${path}`;
-      // }
-    } catch {
-      // SSR or App Bridge not ready
-    }
-  }, [routeData]);
-};
+//   return React.useCallback(() => {
+//     try {
+//       // const shop = app?.config?.shop;
+//       const shop = routeData?.shop;
+//       if (!shop) return;
+//       const storeHandle = shop.split(".").at(0);
+//       const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
+//       console.log("path", path);
+//       if (path) {
+//         window.top.location.href = `https://admin.shopify.com${path}`;
+//       }
+//       // if (app?.redirect?.dispatch) {
+//       //   app.redirect.dispatch("ADMIN_PATH", path);
+//       // } else {
+//       //   window.top.location.href = `https://admin.shopify.com${path}`;
+//       // }
+//     } catch {
+//       // SSR or App Bridge not ready
+//     }
+//   }, [routeData]);
+// };
+
 export const openBillingUrl = (url, app) => {
   const log = [];
   if (!url) {
@@ -98,41 +99,43 @@ export const openBillingUrl = (url, app) => {
   return { method: "appbridge_v4", log };
 };
 
-// export const usePricingRedirect = () => {
-//   const routeData = useRouteLoaderData("routes/app");
+export const usePricingRedirect = () => {
+  const routeData = useRouteLoaderData("routes/app");
+  console.log("routeData", routeData);
 
-//   return React.useCallback(() => {
-//     const billingUrl = routeData?.billingUrl;
-//     if (billingUrl) {
-//       // In Shopify App Bridge v4 with embedded apps, we can just use the global shopify object
-//       if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
-//         openBillingUrl(billingUrl, window.shopify);
-//       } else {
-//         openBillingUrl(billingUrl, null);
-//       }
-//       return;
-//     }
+  return React.useCallback(() => {
+    const billingUrl = routeData?.billingUrl;
+    console.log("billing url", billingUrl);
+    if (billingUrl) {
+      // In Shopify App Bridge v4 with embedded apps, we can just use the global shopify object
+      if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
+        openBillingUrl(billingUrl, window.shopify);
+      } else {
+        openBillingUrl(billingUrl, null);
+      }
+      return;
+    }
 
-//     if (typeof window === "undefined") {
-//       console.warn("[PricingRedirect] No shop resolved — aborting");
-//       return;
-//     }
+    if (typeof window === "undefined") {
+      console.warn("[PricingRedirect] No shop resolved — aborting");
+      return;
+    }
 
-//     const urlShop = new URLSearchParams(window.location.search).get("shop");
-//     if (!urlShop) {
-//       console.warn("[PricingRedirect] No shop resolved — aborting");
-//       return;
-//     }
-//     const storeHandle = urlShop.split(".").at(0);
-//     const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
+    const urlShop = new URLSearchParams(window.location.search).get("shop");
+    if (!urlShop) {
+      console.warn("[PricingRedirect] No shop resolved — aborting");
+      return;
+    }
+    const storeHandle = urlShop.split(".").at(0);
+    const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
 
-//     if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
-//       openBillingUrl(`https://admin.shopify.com${path}`, window.shopify);
-//     } else {
-//       openBillingUrl(`https://admin.shopify.com${path}`, null);
-//     }
-//   }, [routeData]);
-// };
+    if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
+      openBillingUrl(`https://admin.shopify.com${path}`, window.shopify);
+    } else {
+      openBillingUrl(`https://admin.shopify.com${path}`, null);
+    }
+  }, [routeData]);
+};
 
 export const getColorHex = (colorName) => {
   const normalized = colorName?.toLowerCase().trim();
