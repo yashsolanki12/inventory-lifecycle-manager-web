@@ -1,8 +1,15 @@
+import React from "react";
+// import SuspenseFallback from "../components/suspense-fallback";
+import DashboardSkeleton from "../ui/skeleton-loader/dashboard-skeleton";
+import SyncProductSkeleton from "../ui/skeleton-loader/sync-product-skeleton";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 import { useLoaderData } from "react-router";
 import { syncPlanToBackend } from "../api/plan";
-import DashboardPage from "../pages/dashboard/dashboard-page";
+
+const DashboardPage = React.lazy(
+  () => import("../pages/dashboard/dashboard-page"),
+);
 
 const BACKEND_URL =
   import.meta.env.VITE_BACKEND_API_URL ||
@@ -10,7 +17,12 @@ const BACKEND_URL =
 
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
-  console.log("[IndexLoader] session.shop=", session?.shop, "session.id=", session?.id);
+  console.log(
+    "[IndexLoader] session.shop=",
+    session?.shop,
+    "session.id=",
+    session?.id,
+  );
 
   const url = new URL(request.url);
   const chargeId = url.searchParams.get("charge_id");
@@ -18,12 +30,12 @@ export const loader = async ({ request }) => {
 
   if (chargeId && planHandle && session?.shop) {
     try {
-      console.log("[IndexLoader] Syncing plan before fetch:", planHandle, chargeId);
-      await syncPlanToBackend(
-        session.shop,
-        planHandle.toLowerCase(),
+      console.log(
+        "[IndexLoader] Syncing plan before fetch:",
+        planHandle,
         chargeId,
       );
+      await syncPlanToBackend(session.shop, planHandle.toLowerCase(), chargeId);
       console.log("[IndexLoader] Plan sync completed");
     } catch (err) {
       console.error("[IndexLoader] Plan sync failed:", err.message);
@@ -53,7 +65,17 @@ export const loader = async ({ request }) => {
 
 export default function Index() {
   const { shop, planUsage } = useLoaderData();
-  return <DashboardPage shop={shop} planFromLoader={planUsage} />;
+  const hasSynced = () => {
+    if (typeof window === "undefined" || !shop) return false;
+    return sessionStorage.getItem(`inventory_synced_${shop}`) === "true";
+  };
+  const showFallback =
+    hasSynced() === true ? <DashboardSkeleton /> : <SyncProductSkeleton />;
+  return (
+    <React.Suspense fallback={showFallback}>
+      <DashboardPage shop={shop} planFromLoader={planUsage} />
+    </React.Suspense>
+  );
 }
 
 export const headers = (headersArgs) => {

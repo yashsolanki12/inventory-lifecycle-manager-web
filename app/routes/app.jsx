@@ -16,7 +16,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 export const loader = async ({ request }) => {
   const { session, billing } = await authenticate.admin(request);
 
-  console.log("[AppLoader] session.shop=", session?.shop, "session.id=", session?.id, "hasSession=", !!session);
+  console.log(
+    "[AppLoader] session.shop=",
+    session?.shop,
+    "session.id=",
+    session?.id,
+    "hasSession=",
+    !!session,
+  );
 
   if (session) {
     const hasInfo = await sessionStorage
@@ -76,7 +83,8 @@ export const loader = async ({ request }) => {
   let billingUrl = "";
   if (session?.shop) {
     // eslint-disable-next-line no-undef
-    const billingHandle = process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
+    const billingHandle =
+      process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
     billingUrl = `https://admin.shopify.com/store/${session.shop
       .split(".")
       .at(0)}/charges/${billingHandle}/pricing_plans`;
@@ -96,6 +104,8 @@ export default function App() {
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
 
+  if (shop) setShopDomain(shop);
+
   const queryClient = React.useMemo(
     () =>
       new QueryClient({
@@ -112,8 +122,6 @@ export default function App() {
   );
   React.useEffect(() => {
     if (!shop) return;
-    setShopDomain(shop);
-
     const key = `auth_post_sync_${shop}`;
     if (!localStorage.getItem(key)) {
       authPostSync(shop).then(() => localStorage.setItem(key, "true"));
