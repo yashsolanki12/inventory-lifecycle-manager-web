@@ -19,7 +19,7 @@ export function setShopDomain(domain) {
   }
 }
 
-export const ShopDomainContext = React.createContext("");
+// export const ShopDomainContext = React.createContext("");
 
 // export const useCurrentShopDomain = () => {
 //   const routeData = useRouteLoaderData("routes/app");
@@ -49,6 +49,7 @@ export const ShopDomainContext = React.createContext("");
 
 export const useCurrentShopDomain = () => {
   const routeData = useRouteLoaderData("routes/app");
+  console.log("useCurrentShopDomain",routeData);
   return routeData?.shop || null;
 };
 
