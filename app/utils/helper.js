@@ -18,6 +18,7 @@ export function setShopDomain(domain) {
   }
 }
 
+
 export const ShopDomainContext = React.createContext("");
 
 export const useCurrentShopDomain = () => {
