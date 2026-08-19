@@ -65,15 +65,19 @@ export const usePricingRedirect = () => {
       if (!shop) return;
       const storeHandle = shop.split(".").at(0);
       const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
-      if (app?.redirect?.dispatch) {
-        app.redirect.dispatch("ADMIN_PATH", path);
-      } else {
+      console.log("path", path);
+      if (path) {
         window.top.location.href = `https://admin.shopify.com${path}`;
       }
+      // if (app?.redirect?.dispatch) {
+      //   app.redirect.dispatch("ADMIN_PATH", path);
+      // } else {
+      //   window.top.location.href = `https://admin.shopify.com${path}`;
+      // }
     } catch {
       // SSR or App Bridge not ready
     }
-  }, [app]);
+  }, [routeData]);
 };
 export const openBillingUrl = (url, app) => {
   const log = [];
