@@ -6,7 +6,6 @@ import {
   ITEM_PADDING_TOP,
   PAPER_ID,
 } from "./config/constants";
-import { useAppBridge } from "@shopify/app-bridge-react";
 
 export const APP_HANDLE =
   import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
@@ -19,69 +18,40 @@ export function setShopDomain(domain) {
   }
 }
 
-// export const ShopDomainContext = React.createContext("");
 
-// export const useCurrentShopDomain = () => {
-//   const routeData = useRouteLoaderData("routes/app");
-//   const routeShop = routeData?.shop || "";
-
-//   const ctxShop = React.useContext(ShopDomainContext);
-
-//   if (ctxShop) return ctxShop;
-//   if (routeShop) return routeShop;
-
-//   if (typeof window === "undefined") return _cachedShopDomain || "";
-
-//   // In App Bridge v4, the shop domain is always available globally
-//   if (window.shopify?.config?.shop) {
-//     _cachedShopDomain = window.shopify.config.shop;
-//     return _cachedShopDomain;
-//   }
-
-//   const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
-//   if (urlShop) {
-//     _cachedShopDomain = urlShop;
-//     return urlShop;
-//   }
-
-//   return _cachedShopDomain || "";
-// };
+export const ShopDomainContext = React.createContext("");
 
 export const useCurrentShopDomain = () => {
   const routeData = useRouteLoaderData("routes/app");
-  console.log("useCurrentShopDomain",routeData);
-  return routeData?.shop || null;
+  const routeShop = routeData?.shop || "";
+  const ctxShop = React.useContext(ShopDomainContext);
+
+  if (ctxShop) return ctxShop;
+
+  if (typeof window !== "undefined") {
+    const urlShop = new URLSearchParams(window.location.search).get("shop");
+    if (urlShop) {
+      _cachedShopDomain = urlShop;
+      return urlShop;
+    }
+
+    if (window.shopify?.config?.shop) {
+      _cachedShopDomain = window.shopify.config.shop;
+      return _cachedShopDomain;
+    }
+  }
+
+  if (routeShop) {
+    _cachedShopDomain = routeShop;
+    return routeShop;
+  }
+
+  if (typeof window === "undefined") return _cachedShopDomain || "";
+
+  return _cachedShopDomain || "";
 };
 
-// export const usePricingRedirect = () => {
-//   const app = useAppBridge();
-//   const routeData = useRouteLoaderData("routes/app");
-//   console.log("routeData", routeData);
-//   console.log("app", app);
-
-//   return React.useCallback(() => {
-//     try {
-//       // const shop = app?.config?.shop;
-//       const shop = routeData?.shop;
-//       if (!shop) return;
-//       const storeHandle = shop.split(".").at(0);
-//       const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
-//       console.log("path", path);
-//       if (path) {
-//         window.top.location.href = `https://admin.shopify.com${path}`;
-//       }
-//       // if (app?.redirect?.dispatch) {
-//       //   app.redirect.dispatch("ADMIN_PATH", path);
-//       // } else {
-//       //   window.top.location.href = `https://admin.shopify.com${path}`;
-//       // }
-//     } catch {
-//       // SSR or App Bridge not ready
-//     }
-//   }, [routeData]);
-// };
-
-export const openBillingUrl = (url, app) => {
+export const openBillingUrl = (url) => {
   const log = [];
   if (!url) {
     return { method: "empty", log: ["billingUrl is EMPTY"] };
@@ -109,10 +79,14 @@ export const usePricingRedirect = () => {
     console.log("billing url", billingUrl);
     if (billingUrl) {
       // In Shopify App Bridge v4 with embedded apps, we can just use the global shopify object
-      if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
-        openBillingUrl(billingUrl, window.shopify);
+      if (
+        typeof window !== "undefined" &&
+        window.shopify &&
+        window.shopify.config
+      ) {
+        openBillingUrl(billingUrl);
       } else {
-        openBillingUrl(billingUrl, null);
+        openBillingUrl(billingUrl);
       }
       return;
     }
@@ -130,10 +104,14 @@ export const usePricingRedirect = () => {
     const storeHandle = urlShop.split(".").at(0);
     const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
 
-    if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
-      openBillingUrl(`https://admin.shopify.com${path}`, window.shopify);
+    if (
+      typeof window !== "undefined" &&
+      window.shopify &&
+      window.shopify.config
+    ) {
+      openBillingUrl(`https://admin.shopify.com${path}`);
     } else {
-      openBillingUrl(`https://admin.shopify.com${path}`, null);
+      openBillingUrl(`https://admin.shopify.com${path}`);
     }
   }, [routeData]);
 };
