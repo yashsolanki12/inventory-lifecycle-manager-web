@@ -21,20 +21,8 @@ import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
 import { useSearchParams } from "react-router";
 import { getPlanFromBackend } from "../../api/plan";
 
-const DashboardPage = ({ shop: shopFromLoader, planFromLoader }) => {
-  const hookShopDomain = useCurrentShopDomain();
-  const shopDomain = shopFromLoader || hookShopDomain;
-
-  React.useEffect(() => {
-    console.log(
-      "[Dashboard] shopFromLoader=",
-      JSON.stringify(shopFromLoader),
-      "hookShopDomain=",
-      JSON.stringify(hookShopDomain),
-      "shopDomain=",
-      JSON.stringify(shopDomain),
-    );
-  }, [shopFromLoader, hookShopDomain]);
+const DashboardPage = () => {
+  const shopDomain = useCurrentShopDomain();
 
   const [hasSynced, setHasSynced] = React.useState(() => {
     if (typeof window === "undefined" || !shopDomain) return false;
@@ -51,23 +39,14 @@ const DashboardPage = ({ shop: shopFromLoader, planFromLoader }) => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
 
-  const { data: planData, refetch: refetchPlan } = useInventoryData(
+  const { data: planData } = useInventoryData(
     ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
     { enabled: !!shopDomain },
   );
 
-  const plan = planFromLoader || planData?.data;
-
-  React.useEffect(() => {
-    if (planFromLoader) {
-      refetchPlan();
-    }
-  }, [planFromLoader, refetchPlan]);
-
-  console.log("dashboard", plan);
-
+  const plan = planData?.data;
   const features = plan?.features || {};
 
   const hasFullDashboard = features.dashboardAnalytics === "full";
