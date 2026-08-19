@@ -19,9 +19,11 @@ import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
 import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
 import { useSearchParams, useRouteLoaderData } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { getPlanFromBackend } from "../../api/plan";
 
 const DashboardPage = () => {
+  const queryClient = useQueryClient();
   const shopDomain = useCurrentShopDomain();
   const routeData = useRouteLoaderData("routes/app");
   const hasActivePlan = routeData?.hasActivePlan;
@@ -41,12 +43,15 @@ const DashboardPage = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
 
-  const { data: planData, refetch: refetchPlan } = useInventoryData(
+  const { data: planData } = useInventoryData(
     ["plan-usage", shopDomain],
     () => getPlanFromBackend(shopDomain),
     null,
     { enabled: !!shopDomain },
   );
+
+  const plan = planData?.data ?? planData;
+  const features = plan?.features || {};
 
   React.useEffect(() => {
     if (!shopDomain) return;
@@ -54,9 +59,6 @@ const DashboardPage = () => {
       sessionStorage.getItem(`inventory_synced_${shopDomain}`) === "true";
     if (alreadySynced) setHasSynced(true);
   }, [shopDomain]);
-
-  const plan = planData?.data;
-  const features = plan?.features || {};
 
   const hasFullDashboard = features.dashboardAnalytics === "full";
   const hasFullAging = features.inventoryAging === "full";
@@ -69,7 +71,7 @@ const DashboardPage = () => {
       { enabled: hasSynced && !!shopDomain },
     );
 
-  const { data: agingData, isLoading: isAgingLoading } = useInventoryData(
+  const { data: agingData } = useInventoryData(
     ["inventory-aging-data", shopDomain],
     () => getAgingBucket(shopDomain, { page: 1, limit: 10, bucket: "dead" }),
     null,
@@ -89,9 +91,9 @@ const DashboardPage = () => {
     setSnackbar,
     {
       invalidateKeys: [
-        ["inventory-dashboard-data"],
-        ["inventory-aging-data"],
-        ["plan-usage"],
+        ["inventory-dashboard-data", shopDomain],
+        ["inventory-aging-data", shopDomain],
+        ["plan-usage", shopDomain],
         ["dead-stock-trend-data"],
       ],
       onSuccess: () => {
@@ -122,19 +124,21 @@ const DashboardPage = () => {
 
   React.useEffect(() => {
     if (searchParams.has("charge_id") || searchParams.has("plan_handle")) {
-      refetchPlan();
+      queryClient.invalidateQueries(["plan-usage", shopDomain]);
+      queryClient.fetchQuery(["plan-usage", shopDomain], () => getPlanFromBackend(shopDomain));
       const newParams = new URLSearchParams(searchParams);
       newParams.delete("charge_id");
       newParams.delete("plan_handle");
       setSearchParams(newParams, { replace: true });
     }
-  }, [searchParams, refetchPlan, setSearchParams]);
+  }, [searchParams, shopDomain, queryClient, setSearchParams]);
 
   React.useEffect(() => {
     if (hasActivePlan && shopDomain) {
-      refetchPlan();
+      queryClient.invalidateQueries(["plan-usage", shopDomain]);
+      queryClient.fetchQuery(["plan-usage", shopDomain], () => getPlanFromBackend(shopDomain));
     }
-  }, [hasActivePlan, shopDomain, refetchPlan]);
+  }, [hasActivePlan, shopDomain, queryClient]);
 
   const isInitialLoading = hasSynced && isDashboardLoading;
   const isSyncing = syncMutation.isPending;

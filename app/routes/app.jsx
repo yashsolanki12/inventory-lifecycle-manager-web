@@ -122,6 +122,16 @@ export default function App() {
     }
   }, [shop]);
 
+  React.useEffect(() => {
+    if (hasActivePlan && shop) {
+      queryClient.invalidateQueries(["plan-usage", shop]);
+      queryClient.fetchQuery(["plan-usage", shop], async () => {
+        const { getPlanFromBackend } = await import("../api/plan");
+        return getPlanFromBackend(shop);
+      });
+    }
+  }, [hasActivePlan, shop, queryClient]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider embedded apiKey={apiKey}>
