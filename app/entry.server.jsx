@@ -15,15 +15,12 @@ export default async function handleRequest(
 ) {
   addDocumentResponseHeaders(request, responseHeaders);
 
-  const backendUrl =
-    process.env.VITE_BACKEND_API_URL ||
-    "https://inventory-lifecycle-manager-backend.onrender.com";
   const csp = responseHeaders.get("Content-Security-Policy");
   if (csp) {
-    const updatedCsp = csp.replace(
-      /connect-src /g,
-      `connect-src ${backendUrl} `,
-    );
+    let updatedCsp = csp;
+    if (!updatedCsp.includes("connect-src")) {
+      updatedCsp += " connect-src 'self'";
+    }
     responseHeaders.set("Content-Security-Policy", updatedCsp);
   }
 

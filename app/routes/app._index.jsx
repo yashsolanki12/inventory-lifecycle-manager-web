@@ -12,9 +12,9 @@ const DashboardPage = React.lazy(
 );
 
 const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_API_URL ||
+  // eslint-disable-next-line no-undef
+  process.env.VITE_BACKEND_API_URL ||
   "https://inventory-lifecycle-manager-backend.onrender.com";
-
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   console.log(
