@@ -36,6 +36,7 @@ app.use(morgan("tiny"));
 const BACKEND_HOST = "inventory-lifecycle-manager-backend.onrender.com";
 
 app.all("/api/*", (req, res) => {
+  console.log(`[Proxy] ${req.method} ${req.originalUrl}`);
   const options = {
     hostname: BACKEND_HOST,
     port: 443,
