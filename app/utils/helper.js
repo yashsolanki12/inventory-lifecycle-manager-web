@@ -85,13 +85,9 @@ export const openBillingUrl = (url, app) => {
   log.push("url:" + url);
 
   try {
-    // In App Bridge v4, open with _top is automatically intercepted and handled securely
-    if (typeof open !== 'undefined') {
-      open(url, '_top');
+    if (typeof window !== "undefined") {
+      window.open(url, "_top");
       log.push("window.open(_top)");
-    } else {
-      window.top.location.href = url;
-      log.push("top:set");
     }
   } catch (e) {
     log.push("error:" + e.message);

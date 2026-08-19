@@ -96,8 +96,6 @@ export default function App() {
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
 
-  if (shop) setShopDomain(shop);
-
   const queryClient = React.useMemo(
     () =>
       new QueryClient({
@@ -114,6 +112,8 @@ export default function App() {
   );
   React.useEffect(() => {
     if (!shop) return;
+    setShopDomain(shop);
+
     const key = `auth_post_sync_${shop}`;
     if (!localStorage.getItem(key)) {
       authPostSync(shop).then(() => localStorage.setItem(key, "true"));
