@@ -14,25 +14,15 @@ export const useInventoryData = (
     retry = false,
   } = options;
 
-  // Avoid SSR/client hydration mismatches and server-side axios calls that
-  // never appear in the browser network tab. Queries run after client mount.
-  const [isClient, setIsClient] = React.useState(false);
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const queryEnabled = enabled && isClient;
-
-  const { error, data, isPending, isFetching, refetch, isSuccess } = useQuery({
+  // Call useQuery at the top level
+  const { error, data, isLoading, isFetching, refetch, isSuccess } = useQuery({
     queryKey: Array.isArray(queryKey) ? queryKey : [queryKey],
     queryFn: queryFn,
-    enabled: queryEnabled,
+    enabled: enabled,
     staleTime: staleTime,
     refetchOnMount: true,
     retry: retry,
   });
-
-  const isLoading = queryEnabled && (isPending || isFetching) && !data;
 
   const errorMessage = error?.message;
   React.useEffect(() => {
