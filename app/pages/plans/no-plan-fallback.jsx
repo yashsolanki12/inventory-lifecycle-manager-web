@@ -6,17 +6,22 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PropTypes from "prop-types";
-import { usePricingRedirect } from "../../utils/helper";
+import { openBillingUrl, usePricingRedirect } from "../../utils/helper";
 
 function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
+  billingUrl,
 }) {
+  console.log("billingUrl", billingUrl);
   const redirectToPricing = usePricingRedirect();
   console.log("redirectToPricing", redirectToPricing);
 
-  const handleClick = React.useCallback(() => {
-    redirectToPricing();
-  }, []);
+  // const handleClick = React.useCallback(() => {
+  //   redirectToPricing();
+  // }, []);
+  const handleSelectPlan = () => {
+    openBillingUrl(billingUrl, null);
+  };
 
   return (
     <Box
@@ -52,7 +57,11 @@ function NoPlanFallback({
           </Typography>
           <Button
             variant="contained"
-            onClick={handleClick}
+            component="a"
+            href={billingUrl || "#"}
+            target="_top"
+            rel="noopener noreferrer"
+            onClick={handleSelectPlan}
             sx={{
               backgroundColor: "#202223",
               textTransform: "none",
@@ -73,6 +82,7 @@ function NoPlanFallback({
 
 NoPlanFallback.propTypes = {
   message: PropTypes.string,
+  billingUrl: PropTypes.string,
 };
 
 export default NoPlanFallback;

@@ -76,17 +76,27 @@ export const loader = async ({ request }) => {
       console.error("[App] Plan sync to backend failed:", err.message),
     );
   }
-
+  let billingUrl = "";
+  if (session?.shop) {
+    // eslint-disable-next-line no-undef
+    const billingHandle =
+      process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
+    billingUrl = `https://admin.shopify.com/store/${session.shop
+      .split(".")
+      .at(0)}/charges/${billingHandle}/pricing_plans`;
+  }
+  console.log("app billing url", billingUrl);
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
     shop: session?.shop || "",
+    billingUrl,
     hasActivePlan,
   };
 };
 
 export default function App() {
-  const { apiKey, hasActivePlan, shop } = useLoaderData();
+  const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
 
@@ -129,7 +139,9 @@ export default function App() {
           {/* 💳  */}
         </s-app-nav>
         {(hasActivePlan || isPlansRoute) && <Outlet />}
-        {!hasActivePlan && !isPlansRoute && <NoPlanFallback />}
+        {!hasActivePlan && !isPlansRoute && (
+          <NoPlanFallback billingUrl={billingUrl} />
+        )}
       </AppProvider>
     </QueryClientProvider>
   );
