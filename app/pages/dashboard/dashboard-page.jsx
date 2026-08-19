@@ -29,10 +29,14 @@ const DashboardPage = ({ shop: shopFromLoader, planFromLoader }) => {
     console.log("[Dashboard] shopFromLoader=", JSON.stringify(shopFromLoader), "hookShopDomain=", JSON.stringify(hookShopDomain), "shopDomain=", JSON.stringify(shopDomain));
   }, [shopFromLoader, hookShopDomain]);
 
-  const [hasSynced, setHasSynced] = React.useState(() => {
-    if (typeof window === "undefined" || !shopDomain) return false;
-    return sessionStorage.getItem(`inventory_synced_${shopDomain}`) === "true";
-  });
+  const [hasSynced, setHasSynced] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!shopDomain || typeof window === "undefined") return;
+    setHasSynced(
+      sessionStorage.getItem(`inventory_synced_${shopDomain}`) === "true",
+    );
+  }, [shopDomain]);
   const [snackbar, setSnackbar] = React.useState({
     open: false,
     message: "",

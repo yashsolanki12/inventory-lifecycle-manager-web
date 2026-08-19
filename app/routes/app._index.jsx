@@ -1,15 +1,8 @@
-import React from "react";
-// import SuspenseFallback from "../components/suspense-fallback";
-import DashboardSkeleton from "../ui/skeleton-loader/dashboard-skeleton";
-import SyncProductSkeleton from "../ui/skeleton-loader/sync-product-skeleton";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { authenticate } from "../shopify.server";
 import { useLoaderData } from "react-router";
 import { syncPlanToBackend } from "../api/plan";
-
-const DashboardPage = React.lazy(
-  () => import("../pages/dashboard/dashboard-page"),
-);
+import DashboardPage from "../pages/dashboard/dashboard-page";
 
 const BACKEND_URL =
   import.meta.env.VITE_BACKEND_API_URL ||
@@ -60,17 +53,7 @@ export const loader = async ({ request }) => {
 
 export default function Index() {
   const { shop, planUsage } = useLoaderData();
-  const hasSynced = () => {
-    if (typeof window === "undefined" || !shop) return false;
-    return sessionStorage.getItem(`inventory_synced_${shop}`) === "true";
-  };
-  const showFallback =
-    hasSynced() === true ? <DashboardSkeleton /> : <SyncProductSkeleton />;
-  return (
-      <React.Suspense fallback={showFallback}>
-        <DashboardPage shop={shop} planFromLoader={planUsage} />
-      </React.Suspense>
-  );
+  return <DashboardPage shop={shop} planFromLoader={planUsage} />;
 }
 
 export const headers = (headersArgs) => {
