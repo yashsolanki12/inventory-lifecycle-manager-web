@@ -1,3 +1,4 @@
+import React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -11,10 +12,11 @@ function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
 }) {
   const redirectToPricing = usePricingRedirect();
+  console.log("redirectToPricing", redirectToPricing);
 
-  const handleClick = () => {
+  const handleClick = React.useCallback(() => {
     redirectToPricing();
-  };
+  }, []);
 
   return (
     <Box
