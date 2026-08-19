@@ -6,6 +6,7 @@ import {
   ITEM_PADDING_TOP,
   PAPER_ID,
 } from "./config/constants";
+import { useAppBridge } from "@shopify/app-bridge-react";
 
 export const APP_HANDLE =
   import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
@@ -20,63 +21,56 @@ export function setShopDomain(domain) {
 
 export const ShopDomainContext = React.createContext("");
 
-export const useCurrentShopDomain = () => {
-  const routeData = useRouteLoaderData("routes/app");
-  const routeShop = routeData?.shop || "";
-
-  const ctxShop = React.useContext(ShopDomainContext);
-
-  if (ctxShop) return ctxShop;
-  if (routeShop) return routeShop;
-
-  if (typeof window === "undefined") return _cachedShopDomain || "";
-
-  // In App Bridge v4, the shop domain is always available globally
-  if (window.shopify?.config?.shop) {
-    _cachedShopDomain = window.shopify.config.shop;
-    return _cachedShopDomain;
-  }
-
-  const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
-  if (urlShop) {
-    _cachedShopDomain = urlShop;
-    return urlShop;
-  }
-
-  return _cachedShopDomain || "";
-};
 // export const useCurrentShopDomain = () => {
-//   const app = useAppBridge();
 //   const routeData = useRouteLoaderData("routes/app");
-//   if (typeof window === "undefined") return _cachedShopDomain;
-
 //   const routeShop = routeData?.shop || "";
-//   const bridgeShop = app?.config?.shop || "";
+
+//   const ctxShop = React.useContext(ShopDomainContext);
+
+//   if (ctxShop) return ctxShop;
+//   if (routeShop) return routeShop;
+
+//   if (typeof window === "undefined") return _cachedShopDomain || "";
+
+//   // In App Bridge v4, the shop domain is always available globally
+//   if (window.shopify?.config?.shop) {
+//     _cachedShopDomain = window.shopify.config.shop;
+//     return _cachedShopDomain;
+//   }
+
 //   const urlShop = new URLSearchParams(window.location.search).get("shop") || "";
-
-//   const shop = routeShop || bridgeShop || urlShop || _cachedShopDomain;
-
-//   if (shop && !_cachedShopDomain) {
-//     _cachedShopDomain = shop;
+//   if (urlShop) {
+//     _cachedShopDomain = urlShop;
+//     return urlShop;
 //   }
 
-//   if (!shop) {
-//     console.warn(
-//       "[useCurrentShopDomain] No shop found — routeData:",
-//       routeData,
-//       "appBridge:",
-//       app?.config,
-//     );
-//   }
-
-//   return shop || "";
+//   return _cachedShopDomain || "";
 // };
 
-// Open an external billing URL in the admin TOP frame (_top). Tries App Bridge
-// redirect.dispatch first (the sanctioned _top navigation via Shopify's
-// postMessage), then window.top.location.href, then the iframe itself as a last
-// resort. No _blank / new-tab behavior. Returns a diagnostic object describing
-// exactly what happened so failures are visible on-screen.
+export const useCurrentShopDomain = () => {
+  const routeData = useRouteLoaderData("routes/app");
+  return routeData?.shop || null;
+};
+
+export const usePricingRedirect = () => {
+  const app = useAppBridge();
+
+  return React.useCallback(() => {
+    try {
+      const shop = app?.config?.shop;
+      if (!shop) return;
+      const storeHandle = shop.split(".").at(0);
+      const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
+      if (app?.redirect?.dispatch) {
+        app.redirect.dispatch("ADMIN_PATH", path);
+      } else {
+        window.top.location.href = `https://admin.shopify.com${path}`;
+      }
+    } catch {
+      // SSR or App Bridge not ready
+    }
+  }, [app]);
+};
 export const openBillingUrl = (url, app) => {
   const log = [];
   if (!url) {
@@ -96,41 +90,41 @@ export const openBillingUrl = (url, app) => {
   return { method: "appbridge_v4", log };
 };
 
-export const usePricingRedirect = () => {
-  const routeData = useRouteLoaderData("routes/app");
+// export const usePricingRedirect = () => {
+//   const routeData = useRouteLoaderData("routes/app");
 
-  return React.useCallback(() => {
-    const billingUrl = routeData?.billingUrl;
-    if (billingUrl) {
-      // In Shopify App Bridge v4 with embedded apps, we can just use the global shopify object
-      if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
-        openBillingUrl(billingUrl, window.shopify);
-      } else {
-        openBillingUrl(billingUrl, null);
-      }
-      return;
-    }
+//   return React.useCallback(() => {
+//     const billingUrl = routeData?.billingUrl;
+//     if (billingUrl) {
+//       // In Shopify App Bridge v4 with embedded apps, we can just use the global shopify object
+//       if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
+//         openBillingUrl(billingUrl, window.shopify);
+//       } else {
+//         openBillingUrl(billingUrl, null);
+//       }
+//       return;
+//     }
 
-    if (typeof window === "undefined") {
-      console.warn("[PricingRedirect] No shop resolved — aborting");
-      return;
-    }
+//     if (typeof window === "undefined") {
+//       console.warn("[PricingRedirect] No shop resolved — aborting");
+//       return;
+//     }
 
-    const urlShop = new URLSearchParams(window.location.search).get("shop");
-    if (!urlShop) {
-      console.warn("[PricingRedirect] No shop resolved — aborting");
-      return;
-    }
-    const storeHandle = urlShop.split(".").at(0);
-    const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
-    
-    if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
-      openBillingUrl(`https://admin.shopify.com${path}`, window.shopify);
-    } else {
-      openBillingUrl(`https://admin.shopify.com${path}`, null);
-    }
-  }, [routeData]);
-};
+//     const urlShop = new URLSearchParams(window.location.search).get("shop");
+//     if (!urlShop) {
+//       console.warn("[PricingRedirect] No shop resolved — aborting");
+//       return;
+//     }
+//     const storeHandle = urlShop.split(".").at(0);
+//     const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
+
+//     if (typeof window !== "undefined" && window.shopify && window.shopify.config) {
+//       openBillingUrl(`https://admin.shopify.com${path}`, window.shopify);
+//     } else {
+//       openBillingUrl(`https://admin.shopify.com${path}`, null);
+//     }
+//   }, [routeData]);
+// };
 
 export const getColorHex = (colorName) => {
   const normalized = colorName?.toLowerCase().trim();
