@@ -142,6 +142,9 @@ export default function App() {
             {/* 💳  */}
           </s-app-nav>
           <Outlet />
+          {!hasActivePlan && !isPlansRoute && (
+            <NoPlanFallback billingUrl={billingUrl} />
+          )}
         </AppProvider>
       </QueryClientProvider>
     </AppContext.Provider>
