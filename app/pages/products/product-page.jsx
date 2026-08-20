@@ -1,11 +1,10 @@
 import React from "react";
-import useInventoryData from "../../hooks/useInventoryData";
+// import useInventoryData from "../../hooks/useInventoryData";
 import useInventorySubmit from "../../hooks/useInventorySubmit";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { syncProduct } from "../../api/products";
 import { useCurrentShopDomain } from "../../utils/helper";
-import { getInventoryDashboard } from "../../api/inventory-dashboard";
 
 const ProductPage = () => {
   const shopDomain = useCurrentShopDomain();
@@ -19,7 +18,7 @@ const ProductPage = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
   };
   const createSyncAllProductMutation = useInventorySubmit(
-    (shop) => syncProduct(shop),
+    () => syncProduct(shopDomain),
     setSnackbar,
     {
       invalidateKeys: [["sync-product"]],
@@ -27,14 +26,10 @@ const ProductPage = () => {
   );
 
   const syncAllProduct = () => {
-    createSyncAllProductMutation.mutate(shopDomain);
+    createSyncAllProductMutation.mutate();
   };
-  const { data: inventoryDashboardData, isLoading: inventoryDashboardLoading } =
-    useInventoryData(
-      ["inventory-dashboard-data"],
-      () => getInventoryDashboard(shopDomain),
-      null,
-    );
+  // const { data: inventoryDashboardData, isLoading: inventoryDashboardLoading } =
+  //   useInventoryData(["inventory-dashboard-data"], getInventoryDashboard, null);
   return (
     <>
       <h2>This is products page</h2>
