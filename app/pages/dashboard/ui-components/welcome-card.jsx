@@ -12,7 +12,6 @@ const WelcomeCard = ({ onSync, plan }) => {
   const planName = plan?.plan || "free";
   const skuLabel = PLAN_SKU_TEXT[planName] || PLAN_SKU_TEXT.free;
   const redirectToPricing = usePricingRedirect();
-  console.log('welcome card',plan)
   const handleUpgrade = () => {
     redirectToPricing();
   };

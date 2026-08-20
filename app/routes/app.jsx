@@ -86,7 +86,6 @@ export const loader = async ({ request }) => {
       .split(".")
       .at(0)}/charges/${billingHandle}/pricing_plans`;
   }
-  console.log("app billing url", billingUrl);
   return {
     // eslint-disable-next-line no-undef
     apiKey: process.env.SHOPIFY_API_KEY || "",
@@ -142,7 +141,7 @@ export default function App() {
             <s-link href="/app/plans">Plans</s-link>
             {/* 💳  */}
           </s-app-nav>
-          {(hasActivePlan || isPlansRoute) && <Outlet />}
+          <Outlet />
           {!hasActivePlan && !isPlansRoute && (
             <NoPlanFallback billingUrl={billingUrl} />
           )}

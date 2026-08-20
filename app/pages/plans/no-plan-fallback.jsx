@@ -12,9 +12,7 @@ function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
   billingUrl,
 }) {
-  console.log("billingUrl", billingUrl);
   const redirectToPricing = usePricingRedirect();
-  console.log("redirectToPricing", redirectToPricing);
 
   // const handleClick = React.useCallback(() => {
   //   redirectToPricing();
@@ -26,10 +24,17 @@ function NoPlanFallback({
   return (
     <Box
       sx={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1300,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "60vh",
+        backgroundColor: "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(4px)",
         px: 3,
       }}
     >
