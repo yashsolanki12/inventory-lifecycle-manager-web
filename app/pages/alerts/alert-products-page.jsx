@@ -9,6 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import AlertDetailSkeleton from "../../ui/skeleton-loader/alert-detail-skeleton";
 import TablePagination from "../../components/TablePagination";
+import AlertNotFoundCard from "./ui-components/alert-not-found-card";
 import { useCurrentShopDomain, formatDate } from "../../utils/helper";
 import { useParams, useNavigate } from "react-router";
 import { ALERT_ACTION_CONFIG } from "../../utils/config/constants";
@@ -58,9 +59,7 @@ const AlertProductsPage = () => {
   if (!alert) {
     return (
       <Box sx={{ p: { xs: 2, sm: 3, md: 2 }, maxWidth: 1200, mx: "auto" }}>
-        <Typography sx={{ color: "#9ca3af", fontSize: 16 }}>
-          Alert not found.
-        </Typography>
+        <AlertNotFoundCard />
       </Box>
     );
   }

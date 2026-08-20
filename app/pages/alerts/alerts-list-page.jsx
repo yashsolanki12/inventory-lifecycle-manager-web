@@ -23,7 +23,12 @@ import AlertsSkeleton from "../../ui/skeleton-loader/alerts-skeleton";
 import { useNavigate } from "react-router";
 import { useCurrentShopDomain, formatDate } from "../../utils/helper";
 import { ALERT_TYPE_CONFIG } from "../../utils/config/constants";
-import { getAlerts, markAlertsRead, markAllAlertsRead } from "../../api/alerts";
+import {
+  getAlerts,
+  markAlertsRead,
+  markAllAlertsRead,
+  generateAlerts,
+} from "../../api/alerts";
 import { useInventoryData } from "../../hooks/useInventoryData";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -45,8 +50,8 @@ const AlertsListPage = () => {
     message: "",
     severity: "success",
   });
-
   const tableRef = React.useRef(null);
+  const hasGeneratedAlerts = React.useRef(false);
 
   const {
     data: responseData,
@@ -74,6 +79,19 @@ const AlertsListPage = () => {
     setSnackbar,
     { onSuccess: () => refetch() },
   );
+
+  const generateAlertsMutation = useInventorySubmit(
+    (shop) => generateAlerts(shop),
+    setSnackbar,
+    { showSuccess: false, showError: false, onSuccess: () => refetch() },
+  );
+
+  React.useEffect(() => {
+    if (shopDomain && !hasGeneratedAlerts.current) {
+      hasGeneratedAlerts.current = true;
+      generateAlertsMutation.mutate(shopDomain);
+    }
+  }, [shopDomain]);
 
   const handleView = (alert) => {
     navigate(`/app/alerts/${alert.id}`);

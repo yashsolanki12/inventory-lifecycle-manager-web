@@ -15,7 +15,6 @@ const PlanGate = ({
   children,
 }) => {
   const redirectToPricing = usePricingRedirect();
-  console.log("up",upgradeUrl)
   const handleUpgrade = () => {
     if (upgradeUrl) {
       window.open(upgradeUrl, "_top");

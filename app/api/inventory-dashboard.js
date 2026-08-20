@@ -8,7 +8,6 @@ export const getInventoryDashboard = async (shopDomain) => {
   return axiosInstance
     .get("analytics/dashboard", {
       params: { shop: shopDomain },
-      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {

@@ -41,11 +41,11 @@ const RuleFormPage = () => {
         : createArchiveRule(shop, data),
     setSnackbar,
     {
-      invalidateKeys: [["rules-list"], ["archive-rule", id]],
-      onSuccess: () => {
-        setTimeout(() => {
+      invalidateKeys: ["rules-list"],
+      onSuccess: (data) => {
+        if (data.success === true) {
           navigate("/app/rules");
-        }, 1500);
+        }
       },
     },
   );

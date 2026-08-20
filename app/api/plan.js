@@ -9,7 +9,6 @@ export const syncPlanToBackend = async (shopDomain, plan, chargeId) => {
     .post(
       "/rules/plan",
       { shop: shopDomain, plan, chargeId },
-      { headers: { "x-shopify-shop-domain": shopDomain } },
     )
     .then((res) => {
       return res.data;
@@ -29,7 +28,6 @@ export const resetPlanOnBackend = async (shopDomain) => {
     .post(
       "/rules/plan",
       { shop: shopDomain, plan: "free", chargeId: null },
-      { headers: { "x-shopify-shop-domain": shopDomain } },
     )
     .then((res) => {
       return res.data;
@@ -45,11 +43,9 @@ export const getPlanFromBackend = async (shopDomain) => {
     console.error("[Plan] No shop domain found in URL parameters.");
     throw new Error("Shop domain is required.");
   }
-  console.log("[DEBUG] getPlanFromBackend firing for:", shopDomain);
   return axiosInstance
     .get("/rules/plan", {
       params: { shop: shopDomain },
-      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((err) => {
