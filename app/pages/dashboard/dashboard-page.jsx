@@ -121,11 +121,6 @@ const DashboardPage = () => {
   }, [syncMutation.error]);
 
   React.useEffect(() => {
-    console.log("[DashboardPage] billing refresh:", {
-      hasChargeId: searchParams.has("charge_id"),
-      hasPlanHandle: searchParams.has("plan_handle"),
-      shopDomain,
-    });
     if (
       (searchParams.has("charge_id") || searchParams.has("plan_handle")) &&
       shopDomain
@@ -136,13 +131,6 @@ const DashboardPage = () => {
       setSearchParams(newParams, { replace: true });
     }
   }, [searchParams, shopDomain, setSearchParams]);
-
-  React.useEffect(() => {
-    console.log("[DashboardPage] hasActivePlan refresh:", {
-      hasActivePlan,
-      shopDomain,
-    });
-  }, [hasActivePlan, shopDomain]);
 
   const isInitialLoading = hasSynced && isDashboardLoading;
   const isSyncing = syncMutation.isPending;

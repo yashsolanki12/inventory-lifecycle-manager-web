@@ -42,8 +42,10 @@ const RuleFormPage = () => {
     setSnackbar,
     {
       invalidateKeys: ["rules-list"],
-      onSuccess: () => {
-        navigate("/app/rules");
+      onSuccess: (data) => {
+        if (data.success === true) {
+          navigate("/app/rules");
+        }
       },
     },
   );
