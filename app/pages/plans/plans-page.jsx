@@ -36,15 +36,14 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
   };
 
   const createSyncPlanToBackendMutation = useInventorySubmit(
-    (payload) =>
-      syncPlanToBackend(payload.shop, payload.plan, payload.chargeId),
+    (payload) => syncPlanToBackend(shop, payload.plan, payload.chargeId),
     null,
     {
       invalidateKeys: [["plan-usage", shop]],
     },
   );
   const payload = {
-    shop: shop,
+    // shop: shop,
     plan: subscription?.name.toLowerCase(),
     chargeId: subscription?.id,
   };
@@ -62,7 +61,8 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
         message: actionData.message || "Operation completed",
         severity: actionData.success ? "success" : "error",
       });
-      if (actionData.success && shop) {
+      if (actionData.success) {
+        // && shop)
         resetPlanOnBackend(shop);
       }
     }

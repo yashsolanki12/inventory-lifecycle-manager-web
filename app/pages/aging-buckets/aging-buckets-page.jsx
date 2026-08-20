@@ -58,7 +58,7 @@ const AgingBucketsPage = () => {
   );
 
   const { data: planData } = useInventoryData(
-    ["plan-usage", shopDomain],
+    ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
     { enabled: !!shopDomain },
