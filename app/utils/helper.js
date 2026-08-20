@@ -10,54 +10,10 @@ import { AppContext } from "./app-context";
 export const APP_HANDLE =
   import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
 
-let _cachedShopDomain = "";
-
-export function setShopDomain(domain) {
-  if (domain) {
-    _cachedShopDomain = domain;
-  }
-}
-
-export const ShopDomainContext = React.createContext("");
-
 export const useCurrentShopDomain = () => {
   const { shop } = React.useContext(AppContext);
-  const result = shop || "";
-  if (typeof window !== "undefined") {
-    console.log("[DEBUG] useCurrentShopDomain:", result);
-  }
-  return result;
+  return shop || "";
 };
-
-// export const useCurrentShopDomain = () => {
-//   const routeData = useRouteLoaderData("routes/app");
-//   const routeShop = routeData?.shop || "";
-//   const ctxShop = React.useContext(ShopDomainContext);
-
-//   if (ctxShop) return ctxShop;
-
-//   if (typeof window !== "undefined") {
-//     const urlShop = new URLSearchParams(window.location.search).get("shop");
-//     if (urlShop) {
-//       _cachedShopDomain = urlShop;
-//       return urlShop;
-//     }
-
-//     if (window.shopify?.config?.shop) {
-//       _cachedShopDomain = window.shopify.config.shop;
-//       return _cachedShopDomain;
-//     }
-//   }
-
-//   if (routeShop) {
-//     _cachedShopDomain = routeShop;
-//     return routeShop;
-//   }
-
-//   if (typeof window === "undefined") return _cachedShopDomain || "";
-
-//   return _cachedShopDomain || "";
-// };
 
 export const openBillingUrl = (url) => {
   const log = [];
@@ -82,7 +38,6 @@ export const usePricingRedirect = () => {
   const { billingUrl } = React.useContext(AppContext);
 
   return React.useCallback(() => {
-    console.log("billing url", billingUrl);
     if (billingUrl) {
       openBillingUrl(billingUrl);
       return;

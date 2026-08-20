@@ -25,9 +25,6 @@ import { getPlanFromBackend } from "../../api/plan";
 const DashboardPage = () => {
   const shopDomain = useCurrentShopDomain();
   const { hasActivePlan } = React.useContext(AppContext);
-  if (typeof window !== "undefined") {
-    console.log("[DEBUG] DashboardPage shopDomain:", shopDomain, "hasActivePlan:", hasActivePlan);
-  }
 
   const [hasSynced, setHasSynced] = React.useState(() => {
     if (typeof window === "undefined" || !shopDomain) return false;
