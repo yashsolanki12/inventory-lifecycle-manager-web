@@ -24,10 +24,6 @@ export const useInventoryData = (
     retry: retry,
   });
 
-  if (typeof window !== "undefined") {
-    console.log("[DEBUG] useQuery:", { queryKey, enabled, data: data?.data ?? data });
-  }
-
   const errorMessage = error?.message;
   React.useEffect(() => {
     if (errorMessage && setSnackBar) {

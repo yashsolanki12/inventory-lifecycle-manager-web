@@ -1,4 +1,11 @@
-import { formatPrice } from "../helper";
+export const formatPrice = (currency, price) => {
+  if (price === null || price === undefined || isNaN(price))
+    return `${currency || ""} 0`;
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: currency || "USD",
+  }).format(price);
+};
 
 export const INVENTORY_STATUS_CONFIG = {
   ACTIVE: { label: "Active", color: "#15803d", bg: "#dcfce7" },
