@@ -41,11 +41,9 @@ const RuleFormPage = () => {
         : createArchiveRule(shop, data),
     setSnackbar,
     {
-      invalidateKeys: [["rules-list"], ["archive-rule", id]],
+      invalidateKeys: ["rules-list"],
       onSuccess: () => {
-        setTimeout(() => {
-          navigate("/app/rules");
-        }, 1500);
+        navigate("/app/rules");
       },
     },
   );
