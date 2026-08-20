@@ -97,6 +97,9 @@ export const loader = async ({ request }) => {
 
 export default function App() {
   const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
+  if (typeof window !== "undefined") {
+    console.log("[DEBUG] App loaderData:", { shop, hasActivePlan, billingUrl });
+  }
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
 

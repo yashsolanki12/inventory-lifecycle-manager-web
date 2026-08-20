@@ -22,7 +22,11 @@ export const ShopDomainContext = React.createContext("");
 
 export const useCurrentShopDomain = () => {
   const { shop } = React.useContext(AppContext);
-  return shop || "";
+  const result = shop || "";
+  if (typeof window !== "undefined") {
+    console.log("[DEBUG] useCurrentShopDomain:", result);
+  }
+  return result;
 };
 
 // export const useCurrentShopDomain = () => {

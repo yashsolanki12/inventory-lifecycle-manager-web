@@ -25,6 +25,9 @@ import { getPlanFromBackend } from "../../api/plan";
 const DashboardPage = () => {
   const shopDomain = useCurrentShopDomain();
   const { hasActivePlan } = React.useContext(AppContext);
+  if (typeof window !== "undefined") {
+    console.log("[DEBUG] DashboardPage shopDomain:", shopDomain, "hasActivePlan:", hasActivePlan);
+  }
 
   const [hasSynced, setHasSynced] = React.useState(() => {
     if (typeof window === "undefined" || !shopDomain) return false;
@@ -42,9 +45,10 @@ const DashboardPage = () => {
   };
 
   const { data: planData } = useInventoryData(
-    ["plan-usage"],
+    ["plan-usage", shopDomain],
     () => getPlanFromBackend(shopDomain),
     null,
+    { enabled: !!shopDomain },
   );
 
   const plan = planData?.data ?? planData;
@@ -62,15 +66,17 @@ const DashboardPage = () => {
 
   const { data: dashboardData, isLoading: isDashboardLoading } =
     useInventoryData(
-      ["inventory-dashboard-data"],
+      ["inventory-dashboard-data", shopDomain],
       () => getInventoryDashboard(shopDomain),
       null,
+      { enabled: !!shopDomain },
     );
 
   const { data: agingData } = useInventoryData(
-    ["inventory-aging-data"],
+    ["inventory-aging-data", shopDomain],
     () => getAgingBucket(shopDomain, { page: 1, limit: 10, bucket: "dead" }),
     null,
+    { enabled: !!shopDomain },
   );
 
   const populateSnapShotMutation = useInventorySubmit(
