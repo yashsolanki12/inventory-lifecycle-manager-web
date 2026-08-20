@@ -14,6 +14,13 @@ const axiosInstance = axios.create({
 // Request Interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
+    const shop =
+      config.params?.shop ||
+      (typeof config.data === "object" && config.data?.shop) ||
+      null;
+    if (shop) {
+      config.headers["x-shopify-shop-domain"] = shop;
+    }
     return config;
   },
   (error) => {
@@ -28,14 +35,14 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error("❌ API Error:", {
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      url: error.config?.url,
-      message: error.message,
-      code: error.code,
-      baseURL: error.config?.baseURL,
-    });
+    // console.error("❌ API Error:", {
+    //   status: error.response?.status,
+    //   statusText: error.response?.statusText,
+    //   url: error.config?.url,
+    //   message: error.message,
+    //   code: error.code,
+    //   baseURL: error.config?.baseURL,
+    // });
     return Promise.reject(error);
   },
 );

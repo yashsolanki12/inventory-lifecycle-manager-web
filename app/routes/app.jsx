@@ -97,9 +97,7 @@ export const loader = async ({ request }) => {
 
 export default function App() {
   const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
-  if (typeof window !== "undefined") {
-    console.log("[DEBUG] App loaderData:", { shop, hasActivePlan, billingUrl });
-  }
+
   const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
 
@@ -139,7 +137,7 @@ export default function App() {
             <s-link href="/app/archive-history">Archive History</s-link>
             <s-link href="/app/alerts">Alerts</s-link>
             <s-link href="/app/aging-buckets">Aging Buckets</s-link>
-            {/* <s-link href="/app/orders">Orders</s-link> */}
+            <s-link href="/app/orders">Orders</s-link>
             {/* 🛍️  */}
             <s-link href="/app/plans">Plans</s-link>
             {/* 💳  */}

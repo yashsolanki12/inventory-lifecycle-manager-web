@@ -93,7 +93,7 @@ export const INVENTORY_COLUMNS = [
       <Tooltip
         title={item.title}
         arrow
-        placement="top"
+        placement="top-start"
         slotProps={{
           tooltip: {
             sx: {
