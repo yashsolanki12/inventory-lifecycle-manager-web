@@ -45,7 +45,7 @@ const DashboardPage = () => {
     ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
-    { enabled: !!shopDomain },
+    // { enabled: !!shopDomain },
   );
 
   const plan = planData?.data;
@@ -66,14 +66,14 @@ const DashboardPage = () => {
       ["inventory-dashboard-data"],
       () => getInventoryDashboard(shopDomain),
       null,
-      { enabled: !!shopDomain },
+      // { enabled: !!shopDomain },
     );
 
   const { data: agingData } = useInventoryData(
     ["inventory-aging-data"],
     () => getAgingBucket(shopDomain, { page: 1, limit: 10, bucket: "dead" }),
     null,
-    { enabled: !!shopDomain },
+    // { enabled: !!shopDomain },
   );
   console.log("plan", plan);
 
