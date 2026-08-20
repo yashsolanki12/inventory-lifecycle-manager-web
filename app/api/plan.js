@@ -42,9 +42,10 @@ export const resetPlanOnBackend = async (shopDomain) => {
 
 export const getPlanFromBackend = async (shopDomain) => {
   if (!shopDomain) {
-    console.error("No shop domain found in URL parameters.");
+    console.error("[Plan] No shop domain found in URL parameters.");
     throw new Error("Shop domain is required.");
   }
+  console.log("[DEBUG] getPlanFromBackend firing for:", shopDomain);
   return axiosInstance
     .get("/rules/plan", {
       params: { shop: shopDomain },
