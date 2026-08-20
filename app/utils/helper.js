@@ -1,5 +1,4 @@
 import React from "react";
-import { useRouteLoaderData } from "react-router";
 import {
   COLOR_MAP,
   ITEM_HEIGHT,
@@ -22,8 +21,8 @@ export function setShopDomain(domain) {
 export const ShopDomainContext = React.createContext("");
 
 export const useCurrentShopDomain = () => {
-  const routeData = useRouteLoaderData("routes/app");
-  return routeData?.shop || "";
+  const { shop } = React.useContext(AppContext);
+  return shop || "";
 };
 
 // export const useCurrentShopDomain = () => {
