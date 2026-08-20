@@ -24,7 +24,7 @@ export const markAlertsRead = async (shop, alertIds) => {
     throw new Error("Shop domain is required");
   }
   return axiosInstance
-    .post("alerts/mark-read", { shop, alertIds })
+    .post("alerts/mark-read", { alertIds }, { params: { shop } })
     .then((res) => res.data)
     .catch((error) => {
       throw error;
@@ -37,7 +37,7 @@ export const markAllAlertsRead = async (shop) => {
     throw new Error("Shop domain is required");
   }
   return axiosInstance
-    .post("alerts/mark-all-read", { shop })
+    .post("alerts/mark-all-read", {}, { params: { shop } })
     .then((res) => res.data)
     .catch((error) => {
       throw error;
@@ -65,7 +65,7 @@ export const generateAlerts = async (shop) => {
     throw new Error("Shop domain is required");
   }
   return axiosInstance
-    .post("alerts/generate", { shop })
+    .post("alerts/generate", {}, { params: { shop } })
     .then((res) => res.data)
     .catch((error) => {
       throw error;

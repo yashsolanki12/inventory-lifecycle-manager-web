@@ -12,7 +12,6 @@ export const syncProduct = async (shopDomain) => {
       {},
       {
         params: { shop: shopDomain },
-        headers: { "x-shopify-shop-domain": shopDomain },
       },
     )
     .then((res) => res.data)
@@ -41,7 +40,6 @@ export const listLocalDbProducts = async (
   return axiosInstance
     .get("products/local", {
       params: { shop: shopDomain, page, limit, search, sort, status },
-      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
@@ -57,7 +55,6 @@ export const getSingleProduct = async (shopDomain, productId) => {
   return axiosInstance
     .get("products", {
       params: { shop: shopDomain, productId },
-      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
@@ -76,7 +73,6 @@ export const getProductTypes = async (
   return axiosInstance
     .get("products/types", {
       params: { shop: shopDomain, page, limit },
-      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
@@ -95,7 +91,6 @@ export const getProductVendors = async (
   return axiosInstance
     .get("products/vendors", {
       params: { shop: shopDomain, page, limit },
-      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
@@ -114,7 +109,6 @@ export const getProductTags = async (
   return axiosInstance
     .get("products/tags", {
       params: { shop: shopDomain, page, limit },
-      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {

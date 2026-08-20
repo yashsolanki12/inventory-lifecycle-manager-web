@@ -15,7 +15,6 @@ export const getAgingBucket = (
   return axiosInstance
     .get("inventory/aging", {
       params: { shop: shopDomain, page, limit, bucket },
-      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
@@ -34,7 +33,6 @@ export const populateSnapshot = (shopDomain) => {
       {},
       {
         params: { shop: shopDomain },
-        headers: { "x-shopify-shop-domain": shopDomain },
       },
     )
     .then((res) => res.data)
