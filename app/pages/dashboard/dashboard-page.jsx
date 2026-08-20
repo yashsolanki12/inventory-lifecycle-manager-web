@@ -45,10 +45,9 @@ const DashboardPage = () => {
     ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
-    // { enabled: !!shopDomain },
   );
 
-  const plan = planData?.data;
+  const plan = planData?.data ?? planData;
   const features = plan?.features || {};
 
   React.useEffect(() => {
@@ -66,16 +65,13 @@ const DashboardPage = () => {
       ["inventory-dashboard-data"],
       () => getInventoryDashboard(shopDomain),
       null,
-      // { enabled: !!shopDomain },
     );
 
   const { data: agingData } = useInventoryData(
     ["inventory-aging-data"],
     () => getAgingBucket(shopDomain, { page: 1, limit: 10, bucket: "dead" }),
     null,
-    // { enabled: !!shopDomain },
   );
-  console.log("plan", plan);
 
   const populateSnapShotMutation = useInventorySubmit(
     () => populateSnapshot(shopDomain),
