@@ -1,134 +1,123 @@
 import axiosInstance from "./axios-instance";
 
-export const syncProduct = async (shop) => {
-  if (!shop) {
+export const syncProduct = async (shopDomain) => {
+  if (!shopDomain) {
     console.error("No shop domain found in URL parameters.");
-    throw new Error("Shop domain is required");
+    throw new Error("Shop domain is required.");
   }
+
   return axiosInstance
     .post(
       "products/sync",
       {},
       {
-        params: {
-          shop: shop,
-        },
+        params: { shop: shopDomain },
+        headers: { "x-shopify-shop-domain": shopDomain },
       },
     )
     .then((res) => res.data)
     .catch((error) => {
-      // console.error(
-      //   "API Error while sync product",
-      //   error.response.data.message,
-      // );
-      throw error?.response?.data?.message || error?.message || "An error occurred";
+      throw (
+        error?.response?.data?.message || error?.message || "An error occurred"
+      );
     });
 };
 
 export const listLocalDbProducts = async (
-  shop,
-  { page = 1, limit = 10, search, sort = "createdAt", status } = {},
+  shopDomain,
+  {
+    page = 1,
+    limit = 10,
+    search,
+    sort = "createdAt",
+    status,
+  } = {},
 ) => {
-  if (!shop) {
+  if (!shopDomain) {
     console.error("No shop domain found in URL parameters.");
-    throw new Error("Shop domain is required");
+    throw new Error("Shop domain is required.");
   }
+
   return axiosInstance
     .get("products/local", {
-      params: {
-        shop: shop,
-        page,
-        limit,
-        search,
-        sort,
-        status,
-      },
+      params: { shop: shopDomain, page, limit, search, sort, status },
+      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
-      // console.error("Error while fetching local Db Products:", error);
       throw error;
     });
 };
 
-export const getSingleProduct = async (shop, productId) => {
-  if (!shop) {
+export const getSingleProduct = async (shopDomain, productId) => {
+  if (!shopDomain) {
     console.error("No shop domain found in URL parameters.");
-    throw new Error("Shop domain is required");
+    throw new Error("Shop domain is required.");
   }
   return axiosInstance
     .get("products", {
-      params: {
-        shop: shop,
-        productId: productId,
-      },
+      params: { shop: shopDomain, productId },
+      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
-      // console.error("Error while fetching single product:", error);
       throw error;
     });
 };
 
-export const getProductTypes = async (shop, { page = 1, limit = 10 } = {}) => {
-  if (!shop) {
+export const getProductTypes = async (
+  shopDomain,
+  { page = 1, limit = 10 } = {},
+) => {
+  if (!shopDomain) {
     console.error("No shop domain found in URL parameters.");
-    throw new Error("Shop domain is required");
+    throw new Error("Shop domain is required.");
   }
   return axiosInstance
     .get("products/types", {
-      params: {
-        shop,
-        page,
-        limit,
-      },
+      params: { shop: shopDomain, page, limit },
+      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
-      // console.error("Error while fetching product types:", error);
       throw error;
     });
 };
 
 export const getProductVendors = async (
-  shop,
+  shopDomain,
   { page = 1, limit = 10 } = {},
 ) => {
-  if (!shop) {
+  if (!shopDomain) {
     console.error("No shop domain found in URL parameters.");
-    throw new Error("Shop domain is required");
+    throw new Error("Shop domain is required.");
   }
   return axiosInstance
     .get("products/vendors", {
-      params: {
-        shop,
-        page,
-        limit,
-      },
+      params: { shop: shopDomain, page, limit },
+      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
-      // console.error("Error while fetching product vendors:", error);
       throw error;
     });
 };
 
-export const getProductTags = async (shop, { page = 1, limit = 10 } = {}) => {
-  if (!shop) {
+export const getProductTags = async (
+  shopDomain,
+  { page = 1, limit = 10 } = {},
+) => {
+  if (!shopDomain) {
     console.error("No shop domain found in URL parameters.");
-    throw new Error("Shop domain is required");
+    throw new Error("Shop domain is required.");
   }
   return axiosInstance
     .get("products/tags", {
-      params: {
-        shop,
-        page,
-        limit,
-      },
+      params: { shop: shopDomain, page, limit },
+      headers: { "x-shopify-shop-domain": shopDomain },
     })
     .then((res) => res.data)
     .catch((error) => {
-      // console.error("Error while fetching product tags:", error);
       throw error;
     });
 };

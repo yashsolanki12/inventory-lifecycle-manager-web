@@ -12,6 +12,7 @@ import { authenticate, sessionStorage } from "../shopify.server";
 import { authPostSync } from "../api/auth";
 import { syncPlanToBackend } from "../api/plan";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppContext } from "../utils/app-context";
 
 export const loader = async ({ request }) => {
   const { session, billing } = await authenticate.admin(request);
@@ -67,9 +68,9 @@ export const loader = async ({ request }) => {
     console.error("[App] Billing check failed:", err.message);
   }
 
-  if (session && hasActivePlan && activeSubscription) {
+  if (hasActivePlan && activeSubscription) {
     syncPlanToBackend(
-      session.shop,
+      session?.shop,
       activeSubscription.name.toLowerCase(),
       activeSubscription.id,
     ).catch((err) =>
@@ -105,10 +106,12 @@ export default function App() {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 1000 * 16, // 16 seconds
+            staleTime: 1000 * 60 * 5, // 5 minutes
             gcTime: 1000 * 60 * 10, // 10 minutes (formerly cacheTime)
             refetchOnWindowFocus: false,
-            retry: false,
+            // retry: false,
+            // Disable queries during SSR
+            enabled: typeof window !== "undefined",
           },
         },
       }),
@@ -122,38 +125,30 @@ export default function App() {
     }
   }, [shop]);
 
-  React.useEffect(() => {
-    if (hasActivePlan && shop) {
-      queryClient.invalidateQueries(["plan-usage", shop]);
-      queryClient.fetchQuery(["plan-usage", shop], async () => {
-        const { getPlanFromBackend } = await import("../api/plan");
-        return getPlanFromBackend(shop);
-      });
-    }
-  }, [hasActivePlan, shop, queryClient]);
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <AppProvider embedded apiKey={apiKey}>
-        <s-app-nav>
-          <s-link href="/app">Dashboard</s-link>
-          {/* 📊 */}
-          <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
-          <s-link href="/app/rules">Rules</s-link>
-          <s-link href="/app/archive-history">Archive History</s-link>
-          <s-link href="/app/alerts">Alerts</s-link>
-          <s-link href="/app/aging-buckets">Aging Buckets</s-link>
-          {/* <s-link href="/app/orders">Orders</s-link> */}
-          {/* 🛍️  */}
-          <s-link href="/app/plans">Plans</s-link>
-          {/* 💳  */}
-        </s-app-nav>
-        {(hasActivePlan || isPlansRoute) && <Outlet />}
-        {!hasActivePlan && !isPlansRoute && (
-          <NoPlanFallback billingUrl={billingUrl} />
-        )}
-      </AppProvider>
-    </QueryClientProvider>
+    <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
+      <QueryClientProvider client={queryClient}>
+        <AppProvider embedded apiKey={apiKey}>
+          <s-app-nav>
+            <s-link href="/app">Dashboard</s-link>
+            {/* 📊 */}
+            <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
+            <s-link href="/app/rules">Rules</s-link>
+            <s-link href="/app/archive-history">Archive History</s-link>
+            <s-link href="/app/alerts">Alerts</s-link>
+            <s-link href="/app/aging-buckets">Aging Buckets</s-link>
+            {/* <s-link href="/app/orders">Orders</s-link> */}
+            {/* 🛍️  */}
+            <s-link href="/app/plans">Plans</s-link>
+            {/* 💳  */}
+          </s-app-nav>
+          {(hasActivePlan || isPlansRoute) && <Outlet />}
+          {!hasActivePlan && !isPlansRoute && (
+            <NoPlanFallback billingUrl={billingUrl} />
+          )}
+        </AppProvider>
+      </QueryClientProvider>
+    </AppContext.Provider>
   );
 }
 

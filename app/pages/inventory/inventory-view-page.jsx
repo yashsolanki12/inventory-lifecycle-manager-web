@@ -40,7 +40,6 @@ const InventoryViewPage = () => {
     ["single-product", id],
     () => getSingleProduct(shopDomain, id),
     null,
-    { enabled: !!shopDomain && !!id },
   );
 
   const product = responseData?.data;
@@ -256,7 +255,7 @@ const InventoryViewPage = () => {
                 {product.inventoryValue != null && (
                   <InfoRow label="Inventory Value" value={inventoryValue} />
                 )}
-                
+
                 {/* Status */}
                 {statusConfig && (
                   <Box

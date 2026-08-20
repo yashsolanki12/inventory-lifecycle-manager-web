@@ -157,7 +157,7 @@ const InventoryListPage = () => {
         searchPlaceholder="Search by product name..."
         sortOptions={INVENTORY_SORT_OPTIONS}
         defaultSort="-createdAt"
-        enabled={!!shopDomain}
+        // enabled={!!shopDomain}
         filters={[
           {
             param: "status",

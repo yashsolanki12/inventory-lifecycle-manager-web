@@ -18,15 +18,13 @@ import { useCurrentShopDomain } from "../../utils/helper";
 import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
 import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
-import { useSearchParams, useRouteLoaderData } from "react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "react-router";
+import { AppContext } from "../../utils/app-context";
 import { getPlanFromBackend } from "../../api/plan";
 
 const DashboardPage = () => {
-  const queryClient = useQueryClient();
   const shopDomain = useCurrentShopDomain();
-  const routeData = useRouteLoaderData("routes/app");
-  const hasActivePlan = routeData?.hasActivePlan;
+  const { hasActivePlan } = React.useContext(AppContext);
 
   const [hasSynced, setHasSynced] = React.useState(() => {
     if (typeof window === "undefined" || !shopDomain) return false;
@@ -44,13 +42,12 @@ const DashboardPage = () => {
   };
 
   const { data: planData } = useInventoryData(
-    ["plan-usage", shopDomain],
+    ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
-    { enabled: !!shopDomain },
   );
 
-  const plan = planData?.data ?? planData;
+  const plan = planData?.data;
   const features = plan?.features || {};
 
   React.useEffect(() => {
@@ -65,21 +62,20 @@ const DashboardPage = () => {
 
   const { data: dashboardData, isLoading: isDashboardLoading } =
     useInventoryData(
-      ["inventory-dashboard-data", shopDomain],
+      ["inventory-dashboard-data"],
       () => getInventoryDashboard(shopDomain),
       null,
-      { enabled: hasSynced && !!shopDomain },
     );
 
   const { data: agingData } = useInventoryData(
-    ["inventory-aging-data", shopDomain],
+    ["inventory-aging-data"],
     () => getAgingBucket(shopDomain, { page: 1, limit: 10, bucket: "dead" }),
     null,
-    { enabled: hasSynced && !!shopDomain && hasFullAging },
   );
+  console.log('plan',plan)
 
   const populateSnapShotMutation = useInventorySubmit(
-    (shop) => populateSnapshot(shop),
+    () => populateSnapshot(shopDomain),
     null,
     {
       invalidateKeys: [["populate-snapshot"]],
@@ -87,26 +83,25 @@ const DashboardPage = () => {
   );
 
   const syncMutation = useInventorySubmit(
-    (shop) => syncProduct(shop),
+    () => syncProduct(shopDomain),
     setSnackbar,
     {
-      invalidateKeys: [
-        ["inventory-dashboard-data", shopDomain],
-        ["inventory-aging-data", shopDomain],
-        ["plan-usage", shopDomain],
-        ["dead-stock-trend-data"],
-      ],
-      onSuccess: () => {
-        sessionStorage.setItem(`inventory_synced_${shopDomain}`, "true");
-        setHasSynced(true);
-        populateSnapShotMutation.mutate(shopDomain);
-      },
+    invalidateKeys: [
+      ["inventory-dashboard-data"],
+      ["inventory-aging-data"],
+      ["plan-usage"],
+      ["dead-stock-trend-data"],
+    ],
+    onSuccess: () => {
+      sessionStorage.setItem(`inventory_synced_${shopDomain}`, "true");
+      setHasSynced(true);
+      populateSnapShotMutation.mutate();
     },
-  );
+  });
 
-  const handleSync = (isResync = false) => {
-    if (!shopDomain) return;
-    syncMutation.mutate(shopDomain);
+  const handleSync = () => {
+    // if (!shopDomain) return;
+    syncMutation.mutate();
     // if (!syncMutation.error && populateSnapShotMutation.status === "idle") {
     //   populateSnapShotMutation.mutate(shopDomain);
     // }
@@ -123,22 +118,28 @@ const DashboardPage = () => {
   }, [syncMutation.error]);
 
   React.useEffect(() => {
-    if (searchParams.has("charge_id") || searchParams.has("plan_handle")) {
-      queryClient.invalidateQueries(["plan-usage", shopDomain]);
-      queryClient.fetchQuery(["plan-usage", shopDomain], () => getPlanFromBackend(shopDomain));
+    console.log("[DashboardPage] billing refresh:", {
+      hasChargeId: searchParams.has("charge_id"),
+      hasPlanHandle: searchParams.has("plan_handle"),
+      shopDomain,
+    });
+    if (
+      (searchParams.has("charge_id") || searchParams.has("plan_handle")) &&
+      shopDomain
+    ) {
       const newParams = new URLSearchParams(searchParams);
       newParams.delete("charge_id");
       newParams.delete("plan_handle");
       setSearchParams(newParams, { replace: true });
     }
-  }, [searchParams, shopDomain, queryClient, setSearchParams]);
+  }, [searchParams, shopDomain, setSearchParams]);
 
   React.useEffect(() => {
-    if (hasActivePlan && shopDomain) {
-      queryClient.invalidateQueries(["plan-usage", shopDomain]);
-      queryClient.fetchQuery(["plan-usage", shopDomain], () => getPlanFromBackend(shopDomain));
-    }
-  }, [hasActivePlan, shopDomain, queryClient]);
+    console.log("[DashboardPage] hasActivePlan refresh:", {
+      hasActivePlan,
+      shopDomain,
+    });
+  }, [hasActivePlan, shopDomain]);
 
   const isInitialLoading = hasSynced && isDashboardLoading;
   const isSyncing = syncMutation.isPending;
@@ -147,7 +148,9 @@ const DashboardPage = () => {
 
   let content;
 
-  if (isInitialLoading) {
+  if (!hasSynced && !isSyncing) {
+    content = <WelcomeCard onSync={() => handleSync(false)} plan={plan} />;
+  } else if (isInitialLoading) {
     content = <DashboardSkeleton />;
   } else if (isSyncing && !hasDashboardData) {
     content = <SyncProductSkeleton />;
@@ -234,8 +237,6 @@ const DashboardPage = () => {
         </Box>
       </Box>
     );
-  } else {
-    content = <WelcomeCard onSync={() => handleSync(false)} plan={plan} />;
   }
 
   return (

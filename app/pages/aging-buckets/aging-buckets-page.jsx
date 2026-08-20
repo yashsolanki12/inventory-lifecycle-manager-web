@@ -54,14 +54,12 @@ const AgingBucketsPage = () => {
     ["aging-buckets"],
     () => getAgingBuckets(shopDomain),
     null,
-    { enabled: !!shopDomain },
   );
 
   const { data: planData } = useInventoryData(
-    ["plan-usage", shopDomain],
+    ["plan-usage"],
     () => getPlanFromBackend(shopDomain),
     null,
-    { enabled: !!shopDomain },
   );
   const planName = planData?.data.plan === "starter";
 

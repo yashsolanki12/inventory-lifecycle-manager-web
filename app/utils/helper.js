@@ -6,6 +6,7 @@ import {
   ITEM_PADDING_TOP,
   PAPER_ID,
 } from "./config/constants";
+import { AppContext } from "./app-context";
 
 export const APP_HANDLE =
   import.meta.env.SHOPIFY_APP_NAME ?? "inventory-lifecycle-manager";
@@ -18,38 +19,42 @@ export function setShopDomain(domain) {
   }
 }
 
-
 export const ShopDomainContext = React.createContext("");
 
 export const useCurrentShopDomain = () => {
   const routeData = useRouteLoaderData("routes/app");
-  const routeShop = routeData?.shop || "";
-  const ctxShop = React.useContext(ShopDomainContext);
-
-  if (ctxShop) return ctxShop;
-
-  if (typeof window !== "undefined") {
-    const urlShop = new URLSearchParams(window.location.search).get("shop");
-    if (urlShop) {
-      _cachedShopDomain = urlShop;
-      return urlShop;
-    }
-
-    if (window.shopify?.config?.shop) {
-      _cachedShopDomain = window.shopify.config.shop;
-      return _cachedShopDomain;
-    }
-  }
-
-  if (routeShop) {
-    _cachedShopDomain = routeShop;
-    return routeShop;
-  }
-
-  if (typeof window === "undefined") return _cachedShopDomain || "";
-
-  return _cachedShopDomain || "";
+  return routeData?.shop || "";
 };
+
+// export const useCurrentShopDomain = () => {
+//   const routeData = useRouteLoaderData("routes/app");
+//   const routeShop = routeData?.shop || "";
+//   const ctxShop = React.useContext(ShopDomainContext);
+
+//   if (ctxShop) return ctxShop;
+
+//   if (typeof window !== "undefined") {
+//     const urlShop = new URLSearchParams(window.location.search).get("shop");
+//     if (urlShop) {
+//       _cachedShopDomain = urlShop;
+//       return urlShop;
+//     }
+
+//     if (window.shopify?.config?.shop) {
+//       _cachedShopDomain = window.shopify.config.shop;
+//       return _cachedShopDomain;
+//     }
+//   }
+
+//   if (routeShop) {
+//     _cachedShopDomain = routeShop;
+//     return routeShop;
+//   }
+
+//   if (typeof window === "undefined") return _cachedShopDomain || "";
+
+//   return _cachedShopDomain || "";
+// };
 
 export const openBillingUrl = (url) => {
   const log = [];
@@ -71,23 +76,12 @@ export const openBillingUrl = (url) => {
 };
 
 export const usePricingRedirect = () => {
-  const routeData = useRouteLoaderData("routes/app");
-  console.log("routeData", routeData);
+  const { billingUrl } = React.useContext(AppContext);
 
   return React.useCallback(() => {
-    const billingUrl = routeData?.billingUrl;
     console.log("billing url", billingUrl);
     if (billingUrl) {
-      // In Shopify App Bridge v4 with embedded apps, we can just use the global shopify object
-      if (
-        typeof window !== "undefined" &&
-        window.shopify &&
-        window.shopify.config
-      ) {
-        openBillingUrl(billingUrl);
-      } else {
-        openBillingUrl(billingUrl);
-      }
+      openBillingUrl(billingUrl);
       return;
     }
 
@@ -104,16 +98,8 @@ export const usePricingRedirect = () => {
     const storeHandle = urlShop.split(".").at(0);
     const path = `/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
 
-    if (
-      typeof window !== "undefined" &&
-      window.shopify &&
-      window.shopify.config
-    ) {
-      openBillingUrl(`https://admin.shopify.com${path}`);
-    } else {
-      openBillingUrl(`https://admin.shopify.com${path}`);
-    }
-  }, [routeData]);
+    openBillingUrl(`https://admin.shopify.com${path}`);
+  }, [billingUrl]);
 };
 
 export const getColorHex = (colorName) => {

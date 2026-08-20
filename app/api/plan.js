@@ -1,32 +1,55 @@
 import axiosInstance from "./axios-instance";
 
-export const syncPlanToBackend = async (shop, plan, chargeId) => {
+export const syncPlanToBackend = async (shopDomain, plan, chargeId) => {
+  if (!shopDomain) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required.");
+  }
   return axiosInstance
-    .post("/rules/plan", { shop, plan, chargeId })
+    .post(
+      "/rules/plan",
+      { shop: shopDomain, plan, chargeId },
+      { headers: { "x-shopify-shop-domain": shopDomain } },
+    )
     .then((res) => {
       return res.data;
     })
     .catch((err) => {
-      // console.error("[Plan] Backend sync failed:", err.message);
+      console.error("[Plan] Backend sync failed:", err.message);
       return null;
     });
 };
 
-export const resetPlanOnBackend = async (shop) => {
+export const resetPlanOnBackend = async (shopDomain) => {
+  if (!shopDomain) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required.");
+  }
   return axiosInstance
-    .post("/rules/plan", { shop, plan: "free", chargeId: null })
+    .post(
+      "/rules/plan",
+      { shop: shopDomain, plan: "free", chargeId: null },
+      { headers: { "x-shopify-shop-domain": shopDomain } },
+    )
     .then((res) => {
       return res.data;
     })
     .catch((err) => {
-      // console.error("[Plan] Backend reset failed:", err.message);
+      console.error("[Plan] Backend reset failed:", err.message);
       return null;
     });
 };
 
-export const getPlanFromBackend = async (shop) => {
+export const getPlanFromBackend = async (shopDomain) => {
+  if (!shopDomain) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required.");
+  }
   return axiosInstance
-    .get("/rules/plan", { params: { shop } })
+    .get("/rules/plan", {
+      params: { shop: shopDomain },
+      headers: { "x-shopify-shop-domain": shopDomain },
+    })
     .then((res) => res.data)
     .catch((err) => {
       console.error("[Plan] Backend fetch failed:", err.message);
