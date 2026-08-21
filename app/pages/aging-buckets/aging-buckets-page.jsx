@@ -99,9 +99,9 @@ const AgingBucketsPage = () => {
       onSuccess: (data) => {
         if (data?.data) {
           setBuckets({
-            freshMax: data.data.freshMax,
-            mildMax: data.data.mildMax,
-            agingMax: data.data.agingMax,
+            freshMax: data?.data.freshMax,
+            mildMax: data?.data.mildMax,
+            agingMax: data?.data.agingMax,
           });
         }
       },
@@ -209,8 +209,8 @@ const AgingBucketsPage = () => {
         </Box>
         {isAgingListError ? (
           <PlanGate
-            message={isAgingListError?.response.data.message}
-            upgradeUrl={isAgingListError?.response.data.data.upgradeUrl}
+            message={isAgingListError?.response?.data.message}
+            upgradeUrl={isAgingListError?.response?.data?.data.upgradeUrl}
           />
         ) : (
           <>
