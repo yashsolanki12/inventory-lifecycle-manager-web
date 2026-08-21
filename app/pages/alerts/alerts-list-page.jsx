@@ -400,7 +400,11 @@ const AlertsListPage = () => {
                         <IconButton
                           size="small"
                           onClick={(e) => handleMarkRead(e, alert)}
-                          disabled={markReadMutation.isPending}
+                          disabled={
+                            markReadMutation.isPending &&
+                            markReadMutation.variables?.alertIds?.[0] ===
+                              alert.id
+                          }
                           sx={{
                             color: "#005ea2",
                             "&:hover": {
