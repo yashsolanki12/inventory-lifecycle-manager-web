@@ -51,13 +51,6 @@ const DashboardPage = () => {
   const plan = planData?.data ?? planData;
   const features = plan?.features || {};
 
-  React.useEffect(() => {
-    if (!shopDomain) return;
-    const alreadySynced =
-      sessionStorage.getItem(`inventory_synced_${shopDomain}`) === "true";
-    if (alreadySynced) setHasSynced(true);
-  }, [shopDomain]);
-
   const hasFullDashboard = features.dashboardAnalytics === "full";
   const hasFullAging = features.inventoryAging === "full";
 
@@ -109,6 +102,12 @@ const DashboardPage = () => {
     //   populateSnapShotMutation.mutate(shopDomain);
     // }
   };
+  React.useEffect(() => {
+    if (!shopDomain) return;
+    const alreadySynced =
+      sessionStorage.getItem(`inventory_synced_${shopDomain}`) === "true";
+    if (alreadySynced && !syncMutation.isPending) setHasSynced(true);
+  }, [shopDomain]);
 
   React.useEffect(() => {
     if (syncMutation.error) {
@@ -132,21 +131,27 @@ const DashboardPage = () => {
     }
   }, [searchParams, shopDomain, setSearchParams]);
 
-  const isInitialLoading = hasSynced && isDashboardLoading;
+  const isInitialLoading =
+    hasSynced && isDashboardLoading && !syncMutation.isPending;
   const isSyncing = syncMutation.isPending;
-  const isResyncing = syncMutation.isPending && hasSynced && dashboardData;
   const hasDashboardData = dashboardData?.data;
 
   let content;
 
-  if (!hasSynced && !isSyncing) {
-    content = <WelcomeCard onSync={() => handleSync(false)} plan={plan} />;
+  if (!hasSynced && isSyncing) {
+    content = <SyncProductSkeleton />;
+  } else if (!hasSynced) {
+    content = (
+      <WelcomeCard
+        onSync={() => handleSync(false)}
+        plan={plan}
+        isSyncing={isSyncing}
+      />
+    );
+  } else if (isSyncing) {
+    content = <DashboardSkeleton dashboardData={dashboardData} />;
   } else if (isInitialLoading) {
     content = <DashboardSkeleton />;
-  } else if (isSyncing && !hasDashboardData) {
-    content = <SyncProductSkeleton />;
-  } else if (isResyncing) {
-    content = <DashboardSkeleton dashboardData={dashboardData} />;
   } else if (hasDashboardData) {
     content = (
       <Box
