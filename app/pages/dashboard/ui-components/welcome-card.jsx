@@ -8,7 +8,7 @@ import SyncIcon from "@mui/icons-material/Sync";
 import { usePricingRedirect } from "../../../utils/helper";
 import { FEATURES, PLAN_SKU_TEXT } from "../../../utils/config/constants";
 
-const WelcomeCard = ({ onSync, plan }) => {
+const WelcomeCard = ({ onSync, plan, isSyncing }) => {
   const planName = plan?.plan || "free";
   const skuLabel = PLAN_SKU_TEXT[planName] || PLAN_SKU_TEXT.free;
   const redirectToPricing = usePricingRedirect();
@@ -150,6 +150,7 @@ const WelcomeCard = ({ onSync, plan }) => {
             variant="contained"
             startIcon={<SyncIcon />}
             onClick={onSync}
+            disabled={isSyncing}
             sx={{
               backgroundColor: "#008060",
               textTransform: "none",
@@ -164,7 +165,11 @@ const WelcomeCard = ({ onSync, plan }) => {
               },
             }}
           >
-            Sync Products
+            {isSyncing ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : (
+              "Sync Products"
+            )}
           </Button>
           {planName === "free" && (
             <Button
