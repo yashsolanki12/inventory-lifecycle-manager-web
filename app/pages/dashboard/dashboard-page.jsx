@@ -85,7 +85,7 @@ const DashboardPage = () => {
         ["inventory-dashboard-data"],
         ["inventory-aging-data"],
         ["plan-usage"],
-        ["dead-stock-trend-data"],
+        // ["dead-stock-trend-data"],
       ],
       onSuccess: () => {
         sessionStorage.setItem(`inventory_synced_${shopDomain}`, "true");
