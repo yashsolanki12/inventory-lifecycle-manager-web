@@ -1,9 +1,10 @@
+
 # Learn more about configuring your app at:
 # https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "3df39ce39e6e9a871e11d18b77897bb6"
 
-application_url = "https://inventory-lifecycle-manager-web.onrender.com"
+application_url = "https://inventory.ecodesoft.net"
 
 embedded = true
 
@@ -30,26 +31,26 @@ api_version = "unstable"
 handle = "product-event"
 topic = "Product"
 actions = ["update"]
-uri = "https://inventory-lifecycle-manager-backend.onrender.com/events"
+uri = "https://inventory-admin.ecodesoft.net/events"
 
 
 [[webhooks.subscriptions]]
 
-uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/inventory_levels/update"
+uri = "https://inventory-admin.ecodesoft.net/api/webhooks/inventory_levels/update"
 
 topics = ["inventory_levels/update"]
 
 
 [[webhooks.subscriptions]]
 
-uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/orders/create"
+uri = "https://inventory-admin.ecodesoft.net/api/webhooks/orders/create"
 
 topics = ["orders/create"]
 
 
 [[webhooks.subscriptions]]
 
-uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/products/update"
+uri = "https://inventory-admin.ecodesoft.net/api/webhooks/products/update"
 
 topics = ["products/update"]
 
@@ -64,15 +65,15 @@ compliance_topics = [
 
 topics = ["app/uninstalled"]
 
-uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/app-uninstalled"
+uri = "https://inventory-admin.ecodesoft.net/api/webhooks/app-uninstalled"
 
 
 [auth]
 
 redirect_urls = [
-  "https://inventory-lifecycle-manager-web.onrender.com/auth/callback",
-  "https://inventory-lifecycle-manager-web.onrender.com/auth/shopify/callback",
-  "https://inventory-lifecycle-manager-web.onrender.com/api/auth/callback"
+  "https://inventory.ecodesoft.net/auth/callback",
+  "https://inventory.ecodesoft.net/auth/shopify/callback",
+  "https://inventory.ecodesoft.net/api/auth/callback"
 ]
 
 
