@@ -155,7 +155,7 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
               >
                 Change plan
               </Button>
-              {subscription.name !== "Free" && (
+              {/* {subscription.name !== "Free" && (
                 <Button
                   variant="outlined"
                   onClick={() => setCancelPlanDialogOpen(true)}
@@ -175,7 +175,7 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
                 >
                   Cancel plan
                 </Button>
-              )}
+              )} */}
             </Box>
           </CardContent>
         </Card>
