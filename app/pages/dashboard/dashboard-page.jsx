@@ -52,26 +52,28 @@ const DashboardPage = () => {
   const hasFullDashboard = features.dashboardAnalytics === "full";
   const hasFullAging = features.inventoryAging === "full";
 
-  const { data: dashboardData, isLoading: isDashboardLoading } =
+  const { data: dashboardData, isLoading: _isDashboardLoading } =
     useInventoryData(
       ["inventory-dashboard-data", shopDomain],
       () => getInventoryDashboard(shopDomain),
       null,
-      { enabled: !!shopDomain },
+      { enabled: !!shopDomain && hasSynced },
     );
 
   const { data: agingData } = useInventoryData(
     ["inventory-aging-data", shopDomain],
     () => getAgingBucket(shopDomain, { page: 1, limit: 10, bucket: "dead" }),
     null,
-    { enabled: !!shopDomain },
+    { enabled: !!shopDomain && hasSynced },
   );
 
   const populateSnapShotMutation = useInventorySubmit(
     () => populateSnapshot(shopDomain),
     null,
     {
-      invalidateKeys: [["populate-snapshot"]],
+      invalidateKeys: [
+        ["populate-snapshot"],
+      ],
     },
   );
 
@@ -80,26 +82,35 @@ const DashboardPage = () => {
     setSnackbar,
     {
       invalidateKeys: [
-        ["inventory-dashboard-data"],
-        ["inventory-aging-data"],
         ["plan-usage"],
-        // ["dead-stock-trend-data"],
+        ["inventory-dashboard-data", shopDomain],
+        ["inventory-aging-data", shopDomain],
       ],
-      onSuccess: () => {
-        sessionStorage.setItem(`inventory_synced_${shopDomain}`, "true");
-        setHasSynced(true);
+      onSuccess: (data) => {
         populateSnapShotMutation.mutate();
+        const details = data?.data;
+        if (details && details.totalAvailable > details.synced) {
+          setSnackbar({
+            open: true,
+            message: `Synced ${details.synced} of ${details.totalAvailable} products. Upgrade your plan to sync more.`,
+            severity: "success",
+          });
+        }
       },
     },
   );
 
   const handleSync = () => {
-    // if (!shopDomain) return;
     syncMutation.mutate();
-    // if (!syncMutation.error && populateSnapShotMutation.status === "idle") {
-    //   populateSnapShotMutation.mutate(shopDomain);
-    // }
   };
+
+  React.useEffect(() => {
+    if (populateSnapShotMutation.isSuccess && shopDomain) {
+      sessionStorage.setItem(`inventory_synced_${shopDomain}`, "true");
+      setHasSynced(true);
+    }
+  }, [populateSnapShotMutation.isSuccess, shopDomain]);
+
   React.useEffect(() => {
     if (!shopDomain) return;
     const alreadySynced =
@@ -129,14 +140,14 @@ const DashboardPage = () => {
     }
   }, [searchParams, shopDomain, setSearchParams]);
 
-  const isInitialLoading =
-    hasSynced && isDashboardLoading && !syncMutation.isPending;
   const isSyncing = syncMutation.isPending;
+  const isPopulating = populateSnapShotMutation.isPending;
+  const isLoadingAfterSync = isSyncing || isPopulating;
   const hasDashboardData = dashboardData?.data;
 
   let content;
 
-  if (!hasSynced && isSyncing) {
+  if (!hasSynced && isLoadingAfterSync) {
     content = <SyncProductSkeleton />;
   } else if (!hasSynced) {
     content = (
@@ -146,10 +157,8 @@ const DashboardPage = () => {
         isSyncing={isSyncing}
       />
     );
-  } else if (isSyncing) {
+  } else if (isLoadingAfterSync) {
     content = <DashboardSkeleton dashboardData={dashboardData} />;
-  } else if (isInitialLoading) {
-    content = <DashboardSkeleton />;
   } else if (hasDashboardData) {
     content = (
       <Box
