@@ -1,13 +1,4 @@
-import React from "react";
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLocation,
-  useNavigate,
-} from "react-router";
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import { StyledEngineProvider } from "@mui/material/styles";
 
 export const meta = () => {
@@ -15,23 +6,6 @@ export const meta = () => {
 };
 
 export default function App() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    if (location) {
-      const params = new URLSearchParams(location.search);
-      params.delete("appLoadId");
-      navigate(`${location.pathname}?${params.toString()}${location.hash}`, {
-        replace: true,
-      });
-    }
-  }, [location.pathname, location.search, location.hash, navigate]);
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
