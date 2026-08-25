@@ -19,12 +19,10 @@ import { syncProduct } from "../../api/products";
 import { getInventoryDashboard } from "../../api/inventory-dashboard";
 import { getAgingBucket, populateSnapshot } from "../../api/inventory-aging";
 import { useSearchParams } from "react-router";
-import { AppContext } from "../../utils/app-context";
 import { getPlanFromBackend } from "../../api/plan";
 
 const DashboardPage = () => {
   const shopDomain = useCurrentShopDomain();
-  const { hasActivePlan } = React.useContext(AppContext);
 
   const [hasSynced, setHasSynced] = React.useState(() => {
     if (typeof window === "undefined" || !shopDomain) return false;
@@ -107,7 +105,7 @@ const DashboardPage = () => {
     const alreadySynced =
       sessionStorage.getItem(`inventory_synced_${shopDomain}`) === "true";
     if (alreadySynced && !syncMutation.isPending) setHasSynced(true);
-  }, [shopDomain]);
+  }, [shopDomain, syncMutation.isPending]);
 
   React.useEffect(() => {
     if (syncMutation.error) {

@@ -7,7 +7,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { formatPrice } from "../../../utils/helper";
 import { BUCKET_COLOR_MAP, COLORS } from "../../../utils/config/constants";
 
-const InventoryValueChart = ({ dashboardData, agingData }) => {
+const InventoryValueChart = ({ dashboardData, _agingData }) => {
   const inventoryByAge = dashboardData?.data?.inventoryValueByAge ?? [];
   const currency = dashboardData?.data?.currency;
   const totalValue = dashboardData?.data?.totalInventoryValue ?? "0";

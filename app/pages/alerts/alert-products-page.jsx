@@ -38,7 +38,7 @@ const AlertProductsPage = () => {
     data: responseData,
     isLoading,
     isFetching,
-    refetch,
+    refetch: _refetch,
   } = useInventoryData(
     ["alerts", id, page],
     () => getAlertById(shopDomain, id, { page, limit: ITEMS_PER_PAGE }),

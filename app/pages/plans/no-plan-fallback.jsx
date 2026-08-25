@@ -6,13 +6,13 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PropTypes from "prop-types";
-import { openBillingUrl, usePricingRedirect } from "../../utils/helper";
+import { openBillingUrl } from "../../utils/helper";
 
 function NoPlanFallback({
   message = "Please select a plan to access all features of this app.",
   billingUrl,
 }) {
-  const redirectToPricing = usePricingRedirect();
+  // const _redirectToPricing = usePricingRedirect();
 
   // const handleClick = React.useCallback(() => {
   //   redirectToPricing();
