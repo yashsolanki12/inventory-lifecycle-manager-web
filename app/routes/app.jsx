@@ -1,10 +1,6 @@
 import React from "react";
 import NoPlanFallback from "../pages/plans/no-plan-fallback";
-import {
-  Outlet,
-  useLoaderData,
-  useRouteError,
-} from "react-router";
+import { Outlet, useLoaderData, useLocation, useRouteError } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate, sessionStorage } from "../shopify.server";
@@ -93,9 +89,9 @@ export const loader = async ({ request }) => {
   };
 };
 
-
 export default function App() {
   const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
+  const location = useLocation();
 
   const isPlansRoute = location.pathname === "/app/plans";
 
@@ -133,7 +129,6 @@ export default function App() {
     <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
       <QueryClientProvider client={queryClient}>
         <AppProvider embedded apiKey={apiKey}>
-
           <s-app-nav>
             <s-link href="/app">Dashboard</s-link>
             {/* 📊 */}
