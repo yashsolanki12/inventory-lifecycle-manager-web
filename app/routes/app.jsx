@@ -99,7 +99,6 @@ export default function App() {
   const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
 
   const location = useLocation();
-  console.log("loca",location)
   const isPlansRoute = location.pathname === "/app/plans";
 
   React.useEffect(() => {
