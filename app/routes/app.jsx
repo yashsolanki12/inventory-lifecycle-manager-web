@@ -1,6 +1,6 @@
 import React from "react";
 import NoPlanFallback from "../pages/plans/no-plan-fallback";
-import { Outlet, useLoaderData, useLocation, useRouteError } from "react-router";
+import { Outlet, useLoaderData, useLocation, useRouteError, useSearchParams } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { authenticate, sessionStorage } from "../shopify.server";
@@ -92,6 +92,7 @@ export const loader = async ({ request }) => {
 export default function App() {
   const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const isPlansRoute = location.pathname === "/app/plans";
 
@@ -126,14 +127,11 @@ export default function App() {
   }, [shop]);
 
   React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
-      if (url.searchParams.has("appLoadId")) {
-        url.searchParams.delete("appLoadId");
-        window.history.replaceState(null, "", url.toString());
-      }
+    if (searchParams.has("appLoadId")) {
+      searchParams.delete("appLoadId");
+      setSearchParams(searchParams, { replace: true });
     }
-  }, [location]);
+  }, [searchParams, setSearchParams]);
 
   return (
     <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
