@@ -6,7 +6,9 @@ export const loader = async ({ request }) => {
   const url = new URL(request.url);
 
   if (url.searchParams.get("shop")) {
-    throw redirect(`/app?${url.searchParams.toString()}`);
+    const params = new URLSearchParams(url.searchParams);
+    params.delete("appLoadId");
+    throw redirect(`/app?${params.toString()}`);
   }
 
   return { showForm: Boolean(login) };

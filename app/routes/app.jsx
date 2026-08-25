@@ -4,7 +4,6 @@ import {
   Outlet,
   useLoaderData,
   useRouteError,
-  useLocation,
 } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
@@ -98,28 +97,7 @@ export const loader = async ({ request }) => {
 export default function App() {
   const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
 
-  const location = useLocation();
   const isPlansRoute = location.pathname === "/app/plans";
-
-  React.useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const url = new URL(window.location.href);
-
-    if (url.searchParams.has("appLoadId")) {
-      url.searchParams.delete("appLoadId");
-
-      window.history.replaceState(
-        window.history.state,
-        "",
-        url.pathname +
-          (url.search ? url.search : "") +
-          (url.hash ? url.hash : ""),
-      );
-    }
-  }, [location.pathname, location.search]);
 
   const queryClient = React.useMemo(
     () =>
