@@ -69,7 +69,7 @@ const AgingDistributionChart = ({ agingData }) => {
     },
   ];
 
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload, _label }) => {
     if (!active || !payload?.length) return null;
     const dataItem = payload[0].payload;
     const colorIndex = chartData.findIndex((d) => d.name === dataItem.name);
