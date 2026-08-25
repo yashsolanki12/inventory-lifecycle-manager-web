@@ -121,12 +121,15 @@ const DashboardPage = () => {
 
   React.useEffect(() => {
     if (
-      (searchParams.has("charge_id") || searchParams.has("plan_handle")) &&
+      (searchParams.has("charge_id") ||
+        searchParams.has("plan_handle") ||
+        searchParams.has("appLoadId")) &&
       shopDomain
     ) {
       const newParams = new URLSearchParams(searchParams);
       newParams.delete("charge_id");
       newParams.delete("plan_handle");
+      newParams.delete("appLoadId");
       setSearchParams(newParams, { replace: true });
     }
   }, [searchParams, shopDomain, setSearchParams]);
