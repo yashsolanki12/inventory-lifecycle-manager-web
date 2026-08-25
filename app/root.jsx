@@ -1,4 +1,12 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLocation } from "react-router";
+import React from "react";
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLocation,
+} from "react-router";
 import { StyledEngineProvider } from "@mui/material/styles";
 
 export const meta = () => {
@@ -32,7 +40,11 @@ export default function App() {
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="emotion-insertion-point" content="" suppressHydrationWarning />
+        <meta
+          name="emotion-insertion-point"
+          content=""
+          suppressHydrationWarning
+        />
         <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
         <Meta />
         <Links />
