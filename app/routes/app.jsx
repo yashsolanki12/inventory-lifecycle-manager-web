@@ -5,7 +5,6 @@ import {
   useLoaderData,
   useRouteError,
   useLocation,
-  useSearchParams,
 } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
@@ -68,15 +67,14 @@ export const loader = async ({ request }) => {
   } catch (err) {
     console.error("[App] Billing check failed:", err.message);
   }
-
   if (hasActivePlan && activeSubscription) {
     syncPlanToBackend(
       session?.shop,
       activeSubscription.name.toLowerCase(),
       activeSubscription.id,
-    ).catch((err) =>
-      console.error("[App] Plan sync to backend failed:", err.message),
-    );
+    ).catch((err) => {
+      console.error("[App] Plan sync to backend failed:", err.message);
+    });
   }
   let billingUrl = "";
   if (session?.shop) {
@@ -96,20 +94,33 @@ export const loader = async ({ request }) => {
   };
 };
 
+
 export default function App() {
   const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
 
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  console.log("loca",location)
   const isPlansRoute = location.pathname === "/app/plans";
 
   React.useEffect(() => {
-    if (searchParams.has("appLoadId")) {
-      const newParams = new URLSearchParams(searchParams);
-      newParams.delete("appLoadId");
-      setSearchParams(newParams, { replace: true });
+    if (typeof window === "undefined") {
+      return;
     }
-  }, [searchParams, setSearchParams]);
+
+    const url = new URL(window.location.href);
+
+    if (url.searchParams.has("appLoadId")) {
+      url.searchParams.delete("appLoadId");
+
+      window.history.replaceState(
+        window.history.state,
+        "",
+        url.pathname +
+          (url.search ? url.search : "") +
+          (url.hash ? url.hash : ""),
+      );
+    }
+  }, [location.pathname, location.search]);
 
   const queryClient = React.useMemo(
     () =>
@@ -131,7 +142,13 @@ export default function App() {
     if (!shop) return;
     const key = `auth_post_sync_${shop}`;
     if (!localStorage.getItem(key)) {
-      authPostSync(shop).then(() => localStorage.setItem(key, "true"));
+      authPostSync(shop)
+        .then(() => {
+          localStorage.setItem(key, "true");
+        })
+        .catch((error) => {
+          console.error("[App] Auth post sync failed:", error);
+        });
     }
   }, [shop]);
 
@@ -139,6 +156,7 @@ export default function App() {
     <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
       <QueryClientProvider client={queryClient}>
         <AppProvider embedded apiKey={apiKey}>
+
           <s-app-nav>
             <s-link href="/app">Dashboard</s-link>
             {/* 📊 */}
