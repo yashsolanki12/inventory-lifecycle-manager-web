@@ -538,9 +538,9 @@ export const PRODUCT_COLORS = [
 ];
 
 export const PLAN_SKU_TEXT = {
-  free: "Sync up to 100 products",
-  starter: "Sync up to 1,000 products",
-  pro: "Sync unlimited products",
+  free: "Sync up to 100 random products",
+  starter: "Sync up to 1,000 random products",
+  pro: "Sync all products",
 };
 
 export const FEATURES = [
