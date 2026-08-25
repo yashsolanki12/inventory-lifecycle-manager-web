@@ -91,7 +91,7 @@ const AlertsListPage = () => {
       hasGeneratedAlerts.current = true;
       generateAlertsMutation.mutate(shopDomain);
     }
-  }, [shopDomain]);
+  }, [shopDomain, generateAlertsMutation]);
 
   const handleView = (alert) => {
     navigate(`/app/alerts/${alert.id}`);

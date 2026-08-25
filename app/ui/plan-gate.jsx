@@ -12,7 +12,7 @@ const PlanGate = ({
   feature,
   message,
   upgradeUrl,
-  children,
+  children: _children,
 }) => {
   const redirectToPricing = usePricingRedirect();
   const handleUpgrade = () => {

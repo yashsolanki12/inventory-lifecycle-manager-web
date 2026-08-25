@@ -50,6 +50,9 @@ module.exports = {
       },
       rules: {
         "react/no-unknown-property": ["error", { ignore: ["variant"] }],
+        "react/prop-types": "off",
+        "react/display-name": "off",
+        "no-unused-vars": ["error", { "varsIgnorePattern": "^_|^React$", "argsIgnorePattern": "^_" }],
       },
     },
 
@@ -91,6 +94,7 @@ module.exports = {
     },
   ],
   globals: {
-    shopify: "readonly"
+    shopify: "readonly",
+    process: "readonly",
   },
 };

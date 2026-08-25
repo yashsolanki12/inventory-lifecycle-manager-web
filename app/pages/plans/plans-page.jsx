@@ -42,17 +42,17 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
       invalidateKeys: [["plan-usage", shop]],
     },
   );
-  const payload = {
+  const payload = React.useMemo(() => ({
     // shop: shop,
     plan: subscription?.name.toLowerCase(),
     chargeId: subscription?.id,
-  };
+  }), [subscription]);
 
   React.useEffect(() => {
     if (subscription && shop) {
       createSyncPlanToBackendMutation.mutate(payload);
     }
-  }, [subscription, shop]);
+  }, [subscription, shop, createSyncPlanToBackendMutation, payload]);
 
   React.useEffect(() => {
     if (actionData) {
@@ -66,7 +66,7 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
         resetPlanOnBackend(shop);
       }
     }
-  }, [actionData]);
+  }, [actionData, shop]);
 
   return (
     <Box
