@@ -125,6 +125,16 @@ export default function App() {
     }
   }, [shop]);
 
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has("appLoadId")) {
+        url.searchParams.delete("appLoadId");
+        window.history.replaceState(null, "", url.toString());
+      }
+    }
+  }, [location]);
+
   return (
     <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
       <QueryClientProvider client={queryClient}>
