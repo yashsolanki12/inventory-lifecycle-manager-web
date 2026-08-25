@@ -146,6 +146,19 @@ const WelcomeCard = ({ onSync, plan, isSyncing }) => {
         </Box>
 
         <Box sx={{ px: { xs: 2.5, sm: 4 }, pb: 4, pt: 2 }}>
+          <Typography
+            sx={{
+              fontSize: 12,
+              color: "#9ca3af",
+              textAlign: "center",
+              lineHeight: 1.4,
+              mb: 2,
+            }}
+          >
+            {planName !== "pro"
+              ? "A random subset of products will be synced based on your plan limit."
+              : "All products will be synced."}
+          </Typography>
           <Button
             fullWidth
             variant="contained"
@@ -172,6 +185,7 @@ const WelcomeCard = ({ onSync, plan, isSyncing }) => {
               "Sync Products"
             )}
           </Button>
+
           {planName === "free" && (
             <Button
               fullWidth
