@@ -5,7 +5,7 @@ client_id = "3df39ce39e6e9a871e11d18b77897bb6"
 
 application_url = "https://inventory.ecodesoft.net"
 
-embedded = false
+embedded = true
 
 name = "Inventory Manager Dev"
 
