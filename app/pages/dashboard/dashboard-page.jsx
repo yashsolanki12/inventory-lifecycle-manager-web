@@ -73,13 +73,15 @@ const DashboardPage = () => {
     {
       invalidateKeys: [
         ["populate-snapshot"],
+        ["inventory-dashboard-data", shopDomain],
+        ["inventory-aging-data", shopDomain],
       ],
     },
   );
 
   const syncMutation = useInventorySubmit(
     () => syncProduct(shopDomain),
-    setSnackbar,
+    null,
     {
       invalidateKeys: [
         ["plan-usage"],
