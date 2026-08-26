@@ -1,4 +1,5 @@
 import { boundary } from "@shopify/shopify-app-react-router/server";
+import { useRouteError } from "react-router";
 import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }) => {
@@ -6,6 +7,10 @@ export const loader = async ({ request }) => {
 
   return null;
 };
+
+export function ErrorBoundary() {
+  return boundary.error(useRouteError());
+}
 
 export const headers = (headersArgs) => {
   return boundary.headers(headersArgs);

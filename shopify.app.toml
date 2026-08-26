@@ -5,7 +5,7 @@ client_id = "3df39ce39e6e9a871e11d18b77897bb6"
 
 application_url = "https://inventory.ecodesoft.net"
 
-embedded = true
+embedded = false
 
 name = "Inventory Manager Dev"
 
@@ -15,7 +15,6 @@ scopes = "read_customers,read_inventory,read_locations,read_markets_home,read_or
 
 optional_scopes = []
 
-use_legacy_install_flow = false
 
 [webhooks]
 
