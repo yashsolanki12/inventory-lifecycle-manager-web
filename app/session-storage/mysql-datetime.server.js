@@ -221,12 +221,20 @@ export class MySQLDatetimeSessionStorage extends MySQLSessionStorage {
 
   _rowToSession(row) {
     if (row.expires) {
-      const d = new Date(row.expires + "Z");
-      row.expires = d.getTime();
+      if (row.expires instanceof Date) {
+        row.expires = row.expires.getTime();
+      } else {
+        const d = new Date(row.expires + "Z");
+        row.expires = d.getTime();
+      }
     }
     if (row.refreshTokenExpires) {
-      const d = new Date(row.refreshTokenExpires + "Z");
-      row.refreshTokenExpires = d.getTime();
+      if (row.refreshTokenExpires instanceof Date) {
+        row.refreshTokenExpires = row.refreshTokenExpires.getTime();
+      } else {
+        const d = new Date(row.refreshTokenExpires + "Z");
+        row.refreshTokenExpires = d.getTime();
+      }
     }
     delete row.created_at;
     delete row.updated_at;
