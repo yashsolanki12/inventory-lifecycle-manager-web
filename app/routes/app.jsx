@@ -133,7 +133,7 @@ export default function App() {
   return (
     <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
       <QueryClientProvider client={queryClient}>
-        <AppProvider embedded apiKey={apiKey}>
+        <AppProvider apiKey={apiKey}>
           <s-app-nav>
             <s-link href="/app">Dashboard</s-link>
             {/* 📊 */}
