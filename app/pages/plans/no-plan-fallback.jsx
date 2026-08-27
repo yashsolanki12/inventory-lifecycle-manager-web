@@ -25,38 +25,31 @@ function NoPlanFallback({
     <Box
       sx={{
         position: "fixed",
-        top: 0,
+        bottom: 0,
         left: 0,
         right: 0,
-        bottom: 0,
         zIndex: 1300,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(255, 255, 255, 0.95)",
-        backdropFilter: "blur(4px)",
-        px: 3,
+        p: 2,
+        backgroundColor: "rgba(255, 255, 255, 0.98)",
+        borderTop: "1px solid #e5e7eb",
+        boxShadow: "0 -4px 12px rgba(0,0,0,0.08)",
       }}
     >
       <Card
         sx={{
-          maxWidth: 480,
-          width: "100%",
+          maxWidth: 600,
+          mx: "auto",
           borderRadius: "10px",
           textAlign: "center",
+          boxShadow: "none",
+          border: "1px solid #e5e7eb",
         }}
       >
-        <CardContent sx={{ p: 4 }}>
-          <CreditCardIcon sx={{ fontSize: 32, color: "#036906", mb: 1 }} />
-          <Typography
-            variant="h6"
-            sx={{ fontWeight: 600, color: "#202223", mb: 1 }}
-          >
-            No Plan Selected
-          </Typography>
+        <CardContent sx={{ py: 2, px: 3, display: "flex", alignItems: "center", justifyContent: "center", gap: 2, flexWrap: "wrap" }}>
+          <CreditCardIcon sx={{ fontSize: 24, color: "#036906" }} />
           <Typography
             variant="body2"
-            sx={{ color: "#6d7175", lineHeight: 1.5, mb: 3 }}
+            sx={{ color: "#6d7175", lineHeight: 1.5, fontWeight: 500 }}
           >
             {message}
           </Typography>
