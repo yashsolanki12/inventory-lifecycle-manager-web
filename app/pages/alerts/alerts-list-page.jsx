@@ -59,7 +59,7 @@ const AlertsListPage = () => {
     refetch,
   } = useInventoryData(
     ["alerts", page],
-    () => getAlerts(shopDomain, { page, limit: 10 }),
+    () => getAlerts(shopDomain, { page, limit: 50 }),
     null,
     { enabled: !!shopDomain },
   );
@@ -260,10 +260,14 @@ const AlertsListPage = () => {
               display: "flex",
               flexDirection: "column",
               gap: 1,
-              maxHeight: "calc(100vh - 282px)",
+              maxHeight: {
+                xs: "calc(100vh - 220px)",
+                sm: "calc(100vh - 260px)",
+                md: "calc(100vh - 282px)",
+              },
               overflowY: "auto",
               px: 2,
-              "&::-webkit-scrollbar": { width: 6 },
+              "&::-webkit-scrollbar": { width: 6, height: 6 },
               "&::-webkit-scrollbar-thumb": {
                 backgroundColor: "#d1d5db",
                 borderRadius: 3,
@@ -430,12 +434,12 @@ const AlertsListPage = () => {
           </Box>
         )}
 
-        {pagination && pagination.total > 10 && (
+        {pagination && pagination.total > 50 && (
           <TablePagination
             page={pagination.page}
             totalPages={pagination.totalPages}
             total={pagination.total}
-            limit={10}
+            limit={50}
             onPageChange={setPage}
             paginationText="alerts"
           />

@@ -247,7 +247,7 @@ const RulesListPage = () => {
         searchPlaceholder="Search by name, conditions..."
         sortOptions={RULES_SORT_OPTIONS}
         defaultSort="-createdAt"
-        defaultLimit={10}
+        defaultLimit={50}
         paginationText="rules"
         enabled={!!shopDomain}
         selectable

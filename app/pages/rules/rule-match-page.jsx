@@ -152,7 +152,7 @@ const RuleMatchPage = () => {
         fetchFn={fetchMatchData}
         queryKey={["rule-match", selectedRuleIds]}
         columns={MATCH_COLUMNS}
-        defaultLimit={10}
+        defaultLimit={50}
         paginationText="products"
         hideSearch={true}
         maxHeight="calc(100vh - 450px)"

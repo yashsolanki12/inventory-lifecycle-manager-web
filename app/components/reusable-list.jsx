@@ -41,7 +41,11 @@ const ReusableList = ({
   onToggleSelect,
   onToggleSelectAll,
   hideSearch = false,
-  maxHeight = "calc(100vh - 300px)",
+  maxHeight = {
+    xs: "calc(100vh - 220px)",
+    sm: "calc(100vh - 260px)",
+    md: "calc(100vh - 300px)",
+  },
   enabled = true,
 }) => {
   const allColumns = actions
@@ -180,7 +184,7 @@ const ReusableList = ({
         maxHeight: maxHeight,
         overflowY: "auto",
         borderRadius: "8px",
-        "&::-webkit-scrollbar": { width: 6 },
+        "&::-webkit-scrollbar": { width: 6, height: 6 },
         "&::-webkit-scrollbar-thumb": {
           backgroundColor: "#d1d5db",
           borderRadius: 3,
