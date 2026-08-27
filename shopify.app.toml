@@ -15,6 +15,8 @@ scopes = "read_customers,read_inventory,read_locations,read_markets_home,read_or
 
 optional_scopes = []
 
+use_legacy_install_flow = false
+
 [build]
 automatically_update_urls_on_dev = true
 
@@ -67,13 +69,8 @@ topics = ["app/uninstalled"]
 
 uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/app-uninstalled"
 
-
 [auth]
 
-redirect_urls = [
-  "https://inventory-lifecycle-manager-web.onrender.com/auth/callback",
-  "https://inventory-lifecycle-manager-web.onrender.com/auth/shopify/callback",
-  "https://inventory-lifecycle-manager-web.onrender.com/api/auth/callback"
-]
+redirect_urls = []
 
 

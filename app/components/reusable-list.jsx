@@ -357,7 +357,7 @@ const ReusableList = ({
                   <Checkbox
                     size="small"
                     checked={selectedIds.includes(item.id)}
-                    onChange={() => onToggleSelect && onToggleSelect(item.id)}
+                    onChange={() => onToggleSelect && onToggleSelect(item)}
                     sx={{ p: 0 }}
                   />
                 </Box>
