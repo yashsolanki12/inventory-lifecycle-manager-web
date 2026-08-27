@@ -16,7 +16,7 @@ import { ALERT_ACTION_CONFIG } from "../../utils/config/constants";
 import { getAlertById } from "../../api/alerts";
 import { useInventoryData } from "../../hooks/useInventoryData";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 50;
 
 const AlertProductsPage = () => {
   const { id } = useParams();
@@ -201,9 +201,13 @@ const AlertProductsPage = () => {
         <Box
           ref={tableRef}
           sx={{
-            maxHeight: "calc(100vh - 480px)",
+            maxHeight: {
+              xs: "calc(100vh - 350px)",
+              sm: "calc(100vh - 400px)",
+              md: "calc(100vh - 480px)",
+            },
             overflowY: "auto",
-            "&::-webkit-scrollbar": { width: 6 },
+            "&::-webkit-scrollbar": { width: 6, height: 6 },
             "&::-webkit-scrollbar-thumb": {
               backgroundColor: "#d1d5db",
               borderRadius: 3,
@@ -300,7 +304,7 @@ const AlertProductsPage = () => {
           })}
         </Box>
 
-        {pagination && pagination.total > 10 && (
+        {pagination && pagination.total > 50 && (
           <TablePagination
             page={pagination.page}
             totalPages={pagination.totalPages}

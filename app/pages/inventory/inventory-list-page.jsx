@@ -165,7 +165,7 @@ const InventoryListPage = () => {
             options: INVENTORY_FILTER_OPTIONS,
           },
         ]}
-        defaultLimit={10}
+        defaultLimit={50}
         paginationText="products"
         handleProductStatus={handleProductStatus}
       />

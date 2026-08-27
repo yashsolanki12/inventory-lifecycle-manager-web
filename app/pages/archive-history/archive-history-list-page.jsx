@@ -156,7 +156,7 @@ const ArchiveHistoryListPage = () => {
         sortOptions={ARCHIVE_HISTORY_SORT_OPTIONS}
         defaultSort="-createdAt"
         paginationText="archive history"
-        defaultLimit={10}
+        defaultLimit={50}
         enabled={!!shopDomain}
       />
 

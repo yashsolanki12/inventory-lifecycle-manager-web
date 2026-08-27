@@ -91,7 +91,7 @@ const OrderListPage = () => {
             options: ORDER_FULFILLMENT_STATUS_FILTER_OPTIONS,
           },
         ]}
-        defaultLimit={10}
+        defaultLimit={50}
         paginationText="orders"
       />
 

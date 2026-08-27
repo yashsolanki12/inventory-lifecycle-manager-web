@@ -25,7 +25,7 @@ const TabPanel = ({ children, value, index }) => {
             py: 1,
             maxHeight: "calc(100vh - 230px)",
             overflowY: "auto",
-            "&::-webkit-scrollbar": { width: 4 },
+            "&::-webkit-scrollbar": { width: 4, height: 4 },
             "&::-webkit-scrollbar-thumb": {
               backgroundColor: "#d1d5db",
               borderRadius: 3,
