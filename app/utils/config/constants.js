@@ -558,7 +558,7 @@ export const VELOCITY_CONFIG = {
   dead: { label: "Dead", color: "#b91c1c", bg: "#fee2e2" },
 };
 
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE = 50;
 
 export const MOVEMENT_CONFIG = {
   addition: { label: "Restocked", color: "#15803d", bg: "#dcfce7" },

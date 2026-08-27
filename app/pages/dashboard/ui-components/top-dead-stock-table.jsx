@@ -57,7 +57,7 @@ const TopDeadStockTable = ({ agingData }) => {
                 maxHeight: 200,
                 overflowY: "auto",
                 borderRadius: "8px",
-                "&::-webkit-scrollbar": { width: 6 },
+                "&::-webkit-scrollbar": { width: 6, height: 6 },
                 "&::-webkit-scrollbar-thumb": {
                   backgroundColor: "#d1d5db",
                   borderRadius: 3,
