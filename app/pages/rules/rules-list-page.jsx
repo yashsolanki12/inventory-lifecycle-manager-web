@@ -34,6 +34,7 @@ const RulesListPage = () => {
     id: "",
   });
   const [selectedIds, setSelectedIds] = React.useState([]);
+  const [selectedRuleNames, setSelectedRuleNames] = React.useState({});
 
   const { data: rulesCountData } = useInventoryData(
     ["rules-list-count"],
@@ -57,24 +58,47 @@ const RulesListPage = () => {
     }
   };
 
-  const handleToggleSelect = (id) => {
+  const handleToggleSelect = (item) => {
+    const id = item.id;
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
+    setSelectedRuleNames((prev) => {
+      const next = { ...prev };
+      if (next[id]) {
+        delete next[id];
+      } else {
+        next[id] = item.rule_name || "";
+      }
+      return next;
+    });
   };
 
   const handleToggleSelectAll = (checked, items) => {
     if (checked) {
       const allIds = items.map((item) => item.id).filter(Boolean);
       setSelectedIds((prev) => [...new Set([...prev, ...allIds])]);
+      setSelectedRuleNames((prev) => {
+        const next = { ...prev };
+        items.forEach((item) => {
+          if (item.id) next[item.id] = item.rule_name || "";
+        });
+        return next;
+      });
     } else {
       const itemIds = items.map((item) => item.id);
       setSelectedIds((prev) => prev.filter((id) => !itemIds.includes(id)));
+      setSelectedRuleNames((prev) => {
+        const next = { ...prev };
+        itemIds.forEach((id) => delete next[id]);
+        return next;
+      });
     }
   };
 
   const handleClearSelection = () => {
     setSelectedIds([]);
+    setSelectedRuleNames({});
   };
 
   const deleteRuleMutation = useInventorySubmit(
@@ -99,6 +123,7 @@ const RulesListPage = () => {
           navigate("/app/rules/match", {
             state: {
               selectedRuleIds: selectedIds,
+              selectedRuleNames,
               totalItems: data.data.pagination.total || data.data.items?.length,
             },
           });

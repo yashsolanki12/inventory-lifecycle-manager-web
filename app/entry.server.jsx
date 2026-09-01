@@ -2,10 +2,9 @@ import { PassThrough } from "stream";
 import { renderToPipeableStream } from "react-dom/server";
 import { ServerRouter } from "react-router";
 import { createReadableStreamFromReadable } from "@react-router/node";
-import { isbot } from "isbot";
 import { addDocumentResponseHeaders } from "./shopify.server";
 
-export const streamTimeout = 5000;
+export const streamTimeout = 10000;
 
 export default async function handleRequest(
   request,
@@ -27,14 +26,11 @@ export default async function handleRequest(
     responseHeaders.set("Content-Security-Policy", updatedCsp);
   }
 
-  const userAgent = request.headers.get("user-agent");
-  const callbackName = isbot(userAgent ?? "") ? "onAllReady" : "onShellReady";
-
   return new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
       <ServerRouter context={reactRouterContext} url={request.url} />,
       {
-        [callbackName]: () => {
+        onShellReady: () => {
           const body = new PassThrough();
           const stream = createReadableStreamFromReadable(body);
 
