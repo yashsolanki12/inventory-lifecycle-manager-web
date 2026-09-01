@@ -1,103 +1,126 @@
 import React from "react";
-import NoPlanFallback from "../pages/plans/no-plan-fallback";
+// import NoPlanFallback from "../pages/plans/no-plan-fallback";
 import {
   Outlet,
   useLoaderData,
-  useLocation,
+  // useLocation,
   useRouteError,
 } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
-import { authenticate, sessionStorage } from "../shopify.server";
-import { authPostSync } from "../api/auth";
-import { syncPlanToBackend } from "../api/plan";
+import { authenticate, } from "../shopify.server"; //  sessionStorage
+// import { authPostSync } from "../api/auth";
+// import { syncPlanToBackend } from "../api/plan";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppContext } from "../utils/app-context";
+// import { AppContext } from "../utils/app-context";
+
+// export const loader = async ({ request }) => {
+//   const { session, billing } = await authenticate.admin(request);
+
+//   if (session) {
+//     const hasInfo = await sessionStorage
+//       .hasShopInfo(session.id)
+//       .catch(() => false);
+//     if (!hasInfo) {
+//       try {
+//         const response = await fetch(
+//           `https://${session.shop}/admin/api/2026-07/shop.json`,
+//           {
+//             headers: {
+//               "X-Shopify-Access-Token": session.accessToken,
+//               "Content-Type": "application/json",
+//             },
+//           },
+//         );
+//         const data = await response.json();
+//         const shopData = data.shop;
+
+//         if (shopData) {
+//           const fullName = shopData.shop_owner || "";
+//           const nameParts = fullName.trim().split(/\s+/);
+//           await sessionStorage.updateShopInfo(session.id, {
+//             firstName: nameParts[0] || "",
+//             lastName: nameParts.slice(1).join(" ") || "",
+//             email: shopData.email || "",
+//             accountOwner: true,
+//             locale: shopData.locale || "",
+//             collaborator: false,
+//             emailVerified: true,
+//           });
+//         }
+//       } catch (err) {
+//         console.error("[App] Failed to fetch shop info:", err.message);
+//       }
+//     }
+//   }
+
+//   let hasActivePlan = false;
+//   let activeSubscription = null;
+//   try {
+//     const { appSubscriptions } = await billing.check();
+//     if (appSubscriptions && appSubscriptions.length > 0) {
+//       activeSubscription = appSubscriptions.find(
+//         (sub) => sub.status.toUpperCase() === "ACTIVE",
+//       );
+//       hasActivePlan = !!activeSubscription;
+//     }
+//   } catch (err) {
+//     console.error("[App] Billing check failed:", err.message);
+//   }
+//   // if (hasActivePlan && activeSubscription) {
+//   //   syncPlanToBackend(
+//   //     session?.shop,
+//   //     activeSubscription.name.toLowerCase(),
+//   //     activeSubscription.id,
+//   //   ).catch((err) => {
+//   //     console.error("[App] Plan sync to backend failed:", err.message);
+//   //   });
+//   // }
+//   let billingUrl = "";
+//   if (session?.shop) {
+//     // eslint-disable-next-line no-undef
+//     const billingHandle =
+//       process.env.SHOPIFY_APP_NAME || "inventory-manager-test";
+//     billingUrl = `https://admin.shopify.com/store/${session.shop
+//       .split(".")
+//       .at(0)}/charges/${billingHandle}/pricing_plans`;
+//   }
+//   return {
+//     // eslint-disable-next-line no-undef
+//     apiKey: process.env.SHOPIFY_API_KEY || "",
+//     shop: session?.shop || "",
+//     billingUrl,
+//     hasActivePlan,
+//   };
+// };
 
 export const loader = async ({ request }) => {
-  const { session, billing } = await authenticate.admin(request);
+  const {
+    session,
+    billing,
+    redirect: shopifyRedirect,
+  } = await authenticate.admin(request);
+  const { hasActivePayment } = await billing.check();
 
-  if (session) {
-    const hasInfo = await sessionStorage
-      .hasShopInfo(session.id)
-      .catch(() => false);
-    if (!hasInfo) {
-      try {
-        const response = await fetch(
-          `https://${session.shop}/admin/api/2026-07/shop.json`,
-          {
-            headers: {
-              "X-Shopify-Access-Token": session.accessToken,
-              "Content-Type": "application/json",
-            },
-          },
-        );
-        const data = await response.json();
-        const shopData = data.shop;
+  const appHandle = "inventory-manager-test";
+  const shop = session.shop;
+  const storeHandle = shop.replace(".myshopify.com", "");
 
-        if (shopData) {
-          const fullName = shopData.shop_owner || "";
-          const nameParts = fullName.trim().split(/\s+/);
-          await sessionStorage.updateShopInfo(session.id, {
-            firstName: nameParts[0] || "",
-            lastName: nameParts.slice(1).join(" ") || "",
-            email: shopData.email || "",
-            accountOwner: true,
-            locale: shopData.locale || "",
-            collaborator: false,
-            emailVerified: true,
-          });
-        }
-      } catch (err) {
-        console.error("[App] Failed to fetch shop info:", err.message);
-      }
-    }
+  if (!hasActivePayment) {
+    const billingUrl = `https://admin.shopify.com/store/${storeHandle}/charges/${appHandle}/pricing_plans`;
+
+    // This tells the browser to perform a full document-level redirect
+    throw shopifyRedirect(billingUrl, { target: "_top" });
   }
 
-  let hasActivePlan = false;
-  let activeSubscription = null;
-  try {
-    const { appSubscriptions } = await billing.check();
-    if (appSubscriptions && appSubscriptions.length > 0) {
-      activeSubscription = appSubscriptions.find(
-        (sub) => sub.status.toUpperCase() === "ACTIVE",
-      );
-      hasActivePlan = !!activeSubscription;
-    }
-  } catch (err) {
-    console.error("[App] Billing check failed:", err.message);
-  }
-  if (hasActivePlan && activeSubscription) {
-    syncPlanToBackend(
-      session?.shop,
-      activeSubscription.name.toLowerCase(),
-      activeSubscription.id,
-    ).catch((err) => {
-      console.error("[App] Plan sync to backend failed:", err.message);
-    });
-  }
-  let billingUrl = "";
-  if (session?.shop) {
-    // eslint-disable-next-line no-undef
-    const billingHandle =
-      process.env.SHOPIFY_APP_NAME || "inventory-manager-test";
-    billingUrl = `https://admin.shopify.com/store/${session.shop
-      .split(".")
-      .at(0)}/charges/${billingHandle}/pricing_plans`;
-  }
-  return {
-    // eslint-disable-next-line no-undef
-    apiKey: process.env.SHOPIFY_API_KEY || "",
-    shop: session?.shop || "",
-    billingUrl,
-    hasActivePlan,
-  };
+  // eslint-disable-next-line no-undef
+  return { apiKey: process.env.SHOPIFY_API_KEY || "" };
 };
 
 export default function App() {
-  const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
-  const location = useLocation();
-  const isPlansRoute = location.pathname === "/app/plans";
+  const { apiKey } = useLoaderData(); //  hasActivePlan, billingUrl, shop
+  // const location = useLocation();
+  // const isPlansRoute = location.pathname === "/app/plans";
 
   const queryClient = React.useMemo(
     () =>
@@ -115,44 +138,42 @@ export default function App() {
       }),
     [],
   );
-  React.useEffect(() => {
-    if (!shop) return;
-    const key = `auth_post_sync_${shop}`;
-    if (!localStorage.getItem(key)) {
-      authPostSync(shop)
-        .then(() => {
-          localStorage.setItem(key, "true");
-        })
-        .catch((error) => {
-          console.error("[App] Auth post sync failed:", error);
-        });
-    }
-  }, [shop]);
+  // React.useEffect(() => {
+  //   if (!shop) return;
+  //   const key = `auth_post_sync_${shop}`;
+  //   if (!localStorage.getItem(key)) {
+  //     authPostSync(shop)
+  //       .then(() => {
+  //         localStorage.setItem(key, "true");
+  //       })
+  //       .catch((error) => {
+  //         console.error("[App] Auth post sync failed:", error);
+  //       });
+  //   }
+  // }, [shop]);
 
   return (
-    <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
-      <QueryClientProvider client={queryClient}>
-        <AppProvider embedded apiKey={apiKey}>
-          <s-app-nav>
-            <s-link href="/app">Dashboard</s-link>
-            {/* 📊 */}
-            <s-link href="/app/inventory">Inventory</s-link> {/* 📦 */}
+    // <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
+    <QueryClientProvider client={queryClient}>
+      <AppProvider embedded apiKey={apiKey}>
+        <s-app-nav>
+          {/* <s-link href="/app">Dashboard</s-link>
+            <s-link href="/app/inventory">Inventory</s-link>
             <s-link href="/app/rules">Rules</s-link>
             <s-link href="/app/archive-history">Archive History</s-link>
             <s-link href="/app/alerts">Alerts</s-link>
-            <s-link href="/app/aging-buckets">Aging Buckets</s-link>
-            {/* <s-link href="/app/orders">Orders</s-link> */}
-            {/* 🛍️  */}
-            <s-link href="/app/plans">Plans</s-link>
-            {/* 💳  */}
-          </s-app-nav>
-          <Outlet />
-          {!hasActivePlan && !isPlansRoute && (
+            <s-link href="/app/aging-buckets">Aging Buckets</s-link> */}
+          {/* <s-link href="/app/orders">Orders</s-link> */}
+
+          <s-link href="/app/plans">Plans</s-link>
+        </s-app-nav>
+        <Outlet />
+        {/* {!hasActivePlan && !isPlansRoute && (
             <NoPlanFallback billingUrl={billingUrl} />
-          )}
-        </AppProvider>
-      </QueryClientProvider>
-    </AppContext.Provider>
+          )} */}
+      </AppProvider>
+    </QueryClientProvider>
+    // </AppContext.Provider>
   );
 }
 
