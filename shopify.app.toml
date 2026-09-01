@@ -67,4 +67,5 @@ uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/app
 redirect_urls = []
 
 [build]
+include_config_on_deploy = true
 automatically_update_urls_on_dev = true
