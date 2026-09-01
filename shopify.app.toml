@@ -1,13 +1,9 @@
-# Learn more about configuring your app at:
-# https://shopify.dev/docs/apps/tools/cli/configuration
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "3df39ce39e6e9a871e11d18b77897bb6"
-
+client_id = "da81126822b503d40d5c7d0345cb12ff"
+name = "Inventory Manager Test"
 application_url = "https://inventory-lifecycle-manager-web.onrender.com"
-
 embedded = true
-
-name = "Inventory Manager Dev"
 
 [access_scopes]
 
@@ -16,9 +12,6 @@ scopes = "read_customers,read_inventory,read_locations,read_markets_home,read_or
 optional_scopes = []
 
 use_legacy_install_flow = false
-
-[build]
-automatically_update_urls_on_dev = true
 
 [webhooks]
 
@@ -73,4 +66,5 @@ uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/app
 
 redirect_urls = []
 
-
+[build]
+automatically_update_urls_on_dev = true
