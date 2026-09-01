@@ -97,7 +97,6 @@ export const loader = async ({ request }) => {
 export default function App() {
   const { apiKey, hasActivePlan, billingUrl, shop } = useLoaderData();
   const location = useLocation();
-
   const isPlansRoute = location.pathname === "/app/plans";
 
   const queryClient = React.useMemo(
@@ -133,7 +132,7 @@ export default function App() {
   return (
     <AppContext.Provider value={{ hasActivePlan, billingUrl, shop }}>
       <QueryClientProvider client={queryClient}>
-        <AppProvider apiKey={apiKey}>
+        <AppProvider embedded apiKey={apiKey}>
           <s-app-nav>
             <s-link href="/app">Dashboard</s-link>
             {/* 📊 */}
