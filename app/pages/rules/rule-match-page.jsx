@@ -22,7 +22,9 @@ const RuleMatchPage = () => {
   const shopDomain = useCurrentShopDomain();
   const [openDialog, setOpenDialog] = React.useState(false);
   const selectedRuleIds = location.state?.selectedRuleIds || [];
+  const selectedRuleNames = location.state?.selectedRuleNames || {};
   const totalFromState = location.state?.totalItems || 0;
+  const [selectedProductIds, setSelectedProductIds] = React.useState([]);
 
   const [snackbar, setSnackbar] = React.useState({
     open: false,
@@ -32,6 +34,23 @@ const RuleMatchPage = () => {
 
   const handleCloseSnackbar = () => {
     setSnackbar({ open: false, message: "", severity: "success" });
+  };
+
+  const handleToggleSelectProduct = (item) => {
+    const id = item.id;
+    setSelectedProductIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+    );
+  };
+
+  const handleToggleSelectAllProducts = (checked, items) => {
+    if (checked) {
+      const allIds = items.map((item) => item.id).filter(Boolean);
+      setSelectedProductIds((prev) => [...new Set([...prev, ...allIds])]);
+    } else {
+      const itemIds = items.map((item) => item.id);
+      setSelectedProductIds((prev) => prev.filter((id) => !itemIds.includes(id)));
+    }
   };
 
   const runRuleMutation = useInventorySubmit(
@@ -116,6 +135,29 @@ const RuleMatchPage = () => {
           Rule Preview
         </Typography>
       </Box>
+      {selectedRuleIds.length > 0 && (
+        <Box sx={{ mb: 3 }}>
+          {selectedRuleIds.map((ruleId) => (
+            <Box
+              key={ruleId}
+              sx={{
+                backgroundColor: "#ffffff",
+                border: "1px solid #e1e3e5",
+                borderRadius: "10px",
+                p: 2,
+                mb: selectedRuleIds.length > 1 ? 1.5 : 0,
+              }}
+            >
+              <Typography sx={{ fontSize: 14, color: "#6d7175" }}>
+                Rule Name:{" "}
+                <span style={{ color: "#202223", fontWeight: 600 }}>
+                  {selectedRuleNames[ruleId] || "—"}
+                </span>
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      )}
       {totalFromState > 0 && (
         <Box
           sx={{
@@ -156,6 +198,10 @@ const RuleMatchPage = () => {
         paginationText="products"
         hideSearch={true}
         maxHeight="calc(100vh - 450px)"
+        selectable
+        selectedIds={selectedProductIds}
+        onToggleSelect={handleToggleSelectProduct}
+        onToggleSelectAll={handleToggleSelectAllProducts}
       />
 
       <Box

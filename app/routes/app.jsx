@@ -80,7 +80,7 @@ export const loader = async ({ request }) => {
   if (session?.shop) {
     // eslint-disable-next-line no-undef
     const billingHandle =
-      process.env.SHOPIFY_APP_NAME || "inventory-lifecycle-manager";
+      process.env.SHOPIFY_APP_NAME || "inventory-manager-test";
     billingUrl = `https://admin.shopify.com/store/${session.shop
       .split(".")
       .at(0)}/charges/${billingHandle}/pricing_plans`;
