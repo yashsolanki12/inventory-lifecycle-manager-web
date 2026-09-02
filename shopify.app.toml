@@ -1,31 +1,17 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "da81126822b503d40d5c7d0345cb12ff"
-name = "Inventory Manager Test"
+client_id = "e75656dfdc22df5286e59679adededf8"
+name = "Inventory Test App"
 application_url = "https://inventory-lifecycle-manager-web.onrender.com"
 embedded = true
 
 [build]
 automatically_update_urls_on_dev = true
 
-[events]
-api_version = "unstable"
-
-  [[events.subscription]]
-  handle = "product-event"
-  topic = "Product"
-  actions = [ "update" ]
-  uri = "https://inventory-lifecycle-manager-backend.onrender.com/events"
-  api_version = "unstable"
-
 [webhooks]
-api_version = "2026-07"
+api_version = "2026-10"
 
-  [[webhooks.subscriptions]]
-  uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/orders/create"
-  topics = [ "orders/create" ]
-
-  [[webhooks.subscriptions]]
+ [[webhooks.subscriptions]]
   uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/app-uninstalled"
   compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
   topics = [ "app/uninstalled" ]
@@ -35,14 +21,17 @@ api_version = "2026-07"
   topics = [ "products/update" ]
 
   [[webhooks.subscriptions]]
+  uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/orders/create"
+  topics = [ "orders/create" ]
+
+  [[webhooks.subscriptions]]
   uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/inventory_levels/update"
-  topics = [ "inventory_levels/update" ]
+  topics = [ "inventory_levels/update" ] 
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_customers,read_inventory,read_locations,read_markets_home,read_orders,read_products,unauthenticated_read_product_listings,unauthenticated_read_product_tags,write_customers,write_inventory,write_orders,write_products"
 optional_scopes = [ ]
-
 
 [auth]
 redirect_urls = [
@@ -50,3 +39,28 @@ redirect_urls = [
   "https://inventory-lifecycle-manager-web.onrender.com/auth/shopify/callback",
   "https://inventory-lifecycle-manager-web.onrender.com/api/auth/callback"
 ]
+
+
+[product.metafields.app.demo_info]
+type = "single_line_text_field"
+name = "Demo Source Info"
+description = "Tracks products created by the Shopify app template for development"
+
+  [product.metafields.app.demo_info.access]
+  admin = "merchant_read_write"
+
+[metaobjects.app.example]
+name = "Example"
+description = "An example metaobject definition created by this template"
+
+  [metaobjects.app.example.access]
+  admin = "merchant_read_write"
+
+[metaobjects.app.example.fields.title]
+name = "Title"
+type = "single_line_text_field"
+required = true
+
+[metaobjects.app.example.fields.description]
+name = "Description"
+type = "multi_line_text_field"

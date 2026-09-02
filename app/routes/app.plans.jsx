@@ -19,8 +19,7 @@ export const loader = async ({ request }) => {
   }
 
   // eslint-disable-next-line no-undef
-  const billingHandle =
-    process.env.SHOPIFY_APP_NAME || "inventory-manager-test";
+  const billingHandle = process.env.SHOPIFY_APP_NAME || "inventory-test-app-5";
   const billingUrl = session?.shop
     ? `https://admin.shopify.com/store/${session.shop
         .split(".")
