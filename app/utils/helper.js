@@ -7,7 +7,7 @@ import {
 } from "./config/constants";
 import { AppContext } from "./app-context";
 
-export const APP_HANDLE = import.meta.env.SHOPIFY_APP_NAME ?? "inventory-manager-test";
+export const APP_HANDLE = import.meta.env.SHOPIFY_APP_NAME ?? "inventory-test-app-5";
 
 export const useCurrentShopDomain = () => {
   const { shop } = React.useContext(AppContext);
