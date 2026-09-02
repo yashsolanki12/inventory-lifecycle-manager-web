@@ -4,8 +4,10 @@ import { boundary } from "@shopify/shopify-app-react-router/server";
 import { AppProvider } from "@shopify/shopify-app-react-router/react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { authenticate } from "../shopify.server";
 
-export const loader = async () => {
+export const loader = async ({ request }) => {
+  await authenticate.admin(request);
   return { apiKey: process.env.SHOPIFY_API_KEY || "" };
 };
 
