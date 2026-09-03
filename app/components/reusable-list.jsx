@@ -387,6 +387,7 @@ const ReusableList = ({
         flexDirection: "column",
         flex: 1,
         minHeight: 0,
+        overflow: "hidden",
       }}
     >
       <CardContent
