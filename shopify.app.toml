@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "e75656dfdc22df5286e59679adededf8"
-name = "Inventory Test App"
+client_id = "3df39ce39e6e9a871e11d18b77897bb6"
+name = "Inventory Manager Dev"
 application_url = "https://inventory-lifecycle-manager-web.onrender.com"
 embedded = true
 
@@ -11,22 +11,24 @@ automatically_update_urls_on_dev = true
 [webhooks]
 api_version = "2026-10"
 
- [[webhooks.subscriptions]]
-  uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/app-uninstalled"
-  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
-  topics = [ "app/uninstalled" ]
-
-  [[webhooks.subscriptions]]
-  uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/products/update"
-  topics = [ "products/update" ]
-
   [[webhooks.subscriptions]]
   uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/orders/create"
   topics = [ "orders/create" ]
 
   [[webhooks.subscriptions]]
   uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/inventory_levels/update"
-  topics = [ "inventory_levels/update" ] 
+  topics = [ "inventory_levels/update" ]
+
+  [[webhooks.subscriptions]]
+  uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/products/update"
+  topics = [ "products/update" ]
+
+  [[webhooks.subscriptions]]
+  uri = "https://inventory-lifecycle-manager-backend.onrender.com/api/webhooks/app-uninstalled"
+  topics = [ "app/uninstalled" ]
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+
+
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
@@ -41,26 +43,3 @@ redirect_urls = [
 ]
 
 
-[product.metafields.app.demo_info]
-type = "single_line_text_field"
-name = "Demo Source Info"
-description = "Tracks products created by the Shopify app template for development"
-
-  [product.metafields.app.demo_info.access]
-  admin = "merchant_read_write"
-
-[metaobjects.app.example]
-name = "Example"
-description = "An example metaobject definition created by this template"
-
-  [metaobjects.app.example.access]
-  admin = "merchant_read_write"
-
-[metaobjects.app.example.fields.title]
-name = "Title"
-type = "single_line_text_field"
-required = true
-
-[metaobjects.app.example.fields.description]
-name = "Description"
-type = "multi_line_text_field"
