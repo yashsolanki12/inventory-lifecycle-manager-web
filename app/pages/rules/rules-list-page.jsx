@@ -14,6 +14,7 @@ import {
   deleteArchiveRule,
   getAllArchiveList,
   ruleMatch,
+  toggleArchiveRule,
 } from "../../api/archive-rules";
 import { useNavigate } from "react-router";
 import { RULES_COLUMNS, rulesRenderActions } from "../../utils/config/columns";
@@ -113,6 +114,20 @@ const RulesListPage = () => {
       },
     },
   );
+
+  const toggleMutation = useInventorySubmit(
+    ({ shop, id }) => toggleArchiveRule(shop, id),
+    setSnackbar,
+    {
+      invalidateKeys: [["rules-list"]],
+      showSuccess: true,
+    },
+  );
+
+  const handleToggleActive = (item) => {
+    if (!shopDomain || !item.id) return;
+    toggleMutation.mutate({ shop: shopDomain, id: item.id });
+  };
 
   const matchRuleMutation = useInventorySubmit(
     ({ shop, ruleIds }) => ruleMatch(shop, ruleIds),
@@ -275,6 +290,7 @@ const RulesListPage = () => {
         defaultLimit={50}
         paginationText="rules"
         enabled={!!shopDomain}
+        columnExtras={{ onToggleActive: handleToggleActive }}
         selectable
         selectedIds={selectedIds}
         onToggleSelect={handleToggleSelect}

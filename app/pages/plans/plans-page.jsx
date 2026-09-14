@@ -42,17 +42,21 @@ const PlansPage = ({ shop, subscription, billingUrl, submit, actionData }) => {
       invalidateKeys: [["plan-usage", shop]],
     },
   );
-  const payload = React.useMemo(() => ({
-    // shop: shop,
-    plan: subscription?.name.toLowerCase(),
-    chargeId: subscription?.id,
-  }), [subscription]);
+  const payload = React.useMemo(
+    () => ({
+      // shop: shop,
+      plan: subscription?.name.toLowerCase(),
+      chargeId: subscription?.id,
+    }),
+    [subscription],
+  );
 
   React.useEffect(() => {
     if (subscription && shop) {
       createSyncPlanToBackendMutation.mutate(payload);
     }
-  }, [subscription, shop, createSyncPlanToBackendMutation, payload]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscription, shop, payload]);
 
   React.useEffect(() => {
     if (actionData) {
