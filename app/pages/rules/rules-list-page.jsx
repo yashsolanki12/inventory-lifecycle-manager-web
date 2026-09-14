@@ -60,6 +60,7 @@ const RulesListPage = () => {
   };
 
   const handleToggleSelect = (item) => {
+    if (item.active === false || item.active === 0) return;
     const id = item.id;
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
@@ -76,18 +77,21 @@ const RulesListPage = () => {
   };
 
   const handleToggleSelectAll = (checked, items) => {
+    const activeItems = items.filter(
+      (item) => item.active !== false && item.active !== 0,
+    );
     if (checked) {
-      const allIds = items.map((item) => item.id).filter(Boolean);
+      const allIds = activeItems.map((item) => item.id).filter(Boolean);
       setSelectedIds((prev) => [...new Set([...prev, ...allIds])]);
       setSelectedRuleNames((prev) => {
         const next = { ...prev };
-        items.forEach((item) => {
+        activeItems.forEach((item) => {
           if (item.id) next[item.id] = item.rule_name || "";
         });
         return next;
       });
     } else {
-      const itemIds = items.map((item) => item.id);
+      const itemIds = activeItems.map((item) => item.id);
       setSelectedIds((prev) => prev.filter((id) => !itemIds.includes(id)));
       setSelectedRuleNames((prev) => {
         const next = { ...prev };
