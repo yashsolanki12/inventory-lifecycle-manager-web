@@ -103,6 +103,21 @@ export const deleteArchiveRule = async (shop, id) => {
     });
 };
 
+export const toggleArchiveRule = async (shop, id) => {
+  if (!shop) {
+    console.error("No shop domain found in URL parameters.");
+    throw new Error("Shop domain is required");
+  }
+  return axiosInstance
+    .patch(`rules/rules/${id}/toggle`, null, {
+      params: { shop },
+    })
+    .then((res) => res.data)
+    .catch((error) => {
+      throw error.response.data.message;
+    });
+};
+
 export const ruleMatch = async (
   shop,
   ruleIds,

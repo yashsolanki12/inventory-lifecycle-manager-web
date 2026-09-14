@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -826,6 +827,43 @@ export const RULES_COLUMNS = [
         </Typography>
       );
     },
+  },
+  {
+    key: "active",
+    label: "Status",
+    sortable: false,
+    skeletonWidth: 60,
+    render: (item, { onToggleActive }) => (
+      <Tooltip
+        title={item.active ? "Disable rule" : "Enable rule"}
+        arrow
+        slotProps={{
+          tooltip: {
+            sx: {
+              lineHeight: 2,
+              fontSize: "12px",
+            },
+          },
+        }}
+      >
+        <IconButton
+          size="small"
+          onClick={() => onToggleActive?.(item)}
+          sx={{
+            color: item.active ? "#008060" : "#9ca3af",
+            "&:hover": {
+              backgroundColor: item.active ? "#ddfde5" : "#f3f4f6",
+            },
+          }}
+        >
+          {item.active ? (
+            <VisibilityIcon sx={{ fontSize: 18 }} />
+          ) : (
+            <VisibilityOffIcon sx={{ fontSize: 18 }} />
+          )}
+        </IconButton>
+      </Tooltip>
+    ),
   },
 ];
 
