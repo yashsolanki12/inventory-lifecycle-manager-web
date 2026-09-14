@@ -47,6 +47,7 @@ const ReusableList = ({
     md: "calc(100vh - 300px)",
   },
   enabled = true,
+  columnExtras = {},
 }) => {
   const allColumns = actions
     ? [
@@ -368,7 +369,7 @@ const ReusableList = ({
                   key={col.key}
                   sx={{ py: 1.2, px: 2, fontSize: 14, verticalAlign: "middle" }}
                 >
-                  {col.render ? col.render(item, idx) : item[col.key]}
+                  {col.render ? col.render(item, columnExtras) : item[col.key]}
                 </Box>
               ))}
             </Box>
